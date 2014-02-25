@@ -2,6 +2,7 @@ package sdokb.ui;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.html.HTML;
@@ -12,6 +13,9 @@ import sdokb.game.KevinBaconGameData;
 import sdokb.game.KevinBaconGameStateManager;
 import properties_manager.PropertiesManager;
 import sdokb.game.Actor;
+import sdokb.game.Connection;
+import sdokb.game.Film;
+import sdokb.game.IMDBObject;
 import sdokb.game.KevinBaconGameGraphManager;
 
 /**
@@ -63,7 +67,8 @@ public class KevinBaconDocumentManager
     private final String LOSSES_ID = "losses";
     private final String GAME_RESULTS_HEADER_ID = "game_results_header";
     private final String GAME_RESULTS_LIST_ID = "game_results_list";
-
+    private final ArrayList<String> displayHtml;
+    private  int count;
     /**
      * This constructor just keeps the UI for later. Note that once constructed,
      * the docs will need to be set before this class can be used.
@@ -73,8 +78,12 @@ public class KevinBaconDocumentManager
     public KevinBaconDocumentManager(KevinBaconUI initUI)
     {
         // KEEP THE UI FOR LATER
-        ui = initUI;
+        ui = initUI; 
+         displayHtml = new ArrayList<String>();
+         count =0;
+         
     }
+    
 
     /**
      * Accessor method for initializing the game doc, which displays while the
@@ -115,38 +124,133 @@ public class KevinBaconDocumentManager
             String subheadText = props.getProperty(KevinBaconPropertyType.GAME_SUBHEADER_TEXT);
             Actor startingActor = ui.getGSM().getGameInProgress().getStartingActor();
             gameDoc.setInnerHTML(sH, subheadText + startingActor.toString());
+            
+            ///My code/////
+            displayHtml.add(ui.getGSM().getGameInProgress().getStartingActor().toString()+"-------");
+            System.out.println("display******************************"+displayHtml);
+            
+            
         } catch (BadLocationException | IOException e)
         {
             KevinBaconErrorHandler errorHandler = ui.getErrorHandler();
             errorHandler.processError(KevinBaconPropertyType.INVALID_DOC_ERROR_TEXT);
         }
     }
+    
+    
+    
+    
+  
+         
+   
+   
 
+     public String display()
+    {
+       KevinBaconGameGraphManager graph = ui.getGSM().getGameGraphManager();
+       Connection lastNode = ui.getGSM().getGameInProgress().getLastConnection();
+       
+       String firstActorID = new String();
+       String secondActorID = new String();
+       String filmID = new String();
+       
+     if (lastNode == null)
+         return"";
+    
+         firstActorID = lastNode.getActor1Id();
+         secondActorID = lastNode.getActor2Id();
+         filmID = lastNode.getFilmId();
+       
+     // if( filmID == null)
+    //  {
+    //      return "";
+    //  }
+      // System.out.println("Testing ***************************"+graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString()+"-----"+
+       //        graph.getActor(secondActorID).toString());
+       if(secondActorID!=null)
+       return graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString()+"-----"+
+              graph.getActor(secondActorID).toString();
+      // else
+           //return graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString();
+      return "";
+    }
+      
     /**
      * This method lets us add a guess to the game page display without having
      * to rebuild the entire page. We just rebuild the list item each time guess
      * is made.
      */
-    public void updateGuessesList()
+    
+    public void updateGuessesList(IMDBObject guess)
     {
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         KevinBaconGameStateManager gsm = ui.getGSM();
         KevinBaconGameData gameInProgress = gsm.getGameInProgress();
         KevinBaconGameGraphManager graph = gsm.getGameGraphManager();
-
+       
+     
+        
+       
+       // {
+            
+       // }
+        if(count==1)
+        {
+        displayHtml.add(guess.toString());
+           count++;  
+        }
+           else{
+                   displayHtml.add(guess.toString()+"-------");
+           count++;
+                   
+                   }
+           
+           if(count==2)
+           {
+                displayHtml.add(guess.toString()+"-------");
+                count=0;
+           }
+        
         try
         {
             Element ol = gameDoc.getElement(GUESSES_LIST_ID);
-            String liText = START_TAG + HTML.Tag.LI + END_TAG
-                            + "BLAH BLAH BLAH BLAH BLAH"
-                            + START_TAG + SLASH + HTML.Tag.LI + END_TAG;
-            gameDoc.insertBeforeEnd(ol, liText);
+            String liText = START_TAG + HTML.Tag.LI + END_TAG;
+            int i;
+                    for(i =0;i < displayHtml.size();i++){
+                        liText += displayHtml.get(i);
+                        if((i+1)%3==0){
+                            liText += START_TAG + SLASH + HTML.Tag.LI + END_TAG + START_TAG + HTML.Tag.LI + END_TAG;
+                               
+                        }
+                    }
+                            if((i+1)%3!=0){
+                                liText += START_TAG + SLASH + HTML.Tag.LI + END_TAG;
+                            }
+                 //display()
+                   //         + START_TAG + SLASH + HTML.Tag.LI + END_TAG;
+           // gameDoc.insertBeforeEnd(ol, liText);
+                            gameDoc.setInnerHTML(ol, liText);
+            if(ui.getGSM().isGameOver())
+            {
+              displayHtml.clear();
+              ui.getGSM().setNewGame(false);
+              count = 0;
+            }
+            
+            if(ui.getGSM().isNewGame())
+            {
+                 displayHtml.clear();
+                   ui.getGSM().setNewGame(false);
+                   count=0;
+            }
+           // ui.getGSM().setNewGame(false);
         } 
         // THE ERROR HANDLER WILL DEAL WITH ERRORS ASSOCIATED WITH BUILDING
         // THE HTML FOR THE PAGE, WHICH WOULD LIKELY BE DUE TO BAD DATA FROM
         // AN XML SETUP FILE
         catch (BadLocationException | IOException e)
         {
+            
             KevinBaconErrorHandler errorHandler = ui.getErrorHandler();
             errorHandler.processError(KevinBaconPropertyType.INVALID_DOC_ERROR_TEXT);
         }

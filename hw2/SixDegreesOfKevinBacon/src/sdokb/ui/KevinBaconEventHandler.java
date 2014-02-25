@@ -109,6 +109,7 @@ public class KevinBaconEventHandler
      */
     public void respondToGuessRequest(IMDBObject guess)
     {
+        
         KevinBaconGameStateManager gsm = ui.getGSM();
 
         // THEN PROCESS THE GUESS

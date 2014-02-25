@@ -43,6 +43,8 @@ public class KevinBaconGameStateManager
     // THIS IS 
     private final String NEWLINE_DELIMITER = "\n";
 
+    private boolean newGameButton;
+    
     /**
      * This constructor initializes this class for use, but does not start a
      * game.
@@ -53,6 +55,7 @@ public class KevinBaconGameStateManager
      */
     public KevinBaconGameStateManager(KevinBaconUI initUI)
     {
+        
         // STORE THIS FOR LATER
         ui = initUI;
 
@@ -69,6 +72,8 @@ public class KevinBaconGameStateManager
         // THIS IS THE ACTUAL GAME GRAPH THAT WE'LL
         // WALK TO FIND CONNECTIONS BETWEEN ACTORS & FILMS
         gameGraphManager = new KevinBaconGameGraphManager();
+        
+        newGameButton = false;
     }
 
     // ACCESSOR METHODS
@@ -81,6 +86,7 @@ public class KevinBaconGameStateManager
     {
         return gameInProgress;
     }
+    
 
     public int getNumGamesPlayed()
     {
@@ -107,6 +113,14 @@ public class KevinBaconGameStateManager
         return currentGameState == KevinBaconGameState.GAME_IN_PROGRESS;
     }
 
+    public boolean isNewGame()
+    {
+        return newGameButton;
+    }
+    public void setNewGame(boolean button)
+    {
+        newGameButton= button;
+    }
     /**
      * This method starts a new game, initializing all the necessary data for
      * that new game as well as recording the current game (if it exists) in the
@@ -115,6 +129,7 @@ public class KevinBaconGameStateManager
      */
     public void startNewGame()
     {
+         
         // IS THERE A GAME ALREADY UNDERWAY?
         // YES, SO END THAT GAME AS A LOSS
         if (!isGameNotStarted() && (!gamesHistory.contains(gameInProgress)))
@@ -131,7 +146,7 @@ public class KevinBaconGameStateManager
         {
             // QUIT THE GAME, WHICH SETS THE END TIME
             gameInProgress.endGameAsLoss();
-
+            newGameButton=true; 
             // MAKE SURE THE STATS PAGE KNOWS ABOUT THE COMPLETED GAME
             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
         }
@@ -146,6 +161,8 @@ public class KevinBaconGameStateManager
         // LOAD ALL THE FILMS INTO THE COMBO BOX
         ArrayList<String> startingActorFilmIds = gameInProgress.getStartingActor().getFilmIDs();
         ui.reloadComboBox(startingActorFilmIds);
+        
+        
     }
 
     /**
@@ -154,6 +171,7 @@ public class KevinBaconGameStateManager
      */
     public void makeNewGame()
     {
+       
         // FIRST PICK THE ACTOR
         Actor startingActor = gameGraphManager.pickRandomActor();
         ArrayList<Connection> shortestPath = gameGraphManager.findShortestPathToKevinBacon(startingActor);
@@ -163,6 +181,7 @@ public class KevinBaconGameStateManager
 
         // THE GAME IS OFFICIALLY UNDERWAY
         currentGameState = KevinBaconGameState.GAME_IN_PROGRESS;
+        
     }
 
     /**
@@ -192,12 +211,28 @@ public class KevinBaconGameStateManager
             currentGameState = KevinBaconGameState.GAME_OVER;
             gamesHistory.add(gameInProgress);
             ui.enableGuessComboBox(false);
-            ui.getDocManager().updateGuessesList();
+            ui.getDocManager().updateGuessesList( guess);
             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
+            newGameButton=false;
             throw new DeadEndException(guess.toString());
         }
-
+        
+        
+         
         // UPDATE THE GAME DISPLAY
-        ui.getDocManager().updateGuessesList();        
+        gameInProgress.addpath(guess);  
+        ui.getDocManager().updateGuessesList( guess); 
+        if(ui.getGSM().getGameInProgress().isWaitingForFilm())
+        ui.getGSM().getGameInProgress().setIsWaitingForFilm(false);
+        else
+            ui.getGSM().getGameInProgress().setIsWaitingForFilm(true);
+       newGameButton=false;
+        ui.reloadComboBox(nonCircularEdges);
+      //  ui.getGSM().getGameInProgress().setIsWaitingForFilm(true);
+        
+        
     }
+    
+    
+   
 }

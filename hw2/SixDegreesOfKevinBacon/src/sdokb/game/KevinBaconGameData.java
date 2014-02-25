@@ -123,6 +123,10 @@ public class KevinBaconGameData
     {
         return waitingForFilm;
     }
+     public void setIsWaitingForFilm(boolean flim)
+    {
+         waitingForFilm = flim;
+    }
     
     /**
      * Gets the total time (in milliseconds) that this game took.
@@ -279,4 +283,31 @@ public class KevinBaconGameData
     {
         return startingActor.toString();
     }
+    
+    public void addpath(IMDBObject guess)
+    {
+     String str = guess.getId();
+        if(lastNode==null)
+        {
+            lastNode = new Connection(startingActor.getId(), str);
+            guessMap.put(str, guess);
+        }
+        else 
+            if(this.isWaitingForFilm())
+        {
+           
+        lastNode.setFilmId(str);
+                guessMap.put(str, guess);
+        }  
+        else
+        {
+            lastNode.setActor2Id(str);
+           // lastNode = new Connection(secondactor, str);
+            guessMap.put(str, guess);
+        }
+                
+        gamePath.add(lastNode);  
+}
+    
+ 
 }
