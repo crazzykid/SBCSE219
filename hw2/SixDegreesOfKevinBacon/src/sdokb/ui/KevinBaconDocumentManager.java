@@ -140,40 +140,6 @@ public class KevinBaconDocumentManager
     
     
     
-  
-         
-   
-   
-
-     public String display()
-    {
-       KevinBaconGameGraphManager graph = ui.getGSM().getGameGraphManager();
-       Connection lastNode = ui.getGSM().getGameInProgress().getLastConnection();
-       
-       String firstActorID = new String();
-       String secondActorID = new String();
-       String filmID = new String();
-       
-     if (lastNode == null)
-         return"";
-    
-         firstActorID = lastNode.getActor1Id();
-         secondActorID = lastNode.getActor2Id();
-         filmID = lastNode.getFilmId();
-       
-     // if( filmID == null)
-    //  {
-    //      return "";
-    //  }
-      // System.out.println("Testing ***************************"+graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString()+"-----"+
-       //        graph.getActor(secondActorID).toString());
-       if(secondActorID!=null)
-       return graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString()+"-----"+
-              graph.getActor(secondActorID).toString();
-      // else
-           //return graph.getActor(firstActorID).toString()+"-----"+ graph.getFilm(filmID).toString();
-      return "";
-    }
       
     /**
      * This method lets us add a guess to the game page display without having
@@ -187,8 +153,18 @@ public class KevinBaconDocumentManager
         KevinBaconGameStateManager gsm = ui.getGSM();
         KevinBaconGameData gameInProgress = gsm.getGameInProgress();
         KevinBaconGameGraphManager graph = gsm.getGameGraphManager();
-       
-     
+        
+       if(gsm.getGameGraphManager().wasKevinBaconInFilm(gsm.getGameInProgress().getLastConnection().getFilmId()))
+       {
+          // gsm.getGameInProgress().isKevinBaconFound()
+            System.out.println("****************yes he is found in this flim"+guess.toString());
+       }
+           
+   if( ! ui.getGSM().getGameInProgress().isWaitingForFilm()&& ui.getGSM().getGameInProgress().hasGuessBeenMade(guess.toString()))
+   {
+      // if(ui.getGSM().getGameGraphManager().wasKevinBaconInFilm(guess.toString()))
+          
+   }
         
        
        // {
@@ -297,12 +273,29 @@ public class KevinBaconDocumentManager
         // GET THE GAME STATS
         KevinBaconGameStateManager gsm = ui.getGSM();
         KevinBaconGameGraphManager graph = gsm.getGameGraphManager();
+        Actor startingActor = gsm.getGameInProgress().getStartingActor();
 
+        
+        
+       // if(gsm.getGameInProgress().isKevinBaconFound())
+    //    if(gsm.getGameInProgress().getDegrees()== gsm.getGameGraphManager().findShortestPathToKevinBacon(startingActor).size())
+       //     gsm.setPerfectWins(gsm.getPerfectWins()+1);
+            
         try
         {
+            
             // USE THE STATS TO UPDATE THE TABLE AT THE TOP OF THE PAGE
             Element gamePlayedElement = statsDoc.getElement(GAMES_PLAYED_ID);
-            statsDoc.setInnerHTML(gamePlayedElement, EMPTY_TEXT + "BLAH BLAH BLAH");
+            statsDoc.setInnerHTML(gamePlayedElement, EMPTY_TEXT + gsm.getNumGamesPlayed());
+            
+            Element WinElement = statsDoc.getElement(WINS_ID);
+           statsDoc.setInnerHTML(WinElement, EMPTY_TEXT + gsm.getNumberOfWins());
+            
+            Element perfectWinElement = statsDoc.getElement(PERFECT_WINS_ID);
+            statsDoc.setInnerHTML(perfectWinElement, EMPTY_TEXT + gsm.getPerfectWins());
+           
+            Element gameLossesElement = statsDoc.getElement(LOSSES_ID);
+            statsDoc.setInnerHTML(gameLossesElement, EMPTY_TEXT + gsm.getGameLosses());
         }
         // WE'LL LET THE ERROR HANDLER TAKE CARE OF ANY ERRORS,
         // WHICH COULD HAPPEN IF XML SETUP FILES ARE IMPROPERLY

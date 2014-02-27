@@ -32,10 +32,15 @@ public class KevinBaconGameStateManager
     // REFLECTED IN THE USER INTERFACE, SO THIS CLASS NEEDS
     // A REFERENCE TO THE UI
     private KevinBaconUI ui;
+    
 
     // HOLDS ALL OF THE COMPLETED GAMES. NOTE THAT THE GAME
     // IN PROGRESS IS NOT ADDED UNTIL IT IS COMPLETED
     private ArrayList<KevinBaconGameData> gamesHistory;
+    
+    private int numberOfWins;
+    private int perfectWins;
+    private int numberOfLosses;
 
     // THE ACTOR/FILMS GAME GRAPH DATA STRUCTURE
     private KevinBaconGameGraphManager gameGraphManager;
@@ -45,6 +50,7 @@ public class KevinBaconGameStateManager
 
     private boolean newGameButton;
     
+   
     /**
      * This constructor initializes this class for use, but does not start a
      * game.
@@ -74,6 +80,10 @@ public class KevinBaconGameStateManager
         gameGraphManager = new KevinBaconGameGraphManager();
         
         newGameButton = false;
+        
+        numberOfWins =0;
+        perfectWins = 0;
+        numberOfLosses =0;
     }
 
     // ACCESSOR METHODS
@@ -92,6 +102,19 @@ public class KevinBaconGameStateManager
     {
         return gamesHistory.size();
     }
+    public int getNumberOfWins()
+    {
+        return numberOfWins;
+    }
+    public int getPerfectWins()
+    {
+        return perfectWins;
+    }
+   public int getGameLosses()
+   {
+       return numberOfLosses;
+   }
+    
 
     public Iterator<KevinBaconGameData> getGamesHistoryIterator()
     {
@@ -121,6 +144,19 @@ public class KevinBaconGameStateManager
     {
         newGameButton= button;
     }
+    public void setNumberOfWins(int num)
+    {
+         numberOfWins = num;
+    }
+     public void setPerfectWins(int num)
+    {
+         perfectWins = num;
+    }
+     public void setGameLosses(int num)
+    {
+         numberOfWins = num;
+    }
+     
     /**
      * This method starts a new game, initializing all the necessary data for
      * that new game as well as recording the current game (if it exists) in the
@@ -147,6 +183,7 @@ public class KevinBaconGameStateManager
             // QUIT THE GAME, WHICH SETS THE END TIME
             gameInProgress.endGameAsLoss();
             newGameButton=true; 
+            numberOfLosses++;
             // MAKE SURE THE STATS PAGE KNOWS ABOUT THE COMPLETED GAME
             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
         }
@@ -214,8 +251,11 @@ public class KevinBaconGameStateManager
             ui.getDocManager().updateGuessesList( guess);
             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
             newGameButton=false;
+            numberOfLosses++;
             throw new DeadEndException(guess.toString());
+            
         }
+        
         
         
          

@@ -100,6 +100,7 @@ public class KevinBaconGameData
         return kevinBaconFound; 
     }
     
+    
     /**
      * Tests to see if the game was a perfect win, meaning it was
      * done via the fewest connections possible.
@@ -292,7 +293,7 @@ public class KevinBaconGameData
             lastNode = new Connection(startingActor.getId(), str);
             guessMap.put(str, guess);
         }
-        else 
+        
             if(this.isWaitingForFilm())
         {
            
