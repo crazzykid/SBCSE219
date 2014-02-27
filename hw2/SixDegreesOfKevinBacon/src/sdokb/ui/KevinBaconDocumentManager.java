@@ -69,6 +69,7 @@ public class KevinBaconDocumentManager
     private final String GAME_RESULTS_LIST_ID = "game_results_list";
     private final ArrayList<String> displayHtml;
     private  int count;
+  
     /**
      * This constructor just keeps the UI for later. Note that once constructed,
      * the docs will need to be set before this class can be used.
@@ -81,7 +82,7 @@ public class KevinBaconDocumentManager
         ui = initUI; 
          displayHtml = new ArrayList<String>();
          count =0;
-         
+        
     }
     
 
@@ -154,22 +155,25 @@ public class KevinBaconDocumentManager
         KevinBaconGameData gameInProgress = gsm.getGameInProgress();
         KevinBaconGameGraphManager graph = gsm.getGameGraphManager();
         
-       if(gsm.getGameGraphManager().wasKevinBaconInFilm(gsm.getGameInProgress().getLastConnection().getFilmId()))
+        if(!gsm.isGameOver())
+       if(graph.wasKevinBaconInFilm(gameInProgress.getLastConnection().getFilmId()))
        {
-          // gsm.getGameInProgress().isKevinBaconFound()
-            System.out.println("****************yes he is found in this flim"+guess.toString());
+         gameInProgress.setKevinBaconFound(true);
+         displayHtml.add(guess.toString()+"-------");
+         displayHtml.add(graph.getKevinBacon().toString());
+         
+         
        }
-           
-   if( ! ui.getGSM().getGameInProgress().isWaitingForFilm()&& ui.getGSM().getGameInProgress().hasGuessBeenMade(guess.toString()))
-   {
-      // if(ui.getGSM().getGameGraphManager().wasKevinBaconInFilm(guess.toString()))
-          
-   }
         
-       
-       // {
+        if(!gameInProgress.isKevinBaconFound())
+        {
+        if(gsm.isGameOver())
+        {
+            displayHtml.clear();
+              ui.getGSM().setNewGame(false);
+        }
             
-       // }
+       
         if(count==1)
         {
         displayHtml.add(guess.toString());
@@ -186,7 +190,7 @@ public class KevinBaconDocumentManager
                 displayHtml.add(guess.toString()+"-------");
                 count=0;
            }
-        
+        }
         try
         {
             Element ol = gameDoc.getElement(GUESSES_LIST_ID);
@@ -220,7 +224,20 @@ public class KevinBaconDocumentManager
                    count=0;
             }
            // ui.getGSM().setNewGame(false);
+            if(gameInProgress.isKevinBaconFound())
+            {
+          //sdf  gameInProgress.endGameAsWin();
+            
+            ui.enableGuessComboBox(false);
+            gsm.setNumberOfWins(gsm.getNumberOfWins()+1);
+             displayHtml.clear();
+             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
+            // gameInProgress.setKevinBaconFound(false);
+            
+            }
+             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
         } 
+        
         // THE ERROR HANDLER WILL DEAL WITH ERRORS ASSOCIATED WITH BUILDING
         // THE HTML FOR THE PAGE, WHICH WOULD LIKELY BE DUE TO BAD DATA FROM
         // AN XML SETUP FILE

@@ -165,12 +165,13 @@ public class KevinBaconGameStateManager
      */
     public void startNewGame()
     {
-         
+       
         // IS THERE A GAME ALREADY UNDERWAY?
         // YES, SO END THAT GAME AS A LOSS
         if (!isGameNotStarted() && (!gamesHistory.contains(gameInProgress)))
         {
             gamesHistory.add(gameInProgress);
+            newGameButton=true;
         }
 
         // IF THERE IS A GAME IN PROGRESS AND THE PLAYER HASN'T WON, THAT MEANS
@@ -181,17 +182,26 @@ public class KevinBaconGameStateManager
         if (isGameInProgress() && !gameInProgress.isKevinBaconFound())
         {
             // QUIT THE GAME, WHICH SETS THE END TIME
-            gameInProgress.endGameAsLoss();
-            newGameButton=true; 
+          
             numberOfLosses++;
+            gameInProgress.endGameAsLoss();
+            
+            
             // MAKE SURE THE STATS PAGE KNOWS ABOUT THE COMPLETED GAME
             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
         }
+        
+         if (isGameInProgress() && gameInProgress.isKevinBaconFound())
+         {
+             gameInProgress.setKevinBaconFound(false);
+             ui.getDocManager().addGameResultToStatsPage(gameInProgress);
+         }
 
         // AND NOW MAKE A NEW GAME
         makeNewGame();
 
         // AND UPDATE THE GAME DISPLAY
+        
         ui.resetUI();
         ui.getDocManager().updateActorInGamePage();
 

@@ -100,7 +100,10 @@ public class KevinBaconGameData
         return kevinBaconFound; 
     }
     
-    
+    public void setKevinBaconFound(boolean value)
+    {
+        kevinBaconFound= value;
+    }
     /**
      * Tests to see if the game was a perfect win, meaning it was
      * done via the fewest connections possible.
@@ -197,11 +200,12 @@ public class KevinBaconGameData
     /**
      * Ends the game as a win.
      */
-    public void endGameAsWin(Actor kevinBacon)
+    public void endGameAsWin ()//(Actor kevinBacon)
     {
-        kevinBaconFound = true;
+       // kevinBaconFound = true;
         endTime = new GregorianCalendar();
-        lastNode.setActor2Id(kevinBacon.getId());
+       // lastNode.setActor2Id(kevinBacon.getId());
+        
     }
 
     /**
