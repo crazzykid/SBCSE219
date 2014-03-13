@@ -215,6 +215,7 @@ public class SortingHatRecord
     {
         Iterator<String> keysIt = levelRecords.keySet().iterator();
         int numLevels = levelRecords.keySet().size();
+      
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeInt(numLevels);

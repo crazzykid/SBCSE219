@@ -49,6 +49,7 @@ public class SortingHatPanel extends JPanel
     private boolean perfectW;
     private int count;
     private String perfectTime;
+    private String pTime;
     /**
      * This constructor stores the game and data references,
      * which we'll need for rendering.
@@ -68,7 +69,8 @@ public class SortingHatPanel extends JPanel
         numberFormatter = NumberFormat.getNumberInstance();
         numberFormatter.setMinimumFractionDigits(3);
         numberFormatter.setMaximumFractionDigits(3);
-        perfectTime = "0:00:00";
+        perfectTime = data.gameTimeToText();
+        pTime =data.gameTimeToText();
     }
     
     // MUTATOR METHODS
@@ -300,22 +302,26 @@ public class SortingHatPanel extends JPanel
             
            
                 
-            
-            
-            
-            
+           
+                 
+           
             if(data.getBadSpellsCounter()==0 && data.won() )
             {
                 
-                if(perfectTime.compareTo(data.gameTimeToText())<=0)
+                 
+           if(perfectTime.equals(pTime))
+                     perfectTime = data.gameTimeToText();
+                
+                //System.out.println(data.gameTimeToText().compareTo(perfectTime));
+                if((data.gameTimeToText().compareTo(perfectTime))<=0)
                 {
                 perfectTime = data.gameTimeToText();
-                
-                    System.out.println("Thestint time askahglkdbelsbsdlgbdlghsl");
+                 //  System.out.println("Thestint time askahglkdbelsbsdlgbdlghsl");
                 }
+                 
                 
-                else 
-                    perfectTime = perfectTime;
+                //else 
+                 //   perfectTime = perfectTime;
                 
                 
                 

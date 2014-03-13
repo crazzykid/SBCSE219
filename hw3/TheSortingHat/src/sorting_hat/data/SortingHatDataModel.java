@@ -477,14 +477,33 @@ public String getAlgorithmName()
 
         // THIS HAS THE APPROXIMATE PATH NODES, WHICH WE'LL SLIGHTLY
         // RANDOMIZE FOR EACH TILE FOLLOWING THE PATH.
-        winPath.add(viewport.getScreenWidth() - WIN_PATH_COORD);
-        winPath.add(WIN_PATH_COORD);
-        winPath.add(WIN_PATH_COORD);
-        winPath.add(WIN_PATH_COORD);
-        winPath.add(WIN_PATH_COORD);
-        winPath.add(viewport.getScreenHeight() - WIN_PATH_COORD);
-        winPath.add(viewport.getScreenWidth() - WIN_PATH_COORD);
-        winPath.add(viewport.getScreenHeight() - WIN_PATH_COORD);
+      //  winPath.add(viewport.getScreenWidth() - WIN_PATH_COORD);
+        
+        
+        winPath.add(637);
+        winPath.add(100);
+        
+        winPath.add(250);
+        winPath.add(591);
+        
+        winPath.add(1100);
+        winPath.add(300);
+        
+        winPath.add(174);
+        winPath.add(300);
+        
+        winPath.add(874);
+        winPath.add(591);
+        
+       // winPath.add(WIN_PATH_COORD);
+      //  winPath.add(WIN_PATH_COORD);
+      //  winPath.add(WIN_PATH_COORD);
+        
+        
+        
+      //  winPath.add(viewport.getScreenHeight() - WIN_PATH_COORD);
+      //  winPath.add(viewport.getScreenWidth() - WIN_PATH_COORD);
+      //  winPath.add(viewport.getScreenHeight() - WIN_PATH_COORD);
         moveAllTilesToStack();
 
         // START THE ANIMATION FOR ALL THE TILES

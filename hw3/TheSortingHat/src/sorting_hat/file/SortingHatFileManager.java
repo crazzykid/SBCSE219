@@ -1,6 +1,7 @@
 package sorting_hat.file;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -141,6 +142,25 @@ public class SortingHatFileManager
     public void saveRecord(SortingHatRecord record)
     {
 
+        try {
+         PropertiesManager props = PropertiesManager.getPropertiesManager();
+            String recordPath = PATH_DATA + props.getProperty(SortingHatPropertyType.FILE_PLAYER_RECORD);
+            File fileToSave = new File(recordPath);
+            
+            
+            // LET'S USE A FAST LOADING TECHNIQUE. WE'LL LOAD ALL OF THE
+            // BYTES AT ONCE INTO A BYTE ARRAY, AND THEN PICK THAT APART.
+            // THIS IS FAST BECAUSE IT ONLY HAS TO DO FILE READING ONCE
+            byte[] bytes = record.toByteArray();
+  
+            FileOutputStream fos = new FileOutputStream(fileToSave);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+        
+            bos.write(bytes);
+        } catch(Exception e) {
+            
+        }
+        
     }
 
     /**
