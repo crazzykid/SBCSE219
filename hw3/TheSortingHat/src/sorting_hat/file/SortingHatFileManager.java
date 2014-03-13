@@ -151,14 +151,19 @@ public class SortingHatFileManager
             // LET'S USE A FAST LOADING TECHNIQUE. WE'LL LOAD ALL OF THE
             // BYTES AT ONCE INTO A BYTE ARRAY, AND THEN PICK THAT APART.
             // THIS IS FAST BECAUSE IT ONLY HAS TO DO FILE READING ONCE
-            byte[] bytes = record.toByteArray();
+           
   
             FileOutputStream fos = new FileOutputStream(fileToSave);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
-        
-            bos.write(bytes);
-        } catch(Exception e) {
             
+          byte[] bytes = record.toByteArray();
+            System.out.println(bytes);
+            bos.write(bytes);
+            bos.close();
+        } catch(Exception e)
+        {
+            // LEVEL LOADING ERROR
+            miniGame.getErrorHandler().processError(SortingHatPropertyType.TEXT_ERROR_LOADING_LEVEL);
         }
         
     }

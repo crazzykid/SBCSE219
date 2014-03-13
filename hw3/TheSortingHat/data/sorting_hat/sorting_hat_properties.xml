@@ -73,14 +73,16 @@
         <property_options name="LEVEL_IMAGE_OPTIONS">
             <option>./sorting_hat/ButtonBubbleSortCoil.png</option>
             <option>./sorting_hat/ButtonBubbleSortO.png</option>
+             <option>./sorting_hat/ButtonSelectionSortU.png</option>
             <option>./sorting_hat/ButtonSelectionSortSine.png</option>
-            <option>./sorting_hat/ButtonSelectionSortU.png</option>
+           
         </property_options>
         <property_options name="LEVEL_MOUSE_OVER_IMAGE_OPTIONS">
             <option>./sorting_hat/ButtonBubbleSortCoilMouseOver.png</option>
             <option>./sorting_hat/ButtonBubbleSortOMouseOver.png</option>
             <option>./sorting_hat/ButtonSelectionSortUMouseOver.png</option>
             <option>./sorting_hat/ButtonSelectionSortSineMouseOver.png</option>
+             
         </property_options>
     </property_options_list>
 </properties>
