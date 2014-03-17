@@ -43,6 +43,7 @@ public class SortingHatDataModel extends MiniGameDataModel
     private int gameTileHeight;
     private int numGameGridColumns;
     private int numGameGridRows;
+    private String TTT ;
 
     // THESE ARE THE TILES STACKED AT THE START OF THE GAME
     private ArrayList<SortingHatTile> stackTiles;
@@ -98,7 +99,7 @@ public class SortingHatDataModel extends MiniGameDataModel
            gameTiles2 = new int [50];
         arrayCount=0;
         isUndo=false;
-       
+       TTT= new String();
 
         // NOTHING IS BEING DRAGGED YET
         selectedTile = null;
@@ -366,6 +367,7 @@ public String getAlgorithmName()
         {
             secondsText = "0" + secondsText;
         }
+        // TTT= hours + ":" + minutesText + ":" + secondsText;
         return hours + ":" + minutesText + ":" + secondsText;
     }
 
@@ -711,7 +713,7 @@ public String getAlgorithmName()
         ((SortingHatMiniGame) miniGame).getPlayerRecord().addWin(currentLevel);
 
         if(badSpellsCounter==0)
-            ((SortingHatMiniGame) miniGame).getPlayerRecord().addPerfectWin(currentLevel);
+            ((SortingHatMiniGame) miniGame).getPlayerRecord().addPerfectWin(currentLevel, this.gameTimeToText());
            
         // SAVE PLAYER DATA
         ((SortingHatMiniGame) miniGame).savePlayerRecord();

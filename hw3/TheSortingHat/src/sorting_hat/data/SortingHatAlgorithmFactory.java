@@ -3,6 +3,7 @@ package sorting_hat.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import sorting_hat.ui.SortingHatTile;
+import static sorting_hat.SortingHatConstants.*;
 
 /**
  * This factory class builds the sorting algorithm objects to be
@@ -27,8 +28,8 @@ public class SortingHatAlgorithmFactory
         if (premadeSortingHatAlgorithms == null)
         {
             premadeSortingHatAlgorithms = new HashMap();
-            premadeSortingHatAlgorithms.put(SortingHatAlgorithmType.BUBBLE_SORT, new BubbleSortAlgorithm(initDataToSort, "BUBBLE_SORT"));
-            premadeSortingHatAlgorithms.put(SortingHatAlgorithmType.SELECTION_SORT, new SelectionSortAlgorithm(initDataToSort, "SELECTION_SORT"));
+            premadeSortingHatAlgorithms.put(SortingHatAlgorithmType.BUBBLE_SORT, new BubbleSortAlgorithm(initDataToSort, BUBBLE_SORT));
+            premadeSortingHatAlgorithms.put(SortingHatAlgorithmType.SELECTION_SORT, new SelectionSortAlgorithm(initDataToSort, SELECTION_SORT));
         }
         // RETURN THE REQUESTED ONE
         return premadeSortingHatAlgorithms.get(algorithmType);

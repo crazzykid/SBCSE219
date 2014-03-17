@@ -48,7 +48,7 @@ public class SortingHatPanel extends JPanel
     private SortingHatRecord theRecord;
     private boolean perfectW;
     private int count;
-    private String perfectTime;
+   // private String perfectTime;
     private String pTime;
     /**
      * This constructor stores the game and data references,
@@ -69,7 +69,7 @@ public class SortingHatPanel extends JPanel
         numberFormatter = NumberFormat.getNumberInstance();
         numberFormatter.setMinimumFractionDigits(3);
         numberFormatter.setMaximumFractionDigits(3);
-        perfectTime = data.gameTimeToText();
+        //perfectTime = data.getCurrentLevel().//.gameTimeToText();
         pTime =data.gameTimeToText();
     }
     
@@ -299,35 +299,35 @@ public class SortingHatPanel extends JPanel
             int games = record.getGamesPlayed(currentLevel);
             int wins = record.getWins(currentLevel);
             int perfectWin=record.getPerfectWins(currentLevel);
+            String perfectTime = record.getPerfectFastTime(currentLevel);
             
            
                 
            
                  
            
-            if(data.getBadSpellsCounter()==0 && data.won() )
-            {
+          //  if(data.getBadSpellsCounter()==0 && data.won() )
+          //  {
                 
                  
-           if(perfectTime.equals(pTime))
-                     perfectTime = data.gameTimeToText();
-                
-                //System.out.println(data.gameTimeToText().compareTo(perfectTime));
-                if((data.gameTimeToText().compareTo(perfectTime))<=0)
-                {
-                perfectTime = data.gameTimeToText();
-                 //  System.out.println("Thestint time askahglkdbelsbsdlgbdlghsl");
-                }
+        //   if(perfectTime==null){
+         //        System.out.println(" sesstion 1 "+perfectTime);
+         //            perfectTime = data.gameTimeToText();
+                     
+                    // pTime =perfectTime;
+         //  }
+           //     if((data.gameTimeToText().compareTo(perfectTime))<0)
+          //      {
+            //    perfectTime = data.gameTimeToText();
+            //       System.out.println("Thestint time askahglkdbelsbsdlgbdlghsl");
+              //  }
                  
                 
                 //else 
                  //   perfectTime = perfectTime;
-                
-                
-                
-                
+               
            // as
-            }
+           // }
 
             // GET ALL THE STATS PROMPTS
             PropertiesManager props = PropertiesManager.getPropertiesManager();            
@@ -346,7 +346,7 @@ public class SortingHatPanel extends JPanel
             g.drawString(winsPrompt + wins,                             STATS_LEVEL_X, STATS_WINS_Y);
             
             g.drawString(perfectWins + perfectWin,                      STATS_LEVEL_X, STATS_PERFECT_WINS_Y );
-             g.drawString(fastPerfectWins + perfectTime,                      STATS_LEVEL_X, STATS_FASTEST_PERFECT_WIN_Y );
+             g.drawString(fastPerfectWins + perfectTime,                STATS_LEVEL_X, STATS_FASTEST_PERFECT_WIN_Y );
              
         }
     }

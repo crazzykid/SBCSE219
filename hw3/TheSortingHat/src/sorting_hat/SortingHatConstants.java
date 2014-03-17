@@ -24,6 +24,8 @@ public class SortingHatConstants
     
     // EACH SCREEN HAS ITS OWN BACKGROUND TYPE
     public static final String BACKGROUND_TYPE = "BACKGROUND_TYPE";
+    public static final String BUBBLE_SORT = "BUBBLE_SORT";
+    public static final String SELECTION_SORT =   "SELECTION_SORT";
     
     // THIS REPRESENTS THE BUTTONS ON THE MENU SCREEN FOR LEVEL SELECTION
     public static final String LEVEL_SELECT_BUTTON_TYPE = "LEVEL_SELECT_BUTTON_TYPE";

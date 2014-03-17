@@ -107,6 +107,19 @@ public class SortingHatRecord
         else
             return rec.perfectWin; 
     }
+     public String getPerfectFastTime(String levelName)
+    {
+        SortingHatLevelRecord rec = levelRecords.get(levelName);
+        
+        // IF levelName ISN'T IN THE RECORD OBJECT
+        // THEN SIMPLY RETURN 0        
+        if (rec == null)
+            return null;
+        // OTHERWISE RETURN THE WINS
+        else
+            return rec.fastWin; 
+    }
+     
     
     /**
      * Returns true if there is already a level called levelName, false
@@ -144,6 +157,8 @@ public class SortingHatRecord
         rec.gamesPlayed = 0;
         rec.perfectWin = 0;
         rec.wins = 0;
+        rec.fastWin = null;
+        rec.fWin=null;
         levelRecords.put(levelName, rec);
         
         
@@ -183,16 +198,29 @@ public class SortingHatRecord
         // UPDATE THE STATS
         rec.gamesPlayed++;
         rec.wins++;
+       
+        
         
         
         
     }
     
-    public void addPerfectWin(String levelName)
+    public void addPerfectWin(String levelName, String TTT)
     {
         
          SortingHatLevelRecord rec = levelRecords.get(levelName);
                 rec.perfectWin++;
+                
+                 rec.fWin=TTT;
+        
+        if(rec.fastWin==null||rec.fWin==null)
+        {
+            rec.fWin=TTT;
+            rec.fastWin= TTT;
+        }
+        else  
+        if(rec.fastWin.compareTo(rec.fWin)>=0)
+        rec.fastWin= TTT;
     }
     
     // ADDITIONAL SERVICE METHODS
@@ -229,7 +257,9 @@ public class SortingHatRecord
             dos.writeInt(rec.gamesPlayed);
             dos.writeInt(rec.wins);
             dos.writeInt(rec.perfectWin);
+            dos.writeUTF(rec.fastWin.toString());;
         }
+        
         // AND THEN RETURN IT
         return baos.toByteArray();
     }

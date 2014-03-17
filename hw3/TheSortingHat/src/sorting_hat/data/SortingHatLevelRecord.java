@@ -14,5 +14,7 @@ public class SortingHatLevelRecord
     public int gamesPlayed;
     public int wins;
     public int perfectWin;
+    public String fastWin;
+    public String fWin;
     
 }

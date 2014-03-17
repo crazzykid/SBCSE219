@@ -214,6 +214,8 @@ public class SortingHatFileManager
                 rec.algorithm = dis.readUTF();
                 rec.gamesPlayed = dis.readInt();
                 rec.wins = dis.readInt();
+                rec.perfectWin=dis.readInt();
+                rec.fastWin=dis.readUTF();
                 recordToLoad.addSortingHatLevelRecord(levelName, rec);
             }
         }
