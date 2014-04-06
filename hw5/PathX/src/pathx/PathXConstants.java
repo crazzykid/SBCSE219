@@ -61,7 +61,7 @@ public class PathXConstants
     public static final int VIEWPORT_MARGIN_RIGHT = 20;
     public static final int VIEWPORT_MARGIN_TOP = 20;
     public static final int VIEWPORT_MARGIN_BOTTOM = 20;
-    public static final int LEVEL_BUTTON_WIDTH = 200;
+    public static final int LEVEL_BUTTON_WIDTH = 100;
     public static final int LEVEL_BUTTON_MARGIN = 5;
     public static final int LEVEL_BUTTON_Y = 570;
     public static final int VIEWPORT_INC = 5;

@@ -80,6 +80,7 @@ public class PathX
         /* IMAGE FILE NAMES */
         IMAGE_BACKGROUND_GAME,
         IMAGE_BACKGROUND_MENU,
+         IMAGE_WINDOW_ICON,
         //IMAGE_BUTTON_NEW,
        // IMAGE_BUTTON_NEW_MOUSE_OVER,
         /*IMAGE_BUTTON_BACK,
@@ -102,8 +103,9 @@ public class PathX
         IMAGE_TILE_BACKGROUND,
         IMAGE_TILE_BACKGROUND_SELECTED,
         IMAGE_TILE_BACKGROUND_MOUSE_OVER,
-        IMAGE_WINDOW_ICON,
+        
         */
+       
         /* GAME TEXT */
         TEXT_ERROR_LOADING_AUDIO,
         TEXT_ERROR_LOADING_LEVEL,

@@ -327,9 +327,9 @@ public class PathXMiniGame extends MiniGame
         // FIRST PUT THE ICON IN THE WINDOW
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);        
-       /// String windowIconFile = props.getProperty(PathXPropertyType.IMAGE_WINDOW_ICON);
-      //  img = loadImage(imgPath + windowIconFile);
-        //window.setIconImage(img);
+        String windowIconFile = props.getProperty(PathXPropertyType.IMAGE_WINDOW_ICON);
+        img = loadImage(imgPath + windowIconFile);
+        window.setIconImage(img);
 
         // CONSTRUCT THE PANEL WHERE WE'LL DRAW EVERYTHING
         canvas = new PathXPanel(this, (PathXDataModel)data);
@@ -350,26 +350,26 @@ public class PathXMiniGame extends MiniGame
       //  Point cursorHotSpot = new Point(0,0);
      //   Cursor wandCursor = Toolkit.getDefaultToolkit().createCustomCursor(img, cursorHotSpot, cursorName);
      //   window.setCursor(wandCursor);
-       /* 
+        
         // ADD A BUTTON FOR EACH LEVEL AVAILABLE
-        ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
-        ArrayList<String> levelImageNames = props.getPropertyOptionsList(PathXPropertyType.LEVEL_IMAGE_OPTIONS);
-        ArrayList<String> levelMouseOverImageNames = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS);
-        float totalWidth = levels.size() * (LEVEL_BUTTON_WIDTH + LEVEL_BUTTON_MARGIN) - LEVEL_BUTTON_MARGIN;
+        ArrayList<String> menuButton = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
+       // ArrayList<String> menuImageNames = props.getPropertyOptionsList(PathXPropertyType.LEVEL_IMAGE_OPTIONS);
+        ArrayList<String> menuMouseOverImageNames = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS);
+        float totalWidth = menuButton.size() * (LEVEL_BUTTON_WIDTH + LEVEL_BUTTON_MARGIN) - LEVEL_BUTTON_MARGIN;
         Viewport viewport = data.getViewport();
         x = (viewport.getScreenWidth() - totalWidth)/2.0f;
-        for (int i = 0; i < levels.size(); i++)
+        for (int i = 0; i < menuButton.size(); i++)
         {
             sT = new SpriteType(LEVEL_SELECT_BUTTON_TYPE);
-            img = loadImageWithColorKey(imgPath + levelImageNames.get(i), COLOR_KEY);
+            img = loadImageWithColorKey(imgPath + menuButton.get(i), COLOR_KEY);
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-            img = loadImageWithColorKey(imgPath + levelMouseOverImageNames.get(i), COLOR_KEY);
-            sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+           // img = loadImageWithColorKey(imgPath + menuButton.get(i), COLOR_KEY);
+           // sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
             s = new Sprite(sT, x, LEVEL_BUTTON_Y, 0, 0, PathXCarState.VISIBLE_STATE.toString());
-            guiButtons.put(levels.get(i), s);
+            guiButtons.put(menuButton.get(i), s);
             x += LEVEL_BUTTON_WIDTH + LEVEL_BUTTON_MARGIN;
         }
-        */
+        
         // ADD THE CONTROLS ALONG THE NORTH OF THE GAME SCREEN
          /*       
          // THEN THE NEW BUTTON
@@ -519,6 +519,8 @@ public class PathXMiniGame extends MiniGame
             }.init(levelButton));
         }   
 */
+        
+        
         // NEW GAME EVENT HANDLER
         //guiButtons.get(NEW_GAME_BUTTON_TYPE).setActionListener(new ActionListener(){
       //      public void actionPerformed(ActionEvent ae)
