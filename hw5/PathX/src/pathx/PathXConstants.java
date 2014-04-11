@@ -29,11 +29,24 @@ public class PathXConstants
     
     // THIS REPRESENTS THE BUTTONS ON THE MENU SCREEN FOR LEVEL SELECTION
     public static final String LEVEL_SELECT_BUTTON_TYPE = "LEVEL_SELECT_BUTTON_TYPE";
+    
+    //THIS REPRESENTS THE SPECIAL EFFECT BUTTONS ON THE GAME SCREEN
+    public static final String SPECIAL_SELECT_BUTTON_TYPE = "SPECIAL_SELECT_BUTTON_TYPE";
 
     // IN-GAME UI CONTROL TYPES
-   // public static final String NEW_GAME_BUTTON_TYPE = "NEW_GAME_BUTTON_TYPE";
-   // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
+    public static final String EXIT_GAME_BUTTON_TYPE = "EXIT_GAME_BUTTON_TYPE";
+        public static final String GAME_HOME_BUTTON_TYPE = "GAME_HOME_BUTTON_TYPE";
+        public static final String GAME_HOME_BUTTON_SETTING_TYPE = "GAME_HOME_SETTING_BUTTON_TYPE";
+            public static final String GAME_X_BUTTON_TYPE = "GAME_X_BUTTON_TYPE";
+                public static final String GAME_START_BUTTON_TYPE = "GAME_START_BUTTON_TYPE";
+                    public static final String GAME_SCROLL_LEFT_BUTTON_TYPE = "GAME_SCROLL_LEFT_BUTTON_TYPE";
+             public static final String GAME_SCROLL_RIGHT_BUTTON_TYPE = "GAME_SCROLL_RIGHT_BUTTON_TYPE";
+              public static final String GAME_SCROLL_UP_BUTTON_TYPE = "GAME_SCROLL_UP_BUTTON_TYPE";
+               public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
     
+    
+   // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
+      public static final String PLAY_GAME_BUTTON_TYPE = "PLAY_GAME_BUTTON_TYPE";
    // public static final String UNDO_BUTTON_TYPE ="UNDO_BUTTON_TYPE";
     
     
@@ -49,21 +62,29 @@ public class PathXConstants
     
     // WE'LL USE THESE STATES TO CONTROL SWITCHING BETWEEN THE TWO
     public static final String MENU_SCREEN_STATE = "MENU_SCREEN_STATE";
-    public static final String GAME_SCREEN_STATE = "GAME_SCREEN_STATE";    
-
+    public static final String GAME_SCREEN_STATE = "GAME_SCREEN_STATE"; 
+   public static final String GAME_SETTINGS_STATE = "GAME_SETTINGS_STATE"; 
     // ANIMATION SPEED
     public static final int FPS = 30;
 
     // UI CONTROL SIZE AND POSITION SETTINGS
-    public static final int WINDOW_WIDTH = 1280;
-    public static final int WINDOW_HEIGHT = 720;
+    public static final int WINDOW_WIDTH = 750; //640
+    public static final int WINDOW_HEIGHT = 650; //480
     public static final int VIEWPORT_MARGIN_LEFT = 20;
     public static final int VIEWPORT_MARGIN_RIGHT = 20;
     public static final int VIEWPORT_MARGIN_TOP = 20;
     public static final int VIEWPORT_MARGIN_BOTTOM = 20;
-    public static final int LEVEL_BUTTON_WIDTH = 100;
+    public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
-    public static final int LEVEL_BUTTON_Y = 570;
+    
+    public static final int SPECIAL_BUTTON_WIDTH = 25;
+    public static final int SPECIAL_BUTTON_MARGIN = 6;
+    public static final int SPECIAL_BUTTON_Y = 156;
+    public static final int SPECIAL_BUTTON_Y2 = 210;
+     public static final int SPECIAL_BUTTON_Y3 = 185;
+         public static final int SPECIAL_BUTTON_Y4 = 239;
+        
+    public static final int LEVEL_BUTTON_Y = 510;
     public static final int VIEWPORT_INC = 5;
         
     // FOR TILE RENDERING
@@ -81,8 +102,36 @@ public class PathXConstants
     // UI CONTROLS POSITIONS IN THE GAME SCREEN
     public static final int NORTH_PANEL_HEIGHT = 130;
     public static final int CONTROLS_MARGIN = 0;
-    //public static final int NEW_BUTTON_X = 0;
-   // public static final int NEW_BUTTON_Y = 0;
+    public static final int EXIT_BUTTON_X = 1190;
+    public static final int EXIT_BUTTON_Y = 0;
+       public static final int START_BUTTON_X = 60;
+    public static final int START_BUTTON_Y = 240;
+    
+      public static final int HOME_BUTTON_X = 57;
+    public static final int HOME_BUTTON_Y = 142;
+    
+    public static final int HOME_BUTTON_SETTING_X = 500;
+    public static final int HOME_BUTTON_SETTING_Y = 50;
+    
+      public static final int HOME_X_BUTTON_X = 170;
+    public static final int HOME_X_BUTTON_Y = 142;
+    
+    
+      public static final int SCROLL_LEFT_BUTTON_X = 49;
+    public static final int SCROLL_LEFT_BUTTON_Y = 585;;
+    
+    
+      public static final int SCROLL_RIGHT_BUTTON_X = 181;
+    public static final int SCROLL_RIGHT_BUTTON_Y = 586;
+    
+      public static final int SCROLL_UP_BUTTON_X = 114;
+    public static final int SCROLL_UP_BUTTON_Y = 560;
+    
+      public static final int SCROLL_DOWN_BUTTON_X = 114;
+    public static final int SCROLL_DOWN_BUTTON_Y = 618;
+    
+    
+    
     
    // public static final int BACK_BUTTON_X = 130;
    // public static final int BACK_BUTTON_Y = 0;

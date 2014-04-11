@@ -7,9 +7,24 @@
 <properties>
     <property_list>
         <!-- ALL THE IMAGES TO BE USED IN THE GAME -->
-        <property name="IMAGE_BACKGROUND_GAME"              value="./pathx/IMAGE_PATHX_BACKGROUND.png"></property>
+        <property name="IMAGE_BACKGROUND_GAME"              value="./pathx/IMAGE_GAME_SCREEN_SELECTION.png"></property>
         <property name="IMAGE_BACKGROUND_MENU"              value="./pathx/IMAGE_PATHX_BACKGROUND.png"></property>
          <property name="IMAGE_WINDOW_ICON"                  value="./pathx/WindowIcon.png"></property>
+        <property name="IMAGE_SETTINGS_WINDOW"              value="./pathx/IMAGE_SETTINGS_WINDOW.png"></property>
+          <property name="IMAGE_BACKGROUND_GAME_SELECT"      value="./pathx/IMAGE_MAP_LI_2.png"></property>
+          <property name="HOME_SCREEN_IMAGE_EXIT"            value="./pathx/IMAGE_BUTTON_X.png"></property>
+          <property name="GAME_SCREEN_IMAGE_BUTTON_HOME"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN.png"></property>
+          <property name="GAME_SCREEN_IMAGE_BUTTON_X"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN.png"></property>
+         <property name="GAME_SCREEN_IMAGE_BUTTON_X1"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN1.png"></property>
+         <property name="GAME_SCREEN_IMAGE_BUTTON_HOME1"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN1.png"></property>
+
+          <property name="GAME_SCREEN_IMAGE_BUTTON_START"            value="./pathx/IMGAE_BUTTON_START_GAME_SCREEN.png"></property>
+           <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_LEFT"            value="./pathx/IMGAE_BUTTON_SCROLL_LEFT.png"></property>
+           <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_DOWN"            value="./pathx/IMGAE_BUTTON_SCROLL_DOWN.png"></property>
+           <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_RIGHT"            value="./pathx/IMGAE_BUTTON_SCROLL_RIGHT.png"></property>
+            <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_UP"            value="./pathx/IMGAE_BUTTON_SCROLL_UP.png"></property>
+           
+          
         <!--<property name="IMAGE_BUTTON_NEW"                   value="./pathx/ButtonNewGame.png"></property>
         <property name="IMAGE_BUTTON_NEW_MOUSE_OVER"        value="./pathx/ButtonNewGameMouseOver.png"></property>
         
@@ -73,28 +88,63 @@
         -->
         
          <property_options_list>
-        <property_options name="HOME_SCREEN_IMAGE_OPTIONS">
+        
+        
+          <property_options name="HOME_SCREEN_IMAGE_OPTIONS">
             <option>./pathx/IMAGE_PLAY.png</option>
              <option>./pathx/IMAGE_RESET.png</option>
             <option>./pathx/IMAGE_SETTINGS.png</option>
             <option>./pathx/IMAGE_HELP.png</option>
-           <option>./pathx/IMAGE_BUTTON_X.png</option>
-           
+          
         </property_options>
         
         <property_options name="HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS">
-            <option>./pathx/IMAGE_PLAY_MOUSE_OVER</option>
-             <option>./pathx/IMAGE_RESET_MOUSE_OVER.png</option>
-            <option>./pathx/IMAGE_SETTINGS_MOUSE_OVER.png</option>
-            <option>./pathx/IMAGE_HELP_MOUSE_OVER.png</option>
-           
-           
+            <option>./pathx/IMAGE_PLAY_MOUSE.png</option>
+             <option>./pathx/IMAGE_RESET_MOUSE.png</option>
+            <option>./pathx/IMAGE_SETTINGS_MOUSE.png</option>
+            <option>./pathx/IMAGE_HELP_MOUSE.png</option>
         </property_options>
+        
+        
         <property_options name="LEVEL_IMAGE_OPTIONS">
             <option>./pathx/IMAGE_MAP_LI_2.png</option>
                        
         </property_options>
         
+         <property_options name="SPECIAL_IMAGE_OPTIONS1">
+    <option>./pathx/IMGAE_BUTTON_GREEN_LIGHT.png</option>
+       <option>./pathx/IMGAE_BUTTON_RED_LIGHT.png</option>
+                  <option>./pathx/IMGAE_BUTTON_FLAT_TIRE.png</option>
+               <option>./pathx/IMGAE_BUTTON_EMPTY_GAS.png</option>
+     
+                   
+        </property_options>
+       
+         <property_options name="SPECIAL_IMAGE_OPTIONS3">
+              <option>./pathx/IMGAE_BUTTON_INCREASE_SPEED.png</option>
+                 <option>./pathx/IMGAE_BUTTON_DECREASE_SPEED.png</option>
+                   <option>./pathx/IMGAE_BUTTON_INCREASE_PLAYER_SPEED.png</option>
+                       <option>./pathx/IMGAE_BUTTON_ROAD_CLOSE.png</option>
+                       
+              </property_options>
+         <property_options name="SPECIAL_IMAGE_OPTIONS2">          
+                     <option>./pathx/IMGAE_BUTTON_STOP.png</option>
+                     <option>./pathx/IMGAE_BUTTON_GO.png</option>
+                     <option>./pathx/IMGAE_BUTTON_MIND_CONTROL.png</option>    
+                        <option>./pathx/IMGAE_BUTTON_MIND_TERROR.png</option>
+                        
+                        </property_options>
+                        
+         <property_options name="SPECIAL_IMAGE_OPTIONS4">         
+                     
+                  <option>./pathx/IMGAE_BUTTON_STEAL.png</option>  
+             <option>./pathx/IMGAE_BUTTON_BALLSpng.png</option>
+                <option>./pathx/IMGAE_BUTTON_FLY.png</option>
+                <option>./pathx/IMGAE_BUTTON_INVINCIBILITY.png</option>
+             
+        </property_options>
+        
+         </property_options_list>
         <!--
         <property_options name="LEVEL_MOUSE_OVER_IMAGE_OPTIONS">
             <option>./pathx/ButtonBubbleSortCoilMouseOver.png</option>
@@ -105,5 +155,5 @@
              
         </property_options>
         -->
-    </property_options_list>
+   
 </properties>

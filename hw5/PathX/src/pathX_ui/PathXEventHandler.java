@@ -5,6 +5,7 @@ import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.MENU_SCREEN_STATE;
 import static pathx.PathXConstants.VIEWPORT_INC;
 import pathx.PathX;
+import javax.swing.JOptionPane;
 import pathx_data.PathXFileManager;
 import pathx_data.PathXDataModel;
 //import sorting_hat.data.SortingHatDataModel;
@@ -32,27 +33,42 @@ public class PathXEventHandler
      */    
     public void respondToExitRequest()
     {
-        // IF THE GAME IS STILL GOING ON, END IT AS A LOSS
-        if (game.getDataModel().inProgress())
-        {
-            game.getDataModel().endGameAsLoss();
-        }
-        // AND CLOSE THE ALL
-        System.exit(0);        
+        System.out.println("testing respondtoexitrequest");
+        
+        
+        int closeGame = JOptionPane.YES_NO_OPTION;
+int Result = JOptionPane.showConfirmDialog(null, "Are You Sure You Want TO Close Path X", "PathX Mini Game ",closeGame);
+if(closeGame==0)
+  System.exit(0);      
     }
 
     /**
      * Called when the user clicks the New button.
      */
-    public void respondToNewGameRequest()
+    public void respondToHomeRequest()
     {
+        game.switchToSplashScreen();
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         if (game.getDataModel().inProgress())
         {
             game.getDataModel().endGameAsLoss();
+            
+           // if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+             
+                   
+                     
+                     
+                    
+                    
         }
         // RESET THE GAME AND ITS DATA
-        game.reset();        
+        //game.reset();        
+        
+    }
+    
+    public void respondToStartRequest()
+    {
+        
     }
     
     
@@ -103,21 +119,28 @@ public class PathXEventHandler
     /**
      * Called when the user clicks a button to select a level.
      */    
-    public void respondToSelectLevelRequest(String levelFile)
+    public void respondToSelectMenuRequest(String menuType)
     {
-        // WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
+        
+        
+        System.out.println("Testing MenuType********************* " + menuType);
+         //WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
         if (game.isCurrentScreenState(MENU_SCREEN_STATE))
         {
-            // GET THE GAME'S DATA MODEL, WHICH IS ALREADY LOCKED FOR US
+           //  GET THE GAME'S DATA MODEL, WHICH IS ALREADY LOCKED FOR US
           PathXDataModel data = (PathXDataModel)game.getDataModel();
         
-            // UPDATE THE DATA
-            PathXFileManager fileManager = game.getFileManager();
-            fileManager.loadLevel(levelFile);
-            data.reset(game);
+           // UPDATE THE DATA
+            //PathXFileManager fileManager = game.getFileManager();
+            //fileManager.loadLevel(MenuType);
+            //data.reset(game);
 
             // GO TO THE GAME
-            game.switchToGameScreen();
+          if(menuType.equals("./data/./pathx/IMAGE_PLAY.png"))
+          game.switchToGameScreen();
+          
+           if(menuType.equals("./data/./pathx/IMAGE_SETTINGS.png"))
+          game.switchToSettingsScreen();
         }        
     }
 
