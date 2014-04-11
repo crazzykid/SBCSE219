@@ -236,6 +236,47 @@ public class PathXMiniGame extends MiniGame
 //        
 //        // AND NOW PUT THE NORTH TOOLBAR IN THE FRAME
 //        window.getContentPane().add(northToolbar, BorderLayout.NORTH);
+public void switchToLevelSelect()
+{
+    
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        
+        guiDecor.get(BACKGROUND_TYPE).setState(GAME_LEVEL_STATE);
+        ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
+        for (String level : levels)
+        {
+            guiButtons.get(level).setState(PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.get(level).setEnabled(false);
+        }
+             guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(true);
+        
+          // DEACTIVATE THE SPECIAL BUTTONS
+        ArrayList<String> specialButtons = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS1);
+        for (String specialButton : specialButtons)
+        {
+           guiButtons.get(specialButton).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(specialButton).setEnabled(false);
+       } 
+        
+          // DEACTIVATE THE SPECIAL SELECT BUTTONS
+          guiButtons.get(GAME_START_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(false);
+        
+        
+         guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+         currentScreenState = GAME_LEVEL_STATE;
+
+        // PLAY THE GAMEPLAY SCREEN SONG
+      //  audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString()); 
+      //  audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
+         
+        
+    
+    
+    
+}
+
 
     public void switchToSettingsScreen()
     {
@@ -291,6 +332,8 @@ public class PathXMiniGame extends MiniGame
             guiButtons.get(level).setState(PathXCarState.INVISIBLE_STATE.toString());
             guiButtons.get(level).setEnabled(true);
         }
+        
+      
           // ACTIVATE THE SPECIAL BUTTONS
         ArrayList<String> specialButtons = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS1);
         for (String specialButton : specialButtons)
@@ -298,24 +341,28 @@ public class PathXMiniGame extends MiniGame
            guiButtons.get(specialButton).setState(PathXCarState.VISIBLE_STATE.toString());
            guiButtons.get(specialButton).setEnabled(true);
        } 
+          
         ArrayList<String> specialButtons2 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS2);
         for (String specialButton : specialButtons2)
         {
            guiButtons.get(specialButton).setState(PathXCarState.VISIBLE_STATE.toString());
            guiButtons.get(specialButton).setEnabled(true);
        } 
+       
         ArrayList<String> specialButtons3 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS3);
         for (String specialButton : specialButtons3)
         {
            guiButtons.get(specialButton).setState(PathXCarState.VISIBLE_STATE.toString());
            guiButtons.get(specialButton).setEnabled(true);
        } 
+      
          ArrayList<String> specialButtons4 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS4);
         for (String specialButton : specialButtons4)
         {
            guiButtons.get(specialButton).setState(PathXCarState.VISIBLE_STATE.toString());
            guiButtons.get(specialButton).setEnabled(true);
        } 
+        
           guiButtons.get(GAME_START_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(true);
         
@@ -342,7 +389,7 @@ public class PathXMiniGame extends MiniGame
         
              guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
-        
+       
         // ACTIVATE THE TOOLBAR AND ITS CONTROLS
         //guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
        // guiButtons.get(NEW_GAME_BUTTON_TYPE).setEnabled(true);
@@ -609,8 +656,12 @@ public class PathXMiniGame extends MiniGame
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GAME));
         sT.addState(GAME_SCREEN_STATE, img);
         
-        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_SETTINGS_WINDOW));
+       img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_SETTINGS_WINDOW));
         sT.addState(GAME_SETTINGS_STATE, img);
+        
+         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GREEN));
+        sT.addState(GAME_LEVEL_STATE , img);
+        
         s = new Sprite(sT, 0, 0, 0, 0, MENU_SCREEN_STATE);
     
         guiDecor.put(BACKGROUND_TYPE, s);
@@ -645,7 +696,7 @@ public class PathXMiniGame extends MiniGame
          ArrayList<String> specialButton = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS1);
          totalWidth = specialButton.size() * (SPECIAL_BUTTON_WIDTH + SPECIAL_BUTTON_MARGIN) - SPECIAL_BUTTON_MARGIN;
          viewport = data.getViewport();
-        x = 21;//(viewport.getScreenWidth() - totalWidth)/2.0f;
+        x = 17;//(viewport.getScreenWidth() - totalWidth)/2.0f;
         for (int i = 0; i < specialButton.size(); i++)
         {
             sT = new SpriteType(SPECIAL_SELECT_BUTTON_TYPE);
@@ -661,7 +712,7 @@ public class PathXMiniGame extends MiniGame
          ArrayList<String> specialButton2 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS2);
          totalWidth = specialButton2.size() * (SPECIAL_BUTTON_WIDTH + SPECIAL_BUTTON_MARGIN) - SPECIAL_BUTTON_MARGIN;
          viewport = data.getViewport();
-        x = 21;//(viewport.getScreenWidth() - totalWidth)/2.0f;
+        x = 17;//(viewport.getScreenWidth() - totalWidth)/2.0f;
         for (int i = 0; i < specialButton2.size(); i++)
         {
             sT = new SpriteType(SPECIAL_SELECT_BUTTON_TYPE);
@@ -677,7 +728,7 @@ public class PathXMiniGame extends MiniGame
         ArrayList<String> specialButton3 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS3);
          totalWidth = specialButton3.size() * (SPECIAL_BUTTON_WIDTH + SPECIAL_BUTTON_MARGIN) - SPECIAL_BUTTON_MARGIN;
          viewport = data.getViewport();
-        x = 21;//(viewport.getScreenWidth() - totalWidth)/2.0f;
+        x = 17;//(viewport.getScreenWidth() - totalWidth)/2.0f;
         for (int i = 0; i < specialButton3.size(); i++)
         {
             sT = new SpriteType(SPECIAL_SELECT_BUTTON_TYPE);
@@ -693,7 +744,7 @@ public class PathXMiniGame extends MiniGame
         ArrayList<String> specialButton4 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS4);
          totalWidth = specialButton4.size() * (SPECIAL_BUTTON_WIDTH + SPECIAL_BUTTON_MARGIN) - SPECIAL_BUTTON_MARGIN;
          viewport = data.getViewport();
-        x = 21;//(viewport.getScreenWidth() - totalWidth)/2.0f;
+        x = 17;//(viewport.getScreenWidth() - totalWidth)/2.0f;
         for (int i = 0; i < specialButton4.size(); i++)
         {
             sT = new SpriteType(SPECIAL_SELECT_BUTTON_TYPE);
@@ -783,6 +834,13 @@ public class PathXMiniGame extends MiniGame
         s = new Sprite(sT, SCROLL_DOWN_BUTTON_X, SCROLL_DOWN_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_DOWN_BUTTON_TYPE, s);
         
+         //The PUT THE NORTH TOOLBAR
+        String northToolBar = props.getProperty(PathXPropertyType.IMAGE_NORTH_TOOL_BAR);
+        sT = new SpriteType(GAME_TOOLBAR_TYPE);
+        img = loadImage(imgPath + northToolBar);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        s = new Sprite(sT, TOOLBAR_X, TOOLBAR_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiDecor.put(GAME_TOOLBAR_TYPE, s);
            /*
        
         

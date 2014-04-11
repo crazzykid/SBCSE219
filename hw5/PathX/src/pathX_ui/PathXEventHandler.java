@@ -137,7 +137,7 @@ if(closeGame==0)
 
             // GO TO THE GAME
           if(menuType.equals("./data/./pathx/IMAGE_PLAY.png"))
-          game.switchToGameScreen();
+          game.switchToLevelSelect();
           
            if(menuType.equals("./data/./pathx/IMAGE_SETTINGS.png"))
           game.switchToSettingsScreen();

@@ -43,7 +43,7 @@ public class PathXConstants
              public static final String GAME_SCROLL_RIGHT_BUTTON_TYPE = "GAME_SCROLL_RIGHT_BUTTON_TYPE";
               public static final String GAME_SCROLL_UP_BUTTON_TYPE = "GAME_SCROLL_UP_BUTTON_TYPE";
                public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
-    
+                 public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
     
    // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
       public static final String PLAY_GAME_BUTTON_TYPE = "PLAY_GAME_BUTTON_TYPE";
@@ -63,7 +63,9 @@ public class PathXConstants
     // WE'LL USE THESE STATES TO CONTROL SWITCHING BETWEEN THE TWO
     public static final String MENU_SCREEN_STATE = "MENU_SCREEN_STATE";
     public static final String GAME_SCREEN_STATE = "GAME_SCREEN_STATE"; 
-   public static final String GAME_SETTINGS_STATE = "GAME_SETTINGS_STATE"; 
+   public static final String GAME_SETTINGS_STATE = "GAME_SETTINGS_STATE";
+   public static final String GAME_LEVEL_STATE = "GAME_LEVEL_STATE";
+   
     // ANIMATION SPEED
     public static final int FPS = 30;
 
@@ -77,12 +79,12 @@ public class PathXConstants
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
     
-    public static final int SPECIAL_BUTTON_WIDTH = 25;
-    public static final int SPECIAL_BUTTON_MARGIN = 6;
-    public static final int SPECIAL_BUTTON_Y = 156;
-    public static final int SPECIAL_BUTTON_Y2 = 210;
-     public static final int SPECIAL_BUTTON_Y3 = 185;
-         public static final int SPECIAL_BUTTON_Y4 = 239;
+    public static final int SPECIAL_BUTTON_WIDTH = 28;
+    public static final int SPECIAL_BUTTON_MARGIN = 8;
+    public static final int SPECIAL_BUTTON_Y = 286;
+     public static final int SPECIAL_BUTTON_Y3 = 335;
+         public static final int SPECIAL_BUTTON_Y2 = 384;
+         public static final int SPECIAL_BUTTON_Y4 = 434;
         
     public static final int LEVEL_BUTTON_Y = 510;
     public static final int VIEWPORT_INC = 5;
@@ -130,6 +132,8 @@ public class PathXConstants
       public static final int SCROLL_DOWN_BUTTON_X = 114;
     public static final int SCROLL_DOWN_BUTTON_Y = 618;
     
+          public static final int TOOLBAR_X = 0;
+    public static final int TOOLBAR_Y = 0;
     
     
     

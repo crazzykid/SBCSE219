@@ -8,6 +8,8 @@
     <property_list>
         <!-- ALL THE IMAGES TO BE USED IN THE GAME -->
         <property name="IMAGE_BACKGROUND_GAME"              value="./pathx/IMAGE_GAME_SCREEN_SELECTION.png"></property>
+        <property name="IMAGE_NORTH_TOOL_BAR"              value="./pathx/IMAGE_NORTH_TOOL_BAR.png"></property>
+            <property name="IMAGE_BACKGROUND_GREEN"              value="./pathx/BACKGROUND_GREEN.png"></property>
         <property name="IMAGE_BACKGROUND_MENU"              value="./pathx/IMAGE_PATHX_BACKGROUND.png"></property>
          <property name="IMAGE_WINDOW_ICON"                  value="./pathx/WindowIcon.png"></property>
         <property name="IMAGE_SETTINGS_WINDOW"              value="./pathx/IMAGE_SETTINGS_WINDOW.png"></property>

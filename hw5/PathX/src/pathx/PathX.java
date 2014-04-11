@@ -80,6 +80,8 @@ public class PathX
         /* IMAGE FILE NAMES */
         IMAGE_BACKGROUND_GAME,
         IMAGE_BACKGROUND_MENU,
+        IMAGE_BACKGROUND_GREEN,
+           IMAGE_NORTH_TOOL_BAR,
         IMAGE_SETTINGS_WINDOW,
         IMAGE_BACKGROUND_GAME_SELECT,
          IMAGE_WINDOW_ICON,
@@ -151,7 +153,9 @@ public class PathX
         SPECIAL_IMAGE_OPTIONS3,
               SPECIAL_IMAGE_OPTIONS4,
        HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS,
+    
        HOME_SCREEN_IMAGE_EXIT
+       
        
        
        
