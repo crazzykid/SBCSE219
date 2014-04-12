@@ -4,8 +4,13 @@ import java.awt.event.KeyEvent;
 import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.MENU_SCREEN_STATE;
 import static pathx.PathXConstants.VIEWPORT_INC;
+import static pathx.PathXConstants.SCROLL_DOWN;
+import static pathx.PathXConstants.SCROLL_LEFT;
+import static pathx.PathXConstants.SCROLL_RIGHT;
+import static pathx.PathXConstants.SCROLL_UP;
 import pathx.PathX;
 import javax.swing.JOptionPane;
+import mini_game.Viewport;
 import pathx_data.PathXFileManager;
 import pathx_data.PathXDataModel;
 //import sorting_hat.data.SortingHatDataModel;
@@ -19,13 +24,16 @@ public class PathXEventHandler
 {
     // THE SORTING HAT GAME, IT PROVIDES ACCESS TO EVERYTHING
     private PathXMiniGame game;
-
+      private int viewPortX;
+          private int viewPortY;
     /**
      * Constructor, it just keeps the game for when the events happen.
      */
     public PathXEventHandler(PathXMiniGame initGame)
     {
         game = initGame;
+        viewPortX =0;
+        viewPortY = 0;
     }
 
     /**
@@ -33,7 +41,7 @@ public class PathXEventHandler
      */    
     public void respondToExitRequest()
     {
-        System.out.println("testing respondtoexitrequest");
+        //System.out.println("testing respondtoexitrequest");
         
         
         int closeGame = JOptionPane.YES_NO_OPTION;
@@ -47,7 +55,13 @@ if(closeGame==0)
      */
     public void respondToHomeRequest()
     {
+         PathXDataModel data = (PathXDataModel)game.getDataModel();
+          Viewport viewport = data.getViewport();
+        
         game.switchToSplashScreen();
+         viewPortX =0;
+        viewPortY = 0;
+        viewport.resetScroll();
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         if (game.getDataModel().inProgress())
         {
@@ -89,7 +103,48 @@ if(closeGame==0)
         // RESET THE GAME AND ITS DATA
        // game.reset();        
     }
-     
+     public void respondToScrollRequest(String scrollType)
+     {
+          PathXDataModel data = (PathXDataModel)game.getDataModel();
+          Viewport viewport = data.getViewport();
+        
+          
+         if(scrollType.equals(SCROLL_DOWN) )
+         {
+             if(viewPortY <=200)
+             {
+                 viewPortY+=50; 
+                 viewport.scroll(0, 50);
+             }
+           
+         }
+         else if(scrollType.equals(SCROLL_UP))
+         {
+             if(viewPortY >0)
+             {
+                 viewPortY+= -50; 
+                 viewport.scroll(0, -50);
+             }
+         }
+           else if(scrollType.equals(SCROLL_RIGHT))
+           {
+               if(viewPortX <350)
+             { 
+                 viewPortX +=50;
+                 viewport.scroll(50, 0);
+                
+             }
+           }
+           else if(scrollType.equals(SCROLL_LEFT))
+           {
+               if(viewPortX>0)
+               {
+                   viewPortX += -50;
+                    viewport.scroll(-50, 0);
+                  
+               }
+           }
+     }
      
       public void respondToUndoRequest()
     {
@@ -123,7 +178,7 @@ if(closeGame==0)
     {
         
         
-        System.out.println("Testing MenuType********************* " + menuType);
+      //  System.out.println("Testing MenuType********************* " + menuType);
          //WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
         if (game.isCurrentScreenState(MENU_SCREEN_STATE))
         {

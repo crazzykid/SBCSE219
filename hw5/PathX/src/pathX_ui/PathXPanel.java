@@ -196,8 +196,13 @@ public class PathXPanel extends JPanel
         Collection<Sprite> decorSprites = game.getGUIDecor().values();
         for (Sprite s : decorSprites)
         {
-            if (s.getSpriteType().getSpriteTypeID() != BACKGROUND_TYPE)
-                renderSprite(g, s);
+            if (s.getSpriteType().getSpriteTypeID() != BACKGROUND_TYPE )
+                if (s.getSpriteType().getSpriteTypeID() != LEVEL_SELECT_BACKGROUND_TYPE ) 
+                    renderSprite(g, s);
+            
+             if (s.getSpriteType().getSpriteTypeID() == LEVEL_SELECT_BACKGROUND_TYPE)
+                renderMap(g, s);
+            
         }
         
         // AND NOW RENDER THE BUTTONS
@@ -206,7 +211,28 @@ public class PathXPanel extends JPanel
         {
             renderSprite(g, s);
         }
+        
+        
     }
+    
+    public void renderMap(Graphics g, Sprite s)
+    {
+            
+           Viewport viewport = data.getViewport();
+          
+            int viewPortX = viewport.getViewportX();
+            int viewPortY = viewport.getViewportY();
+           int moveX = VIEWPORT_OFFSET_Y + viewPortX;
+           int moveY = VIEWPORT_OFFSET_X + viewPortY;
+       
+          
+           
+           SpriteType bgST = s.getSpriteType();
+            Image img = bgST.getStateImage(s.getState()); 
+             g.drawImage(img, 10, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);   
+      
+    }
+    
     
     public void renderHeader(Graphics g)
     {
@@ -445,6 +471,8 @@ public class PathXPanel extends JPanel
             SpriteType bgST = s.getSpriteType();
             Image img = bgST.getStateImage(s.getState());
             g.drawImage(img, (int)s.getX(), (int)s.getY(), bgST.getWidth(), bgST.getHeight(), null); 
+            
+           //System.out.println("s getX :" +(int)s.getX() + " \ns getY :" + (int)s.getY() + " \nbgST W :" +bgST.getWidth() + " \nbgst H :" + bgST.getHeight() );
         }
     }
 

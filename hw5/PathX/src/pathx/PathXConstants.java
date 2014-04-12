@@ -24,6 +24,7 @@ public class PathXConstants
     
     // EACH SCREEN HAS ITS OWN BACKGROUND TYPE
     public static final String BACKGROUND_TYPE = "BACKGROUND_TYPE";
+     public static final String LEVEL_SELECT_BACKGROUND_TYPE = "LEVEL_SELECT_BACKGROUND_TYPE";
     //public static final String BUBBLE_SORT = "BUBBLE_SORT";
    // public static final String SELECTION_SORT =   "SELECTION_SORT";
     
@@ -66,6 +67,12 @@ public class PathXConstants
    public static final String GAME_SETTINGS_STATE = "GAME_SETTINGS_STATE";
    public static final String GAME_LEVEL_STATE = "GAME_LEVEL_STATE";
    
+   
+      public static final String SCROLL_LEFT = "SCROLL_LEFT";
+      public static final String SCROLL_RIGHT = "SCROLL_RIGHT";
+      public static final String SCROLL_UP = "SCROLL_UP";
+      public static final String SCROLL_DOWN = "SCROLL_DOWN";
+   
     // ANIMATION SPEED
     public static final int FPS = 30;
 
@@ -76,6 +83,12 @@ public class PathXConstants
     public static final int VIEWPORT_MARGIN_RIGHT = 20;
     public static final int VIEWPORT_MARGIN_TOP = 20;
     public static final int VIEWPORT_MARGIN_BOTTOM = 20;
+    
+   
+    
+        public static final int VIEWPORT_OFFSET_X = 400;
+    public static final int VIEWPORT_OFFSET_Y = 400;
+    
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
     

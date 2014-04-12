@@ -89,7 +89,6 @@ public class PathXDataModel extends MiniGameDataModel
     {
         // KEEP THE GAME FOR LATER
         miniGame = initMiniGame;
-
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
         stackCars = new ArrayList();
         movingCars = new ArrayList();
