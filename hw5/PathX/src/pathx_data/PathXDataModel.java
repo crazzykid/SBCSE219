@@ -47,7 +47,9 @@ public class PathXDataModel extends MiniGameDataModel
     private ArrayList<PathXCar> stackCars;
     private int stackCarsX;
     private int stackCarsY;
-
+    
+   private ArrayList<PathXGameLevel> levelLocation; 
+   
     // THESE ARE THE TILES THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
     private ArrayList<PathXCar> movingCars;
 
@@ -99,6 +101,17 @@ public class PathXDataModel extends MiniGameDataModel
         selectedCar = null;
         selectedCarIndex = -1;
         tempCar = null;
+        
+         levelLocation = new ArrayList<PathXGameLevel>();
+         
+         for(int i =0; i<20; i++ )
+        {
+            PathXGameLevel GameLevel;
+            GameLevel = new PathXGameLevel();
+            
+             levelLocation.add(i, GameLevel);
+        }
+         
     }
 
     // ACCESSOR METHODS
@@ -144,7 +157,10 @@ public class PathXDataModel extends MiniGameDataModel
     {
         return currentLevel;
     }
-
+public ArrayList getLevelLocation()
+{
+    return levelLocation;
+}
    // public ArrayList<PathXCar> getTilesToSort()
     {
    //     return tilesToSort;

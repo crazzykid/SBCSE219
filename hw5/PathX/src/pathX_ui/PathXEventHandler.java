@@ -103,6 +103,20 @@ if(closeGame==0)
         // RESET THE GAME AND ITS DATA
        // game.reset();        
     }
+       public void respondToStageRequest(String stage)
+    {
+        // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
+      //  if (game.getDataModel().inProgress())
+       // {
+           //if( game.isCurrentScreenState(GAME_SCREEN))
+             
+                    game.switchToGameScreen();
+                    
+      //  }
+        // RESET THE GAME AND ITS DATA
+       // game.reset();        
+    }
+       
      public void respondToScrollRequest(String scrollType)
      {
           PathXDataModel data = (PathXDataModel)game.getDataModel();

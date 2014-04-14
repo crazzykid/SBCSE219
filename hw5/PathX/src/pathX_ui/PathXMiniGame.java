@@ -330,7 +330,7 @@ public void switchToLevelSelect()
         guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(false);
         
         guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
-        
+        guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
          currentScreenState = GAME_SETTINGS_STATE;
 
         // PLAY THE GAMEPLAY SCREEN SONG
@@ -349,12 +349,15 @@ public void switchToLevelSelect()
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_SCREEN_STATE);
         
          guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        
+         guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+         
         // DEACTIVATE THE LEVEL SELECT BUTTONS
         ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
         for (String level : levels)
         {
             guiButtons.get(level).setState(PathXCarState.INVISIBLE_STATE.toString());
-            guiButtons.get(level).setEnabled(true);
+            guiButtons.get(level).setEnabled(false);
         }
         
       
@@ -676,6 +679,10 @@ public void switchToLevelSelect()
         canvas = new PathXPanel(this, (PathXDataModel)data);
         
          Viewport viewport = data.getViewport();
+         
+       ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
+       level.get(0).setStageUnlock(true);
+       level.get(0).setLevelState(RED_STATE);
      
     
         // LOAD THE BACKGROUNDS, WHICH ARE GUI DECOR
@@ -1545,6 +1552,11 @@ public void switchToLevelSelect()
             public void actionPerformed(ActionEvent ae)
            {   eventHandler.respondToScrollRequest(SCROLL_RIGHT);     }
       });
+             guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE1).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+           {   eventHandler.respondToStageRequest(STAGE1);     }
+      });
+           
         
 //           String exitButton = props.getProperty(PathXPropertyType.HOME_SCREEN_IMAGE_EXIT);
 //         //EXIT GAME EVENT HANDLER
