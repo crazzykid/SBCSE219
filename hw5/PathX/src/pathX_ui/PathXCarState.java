@@ -25,5 +25,11 @@ public enum PathXCarState
     INVISIBLE_STATE,
     VISIBLE_STATE,
     SELECTED_STATE,
-    MOUSE_OVER_STATE
+    MOUSE_OVER_STATE,
+    GREEN_STATE,
+    RED_STATE,
+    WHITE_STATE
+    
+    
+    
 }

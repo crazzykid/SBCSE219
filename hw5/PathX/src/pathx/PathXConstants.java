@@ -45,6 +45,71 @@ public class PathXConstants
               public static final String GAME_SCROLL_UP_BUTTON_TYPE = "GAME_SCROLL_UP_BUTTON_TYPE";
                public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
                  public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
+                 
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE1 = "GAME_PLAY_LEVEL_RED_TYPE1";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE1 = "GAME_PLAY_LEVEL_WHITE_TYPE1";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE1 = "GAME_PLAY_LEVEL_GREEN_TYPE1";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE2 = "GAME_PLAY_LEVEL_RED_TYPE2";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE2 = "GAME_PLAY_LEVEL_WHITE_TYPE2";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE2 = "GAME_PLAY_LEVEL_GREEN_TYPE2";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE3 = "GAME_PLAY_LEVEL_RED_TYPE3";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE3 = "GAME_PLAY_LEVEL_WHITE_TYPE3";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE3 = "GAME_PLAY_LEVEL_GREEN_TYPE3";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE4 = "GAME_PLAY_LEVEL_RED_TYPE4";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE4 = "GAME_PLAY_LEVEL_WHITE_TYPE4";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE4 = "GAME_PLAY_LEVEL_GREEN_TYPE4";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE5 = "GAME_PLAY_LEVEL_RED_TYPE5";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE5 = "GAME_PLAY_LEVEL_WHITE_TYPE5";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE5 = "GAME_PLAY_LEVEL_GREEN_TYPE5";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE6 = "GAME_PLAY_LEVEL_RED_TYPE6";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE6 = "GAME_PLAY_LEVEL_WHITE_TYPE6";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE6 = "GAME_PLAY_LEVEL_GREEN_TYPE6";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE7 = "GAME_PLAY_LEVEL_RED_TYPE7";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE7 = "GAME_PLAY_LEVEL_WHITE_TYPE7";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE7 = "GAME_PLAY_LEVEL_GREEN_TYPE7";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE8 = "GAME_PLAY_LEVEL_RED_TYPE8";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE8 = "GAME_PLAY_LEVEL_WHITE_TYPE8";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE8 = "GAME_PLAY_LEVEL_GREEN_TYPE8";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE9 = "GAME_PLAY_LEVEL_RED_TYPE9";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE9 = "GAME_PLAY_LEVEL_WHITE_TYPE9";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE9 = "GAME_PLAY_LEVEL_GREEN_TYPE9";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE10 = "GAME_PLAY_LEVEL_RED_TYPE10";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE10 = "GAME_PLAY_LEVEL_WHITE_TYPE10";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE10 = "GAME_PLAY_LEVEL_GREEN_TYPE10";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE11 = "GAME_PLAY_LEVEL_RED_TYPE11";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE11 = "GAME_PLAY_LEVEL_WHITE_TYPE11";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE11 = "GAME_PLAY_LEVEL_GREEN_TYPE11";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE12 = "GAME_PLAY_LEVEL_RED_TYPE12";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE12 = "GAME_PLAY_LEVEL_WHITE_TYPE12";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE12 = "GAME_PLAY_LEVEL_GREEN_TYPE12";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE13 = "GAME_PLAY_LEVEL_RED_TYPE13";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE13 = "GAME_PLAY_LEVEL_WHITE_TYPE13";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE13 = "GAME_PLAY_LEVEL_GREEN_TYPE13";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE14 = "GAME_PLAY_LEVEL_RED_TYPE14";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE14 = "GAME_PLAY_LEVEL_WHITE_TYPE14";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE14 = "GAME_PLAY_LEVEL_GREEN_TYPE14";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE15 = "GAME_PLAY_LEVEL_RED_TYPE15";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE15 = "GAME_PLAY_LEVEL_WHITE_TYPE15";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE15 = "GAME_PLAY_LEVEL_GREEN_TYPE15";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE16 = "GAME_PLAY_LEVEL_RED_TYPE16";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE16 = "GAME_PLAY_LEVEL_WHITE_TYPE16";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE16 = "GAME_PLAY_LEVEL_GREEN_TYPE16";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE17 = "GAME_PLAY_LEVEL_RED_TYPE17";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE17 = "GAME_PLAY_LEVEL_WHITE_TYPE17";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE17 = "GAME_PLAY_LEVEL_GREEN_TYPE17";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE18 = "GAME_PLAY_LEVEL_RED_TYPE18";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE18 = "GAME_PLAY_LEVEL_WHITE_TYPE18";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE18 = "GAME_PLAY_LEVEL_GREEN_TYPE18";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE19 = "GAME_PLAY_LEVEL_RED_TYPE19";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE19 = "GAME_PLAY_LEVEL_WHITE_TYPE19";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE19 = "GAME_PLAY_LEVEL_GREEN_TYPE19";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE20 = "GAME_PLAY_LEVEL_RED_TYPE20";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE20 = "GAME_PLAY_LEVEL_WHITE_TYPE20";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE20 = "GAME_PLAY_LEVEL_GREEN_TYPE20";
+                  public static final String GAME_PLAY_LEVEL_RED_TYPE = "GAME_PLAY_LEVEL_RED_TYPE";
+                  public static final String GAME_PLAY_LEVEL_WHITE_TYPE = "GAME_PLAY_LEVEL_WHITE_TYPE";
+                  public static final String GAME_PLAY_LEVEL_GREEN_TYPE = "GAME_PLAY_LEVEL_GREEN_TYPE";
+                  
     
    // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
       public static final String PLAY_GAME_BUTTON_TYPE = "PLAY_GAME_BUTTON_TYPE";
@@ -86,8 +151,8 @@ public class PathXConstants
     
    
     
-        public static final int VIEWPORT_OFFSET_X = 400;
-    public static final int VIEWPORT_OFFSET_Y = 400;
+        public static final int VIEWPORT_OFFSET_X = 350;
+    public static final int VIEWPORT_OFFSET_Y = 350;
     
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
@@ -144,6 +209,7 @@ public class PathXConstants
     
       public static final int SCROLL_DOWN_BUTTON_X = 114;
     public static final int SCROLL_DOWN_BUTTON_Y = 618;
+    
     
           public static final int TOOLBAR_X = 0;
     public static final int TOOLBAR_Y = 0;

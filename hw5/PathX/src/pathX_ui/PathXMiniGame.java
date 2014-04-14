@@ -39,6 +39,8 @@ import pathx.PathXConstants;
 import pathx.PathX.PathXPropertyType;
 import pathx_data.PathXFileManager;
 import pathx_data.PathXRecord;
+import static pathx_data.PathXGameLevel.*;
+import pathx_data.PathXGameLevel;
 //import sorting_hat.data.PathXDataModel;
 
 /**
@@ -74,6 +76,7 @@ public class PathXMiniGame extends MiniGame
     private JButton helpButton;
     private JButton exitButton;
      private JScrollPane statsScrollPane;
+     private ArrayList<PathXGameLevel> levelLocation;
     
     
     // ACCESSOR METHODS
@@ -93,11 +96,16 @@ public class PathXMiniGame extends MiniGame
         return record; 
     }
 
+     public ArrayList getGameLevelLocation()
+     {
+         return levelLocation;
+     }
     /**
      * Accessor method for getting the application's error handler.
      * 
      * @return The error handler.
      */
+    
     public PathXErrorHandler getErrorHandler()
     {
         return errorHandler;
@@ -280,9 +288,6 @@ public void switchToLevelSelect()
         guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(false);
         
         
-         
-
-         
          guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
          
          guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
@@ -885,6 +890,486 @@ public void switchToLevelSelect()
         s = new Sprite(sT, SCROLL_DOWN_BUTTON_X, SCROLL_DOWN_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_DOWN_BUTTON_TYPE, s);
         
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE1);
+        img = loadImage(imgPath + levelGreenButton);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE1, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE1);
+        img = loadImage(imgPath + levelRedButton);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE1, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE1);
+        img = loadImage(imgPath + levelWhiteButton);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE1, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton2 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE2);
+        img = loadImage(imgPath + levelGreenButton2);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE2, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton2 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE2);
+        img = loadImage(imgPath + levelRedButton2);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE2, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton2 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE2);
+        img = loadImage(imgPath + levelWhiteButton2);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE2, s);
+   
+       //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton3 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE3);
+        img = loadImage(imgPath + levelGreenButton3);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE3, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton3 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE3);
+        img = loadImage(imgPath + levelRedButton3);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE3, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton3 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE3);
+        img = loadImage(imgPath + levelWhiteButton3);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE3, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton4 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE4);
+        img = loadImage(imgPath + levelGreenButton4);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE4, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton4 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE4);
+        img = loadImage(imgPath + levelRedButton4);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE4, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton4 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE4);
+        img = loadImage(imgPath + levelWhiteButton4);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE4, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton5 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE5);
+        img = loadImage(imgPath + levelGreenButton5);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE5, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton5 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE5);
+        img = loadImage(imgPath + levelRedButton5);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE5, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton5 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE5);
+        img = loadImage(imgPath + levelWhiteButton5);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE5, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton6 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE6);
+        img = loadImage(imgPath + levelGreenButton6);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE6, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton6 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE6);
+        img = loadImage(imgPath + levelRedButton6);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE6, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton6 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE6);
+        img = loadImage(imgPath + levelWhiteButton6);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE6, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton7 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE7);
+        img = loadImage(imgPath + levelGreenButton7);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE7, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton7 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE7);
+        img = loadImage(imgPath + levelRedButton7);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE7, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton7 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE7);
+        img = loadImage(imgPath + levelWhiteButton7);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE7, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton8 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE8);
+        img = loadImage(imgPath + levelGreenButton8);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE8, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton8 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE8);
+        img = loadImage(imgPath + levelRedButton8);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE8, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton8 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE8);
+        img = loadImage(imgPath + levelWhiteButton8);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE8, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton9 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE9);
+        img = loadImage(imgPath + levelGreenButton9);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE9, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton9 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE9);
+        img = loadImage(imgPath + levelRedButton9);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE9, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton9 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE9);
+        img = loadImage(imgPath + levelWhiteButton9);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE9, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton10 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE10);
+        img = loadImage(imgPath + levelGreenButton10);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE10, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton10 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE10);
+        img = loadImage(imgPath + levelRedButton10);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE10, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton10 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE10);
+        img = loadImage(imgPath + levelWhiteButton10);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE10, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton11 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE11);
+        img = loadImage(imgPath + levelGreenButton11);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE11, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton11 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE11);
+        img = loadImage(imgPath + levelRedButton11);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE11, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton11 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE11);
+        img = loadImage(imgPath + levelWhiteButton11);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE11, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton12 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE12);
+        img = loadImage(imgPath + levelGreenButton12);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE12, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton12 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE12);
+        img = loadImage(imgPath + levelRedButton12);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE12, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton12 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE12);
+        img = loadImage(imgPath + levelWhiteButton12);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE12, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton13 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE13);
+        img = loadImage(imgPath + levelGreenButton13);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE13, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton13 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE13);
+        img = loadImage(imgPath + levelRedButton13);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE13, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton13 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE13);
+        img = loadImage(imgPath + levelWhiteButton13);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE13, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton14 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE14);
+        img = loadImage(imgPath + levelGreenButton14);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE14, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton14 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE14);
+        img = loadImage(imgPath + levelRedButton14);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE14, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton14 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE14);
+        img = loadImage(imgPath + levelWhiteButton14);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE14, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton15 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE15);
+        img = loadImage(imgPath + levelGreenButton15);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X15, LEVEL_OFFSET_LOCATION_Y15, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE15, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton15 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE15);
+        img = loadImage(imgPath + levelRedButton15);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X15, LEVEL_OFFSET_LOCATION_Y15, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE15, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton15 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE15);
+        img = loadImage(imgPath + levelWhiteButton15);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X15, LEVEL_OFFSET_LOCATION_Y15, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE15, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton16 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE16);
+        img = loadImage(imgPath + levelGreenButton16);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE16, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton16 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE16);
+        img = loadImage(imgPath + levelRedButton16);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE16, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton16 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE16);
+        img = loadImage(imgPath + levelWhiteButton16);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE16, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton17 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE17);
+        img = loadImage(imgPath + levelGreenButton17);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE17, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton17 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE17);
+        img = loadImage(imgPath + levelRedButton17);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE17, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton17 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE17);
+        img = loadImage(imgPath + levelWhiteButton17);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE17, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton18 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE18);
+        img = loadImage(imgPath + levelGreenButton18);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE18, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton18 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE18);
+        img = loadImage(imgPath + levelRedButton18);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE18, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton18 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE18);
+        img = loadImage(imgPath + levelWhiteButton18);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE18, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton19 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE19);
+        img = loadImage(imgPath + levelGreenButton19);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE19, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton19 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE19);
+        img = loadImage(imgPath + levelRedButton19);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE19, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton19 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE19);
+        img = loadImage(imgPath + levelWhiteButton19);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE19, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelGreenButton20 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE20);
+        img = loadImage(imgPath + levelGreenButton20);
+        sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE20, s);
+        
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelRedButton20 = props.getProperty(PathXPropertyType.RED_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE20);
+        img = loadImage(imgPath + levelRedButton20);
+        sT.addState(PathXCarState.RED_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.RED_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE20, s);
+       
+        //The PUT THE GREEN LEVEL ICONS BUTTON
+        String levelWhiteButton20 = props.getProperty(PathXPropertyType.WHITE_LOCATION);
+        sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE20);
+        img = loadImage(imgPath + levelWhiteButton20);
+        sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.WHITE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE20, s);
            /*
        
         

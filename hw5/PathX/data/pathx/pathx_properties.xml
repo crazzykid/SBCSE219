@@ -20,6 +20,10 @@
          <property name="GAME_SCREEN_IMAGE_BUTTON_X1"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN1.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_HOME1"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN1.png"></property>
 
+         <property name="GREEN_LOCATION"                  value="./pathx/GREEN_LOCATION.png"></property>
+         <property name="RED_LOCATION"                    value="./pathx/RED_LOCATION.png"></property>
+         <property name="WHITE_LOCATION"                   value="./pathx/WHITE_LOCATION.png"></property>
+
           <property name="GAME_SCREEN_IMAGE_BUTTON_START"            value="./pathx/IMGAE_BUTTON_START_GAME_SCREEN.png"></property>
            <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_LEFT"            value="./pathx/IMGAE_BUTTON_SCROLL_LEFT.png"></property>
            <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_DOWN"            value="./pathx/IMGAE_BUTTON_SCROLL_DOWN.png"></property>
