@@ -76,7 +76,7 @@ public class PathXPanel extends JPanel
         pTime =data.gameTimeToText();
          
     
-         
+        
        
     }
      
@@ -252,14 +252,22 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(0).getCompletedLevel()  
                             && levelLocation.get(0).getStageUnlock() )
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
+                        
+                        int []level = levelLocation.get(0).getLevelOffsetLocation(1);
+                        
+                         int x = (level[0] -(2*viewPortX));
+                         int y = (level[1] -((7*viewPortY)/6));
                         if( y>180 && x>0)
                         {
                         SpriteType r = st.getSpriteType();
                          Image img1 = r.getStateImage(st.getState());
-                         g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null); 
+                         
+                         g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                      
+                         st.setX(x);
+                         st.setY(y);
                         }    
+                     
                  }
                    
             }

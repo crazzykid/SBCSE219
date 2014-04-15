@@ -1,6 +1,7 @@
 package pathX_ui;
 
 import java.awt.event.KeyEvent;
+import java.util.Collection;
 import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.MENU_SCREEN_STATE;
 import static pathx.PathXConstants.VIEWPORT_INC;
@@ -10,7 +11,9 @@ import static pathx.PathXConstants.SCROLL_RIGHT;
 import static pathx.PathXConstants.SCROLL_UP;
 import pathx.PathX;
 import javax.swing.JOptionPane;
+import mini_game.Sprite;
 import mini_game.Viewport;
+import static pathx.PathXConstants.GAME_PLAY_LEVEL_RED_TYPE1;
 import pathx_data.PathXFileManager;
 import pathx_data.PathXDataModel;
 //import sorting_hat.data.SortingHatDataModel;
@@ -121,11 +124,11 @@ if(closeGame==0)
      {
           PathXDataModel data = (PathXDataModel)game.getDataModel();
           Viewport viewport = data.getViewport();
-        
+          
           
          if(scrollType.equals(SCROLL_DOWN) )
          {
-             if(viewPortY <=200)
+             if(viewPortY <=600)
              {
                  viewPortY+=50; 
                  viewport.scroll(0, 50);
@@ -142,7 +145,7 @@ if(closeGame==0)
          }
            else if(scrollType.equals(SCROLL_RIGHT))
            {
-               if(viewPortX <350)
+               if(viewPortX <850)
              { 
                  viewPortX +=50;
                  viewport.scroll(50, 0);
@@ -158,6 +161,8 @@ if(closeGame==0)
                   
                }
            }
+        
+         
      }
      
       public void respondToUndoRequest()
@@ -228,38 +233,50 @@ if(closeGame==0)
     public void respondToKeyPress(int keyCode)
     {
         PathXDataModel data = (PathXDataModel)game.getDataModel();
-
+        Viewport viewport = data.getViewport();
         // CHEAT BY ONE MOVE. NOTE THAT IF WE HOLD THE C
         // KEY DOWN IT WILL CONTINUALLY CHEAT
-        if (keyCode == KeyEvent.VK_C)
+        if (keyCode == KeyEvent.VK_LEFT)
         {            
-            // ONLY DO THIS IF THE GAME IS NO OVER
-            if (data.inProgress())
-            {
-                // FIND A MOVE IF THERE IS ONE
-               // SortTransaction move = data.getNextSwapTransaction();
-               // if (move != null)
-                {
-              //      data.swapTiles(move.getFromIndex(), move.getToIndex());
-              //      game.getAudio().play(TheSortingHat.SortingHatPropertyType.AUDIO_CUE_CHEAT.toString(), false);
-                }
-            }
+           if(viewPortX>0)
+               {
+                   viewPortX += -50;
+                    viewport.scroll(-50, 0);
+               }
         }
         
-        if (keyCode == KeyEvent.VK_U)
-        {
-            // ONLY DO THIS IF THE GAME IS NO OVER
-            if (game.getDataModel().inProgress())
-        {
-                // FIND A MOVE IF THERE IS ONE
-           //    SortTransaction theSwap = data.updateUndo();
-          //       if(theSwap!=null)
-            {
-          //          data.swapTiles(theSwap.getFromIndex(), theSwap.getToIndex());
-           //         game.getAudio().play(TheSortingHat.SortingHatPropertyType.AUDIO_CUE_CHEAT.toString(), false);
+        else if (keyCode == KeyEvent.VK_RIGHT)
+        {            
+            if(viewPortX <850)
+             { 
+                 viewPortX +=50;
+                 viewport.scroll(50, 0);
+                
              }
-            }
-        
         }
+        
+        else  if (keyCode == KeyEvent.VK_UP)
+        {            
+           if(viewPortY >0)
+             {
+                 viewPortY+= -50; 
+                 viewport.scroll(0, -50);
+             }
+        }
+      else     if (keyCode == KeyEvent.VK_DOWN)
+        {            
+            if(viewPortY <=600)
+             {
+                 viewPortY+=50; 
+                 viewport.scroll(0, 50);
+             }
+           
+        }
+         
+         
+        
+           
+          
+        
     }
 }

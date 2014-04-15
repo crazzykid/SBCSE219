@@ -39,6 +39,7 @@ public class PathXConstants
         public static final String GAME_HOME_BUTTON_TYPE = "GAME_HOME_BUTTON_TYPE";
         public static final String GAME_HOME_BUTTON_SETTING_TYPE = "GAME_HOME_SETTING_BUTTON_TYPE";
             public static final String GAME_X_BUTTON_TYPE = "GAME_X_BUTTON_TYPE";
+             public static final String GAME_SETTINGS_X_BUTTON_TYPE = "GAME_SETTINGS_X_BUTTON_TYPE";
                 public static final String GAME_START_BUTTON_TYPE = "GAME_START_BUTTON_TYPE";
                     public static final String GAME_SCROLL_LEFT_BUTTON_TYPE = "GAME_SCROLL_LEFT_BUTTON_TYPE";
              public static final String GAME_SCROLL_RIGHT_BUTTON_TYPE = "GAME_SCROLL_RIGHT_BUTTON_TYPE";
@@ -190,78 +191,42 @@ public class PathXConstants
     public static final int CONTROLS_MARGIN = 0;
     public static final int EXIT_BUTTON_X = 1190;
     public static final int EXIT_BUTTON_Y = 0;
-       public static final int START_BUTTON_X = 60;
-    public static final int START_BUTTON_Y = 240;
+       public static final int START_BUTTON_X = 20;
+    public static final int START_BUTTON_Y = 215;
     
-      public static final int HOME_BUTTON_X = 57;
-    public static final int HOME_BUTTON_Y = 142;
+  
     
-    public static final int HOME_BUTTON_SETTING_X = 500;
-    public static final int HOME_BUTTON_SETTING_Y = 50;
+    public static final int HOME_BUTTON_SETTING_X = 620;
+    public static final int HOME_BUTTON_SETTING_Y = 5;
     
-      public static final int HOME_X_BUTTON_X = 170;
-    public static final int HOME_X_BUTTON_Y = 142;
+    public static final int HOME_SETTINGS_X_BUTTON_X = 685;
+    public static final int HOME_SETTINGS_X_BUTTON_Y = 5;
+    
+        public static final int HOME_BUTTON_X = 25;
+    public static final int HOME_BUTTON_Y = 128;
+            
+      public static final int HOME_X_BUTTON_X = 93;
+    public static final int HOME_X_BUTTON_Y = 128;
     
     
-      public static final int SCROLL_LEFT_BUTTON_X = 49;
-    public static final int SCROLL_LEFT_BUTTON_Y = 585;;
+      public static final int SCROLL_LEFT_BUTTON_X = 20;
+    public static final int SCROLL_LEFT_BUTTON_Y = 525;;
     
     
-      public static final int SCROLL_RIGHT_BUTTON_X = 181;
-    public static final int SCROLL_RIGHT_BUTTON_Y = 586;
+      public static final int SCROLL_RIGHT_BUTTON_X = 114;
+    public static final int SCROLL_RIGHT_BUTTON_Y = 525;
     
-      public static final int SCROLL_UP_BUTTON_X = 114;
-    public static final int SCROLL_UP_BUTTON_Y = 560;
+      public static final int SCROLL_UP_BUTTON_X = 72;
+    public static final int SCROLL_UP_BUTTON_Y = 495;
     
-      public static final int SCROLL_DOWN_BUTTON_X = 114;
-    public static final int SCROLL_DOWN_BUTTON_Y = 618;
+      public static final int SCROLL_DOWN_BUTTON_X = 72;
+    public static final int SCROLL_DOWN_BUTTON_Y = 560;
     
     
           public static final int TOOLBAR_X = 0;
     public static final int TOOLBAR_Y = 0;
     
-    public static final int LEVEL_OFFSET_LOCATION_X = 50;
-    public static final int LEVEL_OFFSET_LOCATION_Y = 320;
-       public static final int LEVEL_OFFSET_LOCATION_X1 = 80;
-    public static final int LEVEL_OFFSET_LOCATION_Y1 = 470;
-      public static final int LEVEL_OFFSET_LOCATION_X2 = 72;
-    public static final int LEVEL_OFFSET_LOCATION_Y2 = 530;
-      public static final int LEVEL_OFFSET_LOCATION_X3 =300;
-    public static final int LEVEL_OFFSET_LOCATION_Y3 = 415;
-      public static final int LEVEL_OFFSET_LOCATION_X4 = 295;
-    public static final int LEVEL_OFFSET_LOCATION_Y4 = 500;
-      public static final int LEVEL_OFFSET_LOCATION_X5 = 305;
-    public static final int LEVEL_OFFSET_LOCATION_Y5 = 650;
-      public static final int LEVEL_OFFSET_LOCATION_X6 = 500;
-    public static final int LEVEL_OFFSET_LOCATION_Y6 = 570;
-      public static final int LEVEL_OFFSET_LOCATION_X7 = 580;
-    public static final int LEVEL_OFFSET_LOCATION_Y7 = 415;
-      public static final int LEVEL_OFFSET_LOCATION_X8 = 610;
-    public static final int LEVEL_OFFSET_LOCATION_Y8 = 650;
-      public static final int LEVEL_OFFSET_LOCATION_X9 = 605;
-    public static final int LEVEL_OFFSET_LOCATION_Y9 = 870;
-      public static final int LEVEL_OFFSET_LOCATION_X10 = 605;
-    public static final int LEVEL_OFFSET_LOCATION_Y10 = 500;
-      public static final int LEVEL_OFFSET_LOCATION_X11 = 705;
-    public static final int LEVEL_OFFSET_LOCATION_Y11 = 550;
-      public static final int LEVEL_OFFSET_LOCATION_X12 = 650;
-    public static final int LEVEL_OFFSET_LOCATION_Y12 = 770;
-      public static final int LEVEL_OFFSET_LOCATION_X13 = 700;
-    public static final int LEVEL_OFFSET_LOCATION_Y13 = 700;
-      public static final int LEVEL_OFFSET_LOCATION_X14 = 730;
-    public static final int LEVEL_OFFSET_LOCATION_Y14 = 740;
-      public static final int LEVEL_OFFSET_LOCATION_X15 = 760;
-    public static final int LEVEL_OFFSET_LOCATION_Y15 = 650;
-      public static final int LEVEL_OFFSET_LOCATION_X16 = 870;
-    public static final int LEVEL_OFFSET_LOCATION_Y16 = 670;
-      public static final int LEVEL_OFFSET_LOCATION_X17 = 850;
-    public static final int LEVEL_OFFSET_LOCATION_Y17 = 585;
-      public static final int LEVEL_OFFSET_LOCATION_X18 = 919;
-    public static final int LEVEL_OFFSET_LOCATION_Y18 = 785;
-      public static final int LEVEL_OFFSET_LOCATION_X19 = 930;
-    public static final int LEVEL_OFFSET_LOCATION_Y19 = 705;
-      public static final int LEVEL_OFFSET_LOCATION_X20 = 1100;
-    public static final int LEVEL_OFFSET_LOCATION_Y20 = 765;
+    
     
    // public static final int BACK_BUTTON_X = 130;
    // public static final int BACK_BUTTON_Y = 0;
