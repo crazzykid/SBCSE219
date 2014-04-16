@@ -202,6 +202,13 @@ public class PathXPanel extends JPanel
      */
     public void renderGUIControls(Graphics g)
     {
+         // GET EACH DECOR IMAGE ONE AT A TIME
+        Collection<Sprite> dialogsSprites = game.getGUIDialogs().values();
+        for (Sprite s : dialogsSprites)
+        {
+            renderSprite(g, s);
+        }
+        
         // GET EACH DECOR IMAGE ONE AT A TIME
         Collection<Sprite> decorSprites = game.getGUIDecor().values();
         for (Sprite s : decorSprites)
@@ -1452,7 +1459,7 @@ public class PathXPanel extends JPanel
         
         
         
-        // IF THE STATS DIALOG IS VISIBLE, ADD THE TEXTUAL STATS
+        /IF THE STATS DIALOG IS VISIBLE, ADD THE TEXTUAL STATS
         if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(SortingHatTileState.VISIBLE_STATE.toString()))
         {
             g.setFont(FONT_STATS);

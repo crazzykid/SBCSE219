@@ -1,6 +1,7 @@
 package pathX_ui;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.MENU_SCREEN_STATE;
@@ -13,9 +14,14 @@ import pathx.PathX;
 import javax.swing.JOptionPane;
 import mini_game.Sprite;
 import mini_game.Viewport;
+import static pathx.PathXConstants.GAME_HELP_SCREEN_STATE;
+import static pathx.PathXConstants.GAME_LEVEL_STATE;
 import static pathx.PathXConstants.GAME_PLAY_LEVEL_RED_TYPE1;
+import static pathx.PathXConstants.GAME_SETTINGS_STATE;
+import static pathx.PathXConstants.HELP_QUIT_TYPE;
 import pathx_data.PathXFileManager;
 import pathx_data.PathXDataModel;
+import properties_manager.PropertiesManager;
 //import sorting_hat.data.SortingHatDataModel;
 //import sorting_hat.file.SortingHatFileManager;
 
@@ -47,10 +53,12 @@ public class PathXEventHandler
         //System.out.println("testing respondtoexitrequest");
         
         
-        int closeGame = JOptionPane.YES_NO_OPTION;
+ int closeGame  = JOptionPane.YES_NO_OPTION;
 int Result = JOptionPane.showConfirmDialog(null, "Are You Sure You Want TO Close Path X", "PathX Mini Game ",closeGame);
-if(closeGame==0)
-  System.exit(0);      
+
+     if(Result==0)
+        System.exit(0); 
+   
     }
 
     /**
@@ -60,8 +68,11 @@ if(closeGame==0)
     {
          PathXDataModel data = (PathXDataModel)game.getDataModel();
           Viewport viewport = data.getViewport();
-        
-        game.switchToSplashScreen();
+          
+          if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+            game.switchToLevelSelect();
+          else
+             game.switchToSplashScreen();
          viewPortX =0;
         viewPortY = 0;
         viewport.resetScroll();
@@ -70,14 +81,10 @@ if(closeGame==0)
         {
             game.getDataModel().endGameAsLoss();
             
-           // if( game.isCurrentScreenState(GAME_SCREEN_STATE))
-             
-                   
-                     
-                     
-                    
-                    
+           // 
+                  
         }
+        
         // RESET THE GAME AND ITS DATA
         //game.reset();        
         
@@ -94,7 +101,7 @@ if(closeGame==0)
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
       //  if (game.getDataModel().inProgress())
        // {
-           //if( game.isCurrentScreenState(GAME_SCREEN))
+           //if( 
              
                      //  if(game.
                      game.getDataModel().endGameAsLoss();
@@ -188,14 +195,32 @@ if(closeGame==0)
             }
           
             
-        
+        public void respondToQuitRequest()
+        {
+           
+           if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+              game.switchToGameScreen();
+               
+           
+          if( game.isCurrentScreenState(MENU_SCREEN_STATE))
+               game.switchToSplashScreen();
+          
+          if( game.isCurrentScreenState(GAME_SETTINGS_STATE))
+             game.switchToSettingsScreen();
+          
+            if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 game.switchToLevelSelect();  
+          
+            
+           
+        }
 
     /**
      * Called when the user clicks a button to select a level.
      */    
     public void respondToSelectMenuRequest(String menuType)
     {
-        
+         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
       //  System.out.println("Testing MenuType********************* " + menuType);
          //WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
@@ -215,6 +240,22 @@ if(closeGame==0)
           
            if(menuType.equals("./data/./pathx/IMAGE_SETTINGS.png"))
           game.switchToSettingsScreen();
+           
+            if(menuType.equals("./data/./pathx/IMAGE_HELP.png"))
+            {
+                game.getGUIDialogs().get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.VISIBLE_STATE.toString());
+                
+                game.getGUIButtons().get(HELP_QUIT_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+                   game.getGUIButtons().get(HELP_QUIT_TYPE).setEnabled(true);
+                   // ACTIVATE THE MENU BUTTONS
+        ArrayList<String> levels = props.getPropertyOptionsList(PathX.PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
+        for (String level : levels)
+        {
+             game.getGUIButtons().get(level).setEnabled(false);
+        }
+        
+             
+            }
         }        
     }
 

@@ -47,6 +47,8 @@ public class PathXConstants
                public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
                  public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
                  
+                  public static final String HELP_QUIT_TYPE = "HELP_QUIT_TYPE";
+                 
                   public static final String GAME_PLAY_LEVEL_RED_TYPE1 = "GAME_PLAY_LEVEL_RED_TYPE1";
                   public static final String GAME_PLAY_LEVEL_WHITE_TYPE1 = "GAME_PLAY_LEVEL_WHITE_TYPE1";
                   public static final String GAME_PLAY_LEVEL_GREEN_TYPE1 = "GAME_PLAY_LEVEL_GREEN_TYPE1";
@@ -111,7 +113,7 @@ public class PathXConstants
                   public static final String GAME_PLAY_LEVEL_WHITE_TYPE = "GAME_PLAY_LEVEL_WHITE_TYPE";
                   public static final String GAME_PLAY_LEVEL_GREEN_TYPE = "GAME_PLAY_LEVEL_GREEN_TYPE";
                   
-    
+    public static final String GAME_HELP_SCREEN_STATE = "GAME_HELP_SCREEN_STATE";
    // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
       public static final String PLAY_GAME_BUTTON_TYPE = "PLAY_GAME_BUTTON_TYPE";
    // public static final String UNDO_BUTTON_TYPE ="UNDO_BUTTON_TYPE";
@@ -222,6 +224,8 @@ public class PathXConstants
       public static final int SCROLL_DOWN_BUTTON_X = 72;
     public static final int SCROLL_DOWN_BUTTON_Y = 560;
     
+     public static final int QUIT_BUTTON_X = 285;
+    public static final int QUIT_BUTTON_Y = 425;
     
           public static final int TOOLBAR_X = 0;
     public static final int TOOLBAR_Y = 0;

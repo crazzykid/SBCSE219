@@ -248,7 +248,7 @@ public void switchToLevelSelect()
 {
     
         PropertiesManager props = PropertiesManager.getPropertiesManager();
-              
+            guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_LEVEL_STATE);
         
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -267,6 +267,8 @@ public void switchToLevelSelect()
          guiButtons.get(str).setState(PathXCarState.GREEN_STATE.toString());
         guiButtons.get(str).setEnabled(true);
         }
+         guiButtons.get(GAME_X_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(GAME_X_BUTTON_TYPE).setEnabled(false);
          
         ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
         for (String level : levels)
@@ -314,6 +316,32 @@ public void switchToLevelSelect()
          guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
              guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(true);
          
+              ArrayList<String> specialButtons1 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS1);
+        for (String specialButton : specialButtons1)
+        {
+           guiButtons.get(specialButton).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(specialButton).setEnabled(false);
+       } 
+        ArrayList<String> specialButtons2 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS2);
+        for (String specialButton : specialButtons2)
+        {
+           guiButtons.get(specialButton).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(specialButton).setEnabled(false);
+       } 
+        ArrayList<String> specialButtons3 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS3);
+        for (String specialButton : specialButtons3)
+        {
+           guiButtons.get(specialButton).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(specialButton).setEnabled(false);
+       } 
+         ArrayList<String> specialButtons4 = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS4);
+        for (String specialButton : specialButtons4)
+        {
+           guiButtons.get(specialButton).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(specialButton).setEnabled(false);
+       } 
+        guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
          //currentScreenState = GAME_LEVEL_STATE;
          
         // PLAY THE GAMEPLAY SCREEN SONG
@@ -321,14 +349,18 @@ public void switchToLevelSelect()
       //  audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
          
 }
+    
 
 
     public void switchToSettingsScreen()
     {
+         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_SETTINGS_STATE);
         
+         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+         
         ArrayList<String> levels = props.getPropertyOptionsList(PathXPropertyType.HOME_SCREEN_IMAGE_OPTIONS);
         for (String level : levels)
         {
@@ -371,6 +403,8 @@ public void switchToLevelSelect()
          guiButtons.get(str).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(str).setEnabled(false);
         }
+        guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
         
         
         
@@ -385,7 +419,7 @@ public void switchToLevelSelect()
     public void switchToGameScreen()
     {
          marginlessInsets = new Insets(0,0,0,0);
-         
+          guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
         // CHANGE THE BACKGROUND
@@ -477,6 +511,8 @@ public void switchToLevelSelect()
         
              guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
+        guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
        
         // ACTIVATE THE TOOLBAR AND ITS CONTROLS
         //guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
@@ -517,12 +553,13 @@ public void switchToLevelSelect()
      */    
     public void switchToSplashScreen()
     {
+         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
          marginlessInsets = new Insets(0,0,0,0);
         // CHANGE THE BACKGROUND
         guiDecor.get(BACKGROUND_TYPE).setState(MENU_SCREEN_STATE);
         
-        guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
-             guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(false);
+        guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+             guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(true);
       for(int i=1; i<21; i++)
         {
         String str = "GAME_PLAY_LEVEL_WHITE_TYPE"+i;
@@ -602,6 +639,9 @@ public void switchToLevelSelect()
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
         
         guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        
+         guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
          
         
        // guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -773,15 +813,20 @@ public void switchToLevelSelect()
         
        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_SETTINGS_WINDOW));
         sT.addState(GAME_SETTINGS_STATE, img);
+        
+        
          img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GREEN));
         sT.addState(GAME_LEVEL_STATE , img);
         
+      
         s = new Sprite(sT, 0, 0, 0, 0, MENU_SCREEN_STATE);
         guiDecor.put(BACKGROUND_TYPE, s);
         
         data.getViewport().initViewportMargins();
         //Add LEVEL SELECT MAP
            
+          //The PUT THE HELP ICONS BUTTON
+       
        
        
       //  sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
@@ -917,13 +962,23 @@ public void switchToLevelSelect()
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
         s = new Sprite(sT, HOME_BUTTON_SETTING_X, HOME_BUTTON_SETTING_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_HOME_BUTTON_SETTING_TYPE, s);
+         String settingHomeMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_HOME_MOUSE_OVER);
+        img = loadImage(imgPath + settingHomeMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, HOME_BUTTON_SETTING_X, HOME_BUTTON_SETTING_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_HOME_BUTTON_SETTING_TYPE, s);
         
         //The PUT THE SETTINGS X BUTTON
         String settingsXButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_X);
         sT = new SpriteType(GAME_SETTINGS_X_BUTTON_TYPE);
         img = loadImage(imgPath + settingsXButton);
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-        s = new Sprite(sT, HOME_SETTINGS_X_BUTTON_X, HOME_SETTINGS_X_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        s = new Sprite(sT, HOME_SETTINGS_X_BUTTON_X, HOME_SETTINGS_X_BUTTON_Y, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.put(GAME_SETTINGS_X_BUTTON_TYPE, s);
+         String settingXMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_X_MOUSE_OVER);
+        img = loadImage(imgPath + settingXMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, HOME_SETTINGS_X_BUTTON_X, HOME_SETTINGS_X_BUTTON_Y, 0, 0, PathXCarState.VISIBLE_STATE.toString());
         guiButtons.put(GAME_SETTINGS_X_BUTTON_TYPE, s);
         
         //The PUT THE HOME X BUTTON
@@ -957,6 +1012,11 @@ public void switchToLevelSelect()
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
         s = new Sprite(sT, SCROLL_LEFT_BUTTON_X, SCROLL_LEFT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_LEFT_BUTTON_TYPE, s);
+         String scrollLeftMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_LEFT_MOUSE_OVER);
+        img = loadImage(imgPath + scrollLeftMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, SCROLL_LEFT_BUTTON_X, SCROLL_LEFT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SCROLL_LEFT_BUTTON_TYPE, s);
         
             //The PUT THE RIGHT SCROLL BUTTON
         String scrollRightButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_RIGHT);
@@ -965,12 +1025,23 @@ public void switchToLevelSelect()
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
         s = new Sprite(sT, SCROLL_RIGHT_BUTTON_X, SCROLL_RIGHT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_RIGHT_BUTTON_TYPE, s);
-         
+         String scrollRightMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_RIGHT_MOUSE_OVER);
+        img = loadImage(imgPath + scrollRightMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, SCROLL_RIGHT_BUTTON_X, SCROLL_RIGHT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SCROLL_RIGHT_BUTTON_TYPE, s);
+        
+        
         //The PUT THE UP SCROLL BUTTON
         String scrollUpButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_UP);
         sT = new SpriteType(GAME_SCROLL_UP_BUTTON_TYPE);
         img = loadImage(imgPath + scrollUpButton);
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        s = new Sprite(sT, SCROLL_UP_BUTTON_X, SCROLL_UP_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SCROLL_UP_BUTTON_TYPE, s);
+         String scrollUPMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_UP_MOUSE_OVER);
+        img = loadImage(imgPath + scrollUPMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, SCROLL_UP_BUTTON_X, SCROLL_UP_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_UP_BUTTON_TYPE, s);
       
@@ -981,7 +1052,24 @@ public void switchToLevelSelect()
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
         s = new Sprite(sT, SCROLL_DOWN_BUTTON_X, SCROLL_DOWN_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_DOWN_BUTTON_TYPE, s);
+        String scrollDownMouseOver = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_DOWN_MOUSE_OVER);
+        img = loadImage(imgPath + scrollDownMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, SCROLL_DOWN_BUTTON_X, SCROLL_DOWN_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SCROLL_DOWN_BUTTON_TYPE, s);
         
+          //The PUT THE QUIT BUTTON
+        String closeButton = props.getProperty(PathXPropertyType.HELP_SCREEN_IMAGE_BUTTON_QUIT);
+        sT = new SpriteType(HELP_QUIT_TYPE);
+        img = loadImage(imgPath + closeButton);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(HELP_QUIT_TYPE, s);
+        String closeButtonMouseOver = props.getProperty(PathXPropertyType.HELP_SCREEN_IMAGE_BUTTON_QUIT_MOUSE_OVER);
+        img = loadImage(imgPath + closeButtonMouseOver);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(HELP_QUIT_TYPE, s);
        
         //The PUT THE GREEN LEVEL ICONS BUTTON
         String levelGreenButton = props.getProperty(PathXPropertyType.GREEN_LOCATION);
@@ -1463,6 +1551,8 @@ public void switchToLevelSelect()
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE20, s);
         
+       
+        
          for(int i=1; i<21; i++)
         {
         String str = "GAME_PLAY_LEVEL_WHITE_TYPE"+i;
@@ -1476,6 +1566,16 @@ public void switchToLevelSelect()
         str = "GAME_PLAY_LEVEL_GREEN_TYPE"+i;
          guiButtons.get(str).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(str).setEnabled(false);
+        
+         
+        String HELPDisplay = props.getProperty(PathXPropertyType.IMAGE_HELP_SCREEN);
+        sT = new SpriteType(GAME_HELP_SCREEN_STATE);
+        img = loadImageWithColorKey(imgPath + HELPDisplay, COLOR_KEY);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        x = (viewport.getScreenWidth()/2) - (img.getWidth(null)/2);
+        y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2);
+        s = new Sprite(sT, x, y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiDialogs.put(GAME_HELP_SCREEN_STATE, s);
         }
            /*
        
@@ -1620,6 +1720,18 @@ public void switchToLevelSelect()
             public void actionPerformed(ActionEvent ae)
            {   eventHandler.respondToExitRequest();     }
       });
+        guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+           {   eventHandler.respondToExitRequest();     }
+            
+      });
+         guiButtons.get(HELP_QUIT_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+           {   eventHandler.respondToQuitRequest();     }
+            
+      });
+        
+        
         
        //HOME GAME EVENT HANDLER
         guiButtons.get(GAME_HOME_BUTTON_TYPE).setActionListener(new ActionListener(){

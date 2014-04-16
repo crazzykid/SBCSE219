@@ -67,7 +67,7 @@ public class PathXGameLevel
     public static int LEVEL_OFFSET_LOCATION_Y = 320;
        public static int LEVEL_OFFSET_LOCATION_X1 = 80;
     public static int LEVEL_OFFSET_LOCATION_Y1 = 470;
-      public static int LEVEL_OFFSET_LOCATION_X2 = 72;
+      public static int LEVEL_OFFSET_LOCATION_X2 = 300;
     public static int LEVEL_OFFSET_LOCATION_Y2 = 530;
       public static int LEVEL_OFFSET_LOCATION_X3 =300;
     public static int LEVEL_OFFSET_LOCATION_Y3 = 415;
