@@ -37,7 +37,7 @@ import mini_game.Viewport;
 import properties_manager.PropertiesManager;
 import pathx.PathXConstants;
 import pathx.PathX.PathXPropertyType;
-import pathx_data.PathXFileManager;
+import pathx_file.PathXFileManager;
 import pathx_data.PathXRecord;
 import static pathx_data.PathXGameLevel.*;
 import pathx_data.PathXGameLevel;
@@ -164,7 +164,7 @@ public class PathXMiniGame extends MiniGame
      */
     public void savePlayerRecord()
     {
-        fileManager.saveRecord(record);
+       // fileManager.saveRecord(record);
     }
     
 //    private JButton initToolbarButton(JPanel toolbar, PathXPropertyType prop)
@@ -247,10 +247,12 @@ public class PathXMiniGame extends MiniGame
 public void switchToLevelSelect()
 {
     
+    
         PropertiesManager props = PropertiesManager.getPropertiesManager();
             guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_LEVEL_STATE);
-        
+      guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
              guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(false);
          for(int i=1; i<21; i++)
@@ -342,6 +344,9 @@ public void switchToLevelSelect()
        } 
         guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
+        
+            guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
          //currentScreenState = GAME_LEVEL_STATE;
          
         // PLAY THE GAMEPLAY SCREEN SONG
@@ -354,6 +359,8 @@ public void switchToLevelSelect()
 
     public void switchToSettingsScreen()
     {
+     guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+
          guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
@@ -406,7 +413,8 @@ public void switchToLevelSelect()
         guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
         
-        
+            guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
         
          currentScreenState = GAME_SETTINGS_STATE;
 
@@ -418,6 +426,8 @@ public void switchToLevelSelect()
     }
     public void switchToGameScreen()
     {
+      guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+
          marginlessInsets = new Insets(0,0,0,0);
           guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
@@ -513,6 +523,9 @@ public void switchToLevelSelect()
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
         guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
+            guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
+        
        
         // ACTIVATE THE TOOLBAR AND ITS CONTROLS
         //guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
@@ -553,6 +566,9 @@ public void switchToLevelSelect()
      */    
     public void switchToSplashScreen()
     {
+        
+                         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+
          guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
          marginlessInsets = new Insets(0,0,0,0);
         // CHANGE THE BACKGROUND
@@ -643,6 +659,8 @@ public void switchToLevelSelect()
          guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
          
+            guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
         
        // guiButtons.get(NEW_GAME_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
       //  guiButtons.get(NEW_GAME_BUTTON_TYPE).setEnabled(false);
@@ -761,9 +779,10 @@ public void switchToLevelSelect()
         
         // INIT OUR FILE MANAGER
         fileManager = new PathXFileManager(this);
+        
 
         // LOAD THE PLAYER'S RECORD FROM A FILE
-        record = fileManager.loadRecord();
+       // record = fileManager.loadRecord();
         
         // INIT OUR DATA MANAGER
         data = new PathXDataModel(this);
@@ -1071,6 +1090,8 @@ public void switchToLevelSelect()
         s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(HELP_QUIT_TYPE, s);
        
+     
+        
         //The PUT THE GREEN LEVEL ICONS BUTTON
         String levelGreenButton = props.getProperty(PathXPropertyType.GREEN_LOCATION);
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE1);
@@ -1576,6 +1597,31 @@ public void switchToLevelSelect()
         y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2);
         s = new Sprite(sT, x, y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiDialogs.put(GAME_HELP_SCREEN_STATE, s);
+        
+           //The PUT THE QUIT BUTTON
+        String closeButton2 = props.getProperty(PathXPropertyType.HELP_SCREEN_IMAGE_BUTTON_QUIT);
+        sT = new SpriteType(HELP_QUIT_TYPE2);
+        img = loadImage(imgPath + closeButton2);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(HELP_QUIT_TYPE2, s);
+        String closeButtonMouseOver2 = props.getProperty(PathXPropertyType.HELP_SCREEN_IMAGE_BUTTON_QUIT_MOUSE_OVER);
+        img = loadImage(imgPath + closeButtonMouseOver2);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(HELP_QUIT_TYPE2, s);
+        
+        
+         String emptyDialog = props.getProperty(PathXPropertyType.IMAGE_EMPTY_DIALOG);
+        sT = new SpriteType(GAME_DIALOG_STATE);
+        img = loadImageWithColorKey(imgPath + emptyDialog, COLOR_KEY);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        x = (viewport.getScreenWidth()/2) - (img.getWidth(null)/2);
+        y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2);
+        s = new Sprite(sT, x, y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiDialogs.put(GAME_DIALOG_STATE, s);
+        
+        
         }
            /*
        
@@ -1730,7 +1776,11 @@ public void switchToLevelSelect()
            {   eventHandler.respondToQuitRequest();     }
             
       });
-        
+         guiButtons.get(HELP_QUIT_TYPE2).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+           {   eventHandler.respondToQuitDialogRequest();     }
+            
+      });
         
         
        //HOME GAME EVENT HANDLER
@@ -1769,13 +1819,22 @@ public void switchToLevelSelect()
             public void actionPerformed(ActionEvent ae)
            {   eventHandler.respondToScrollRequest(SCROLL_RIGHT);     }
       });
-             guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE1).setActionListener(new ActionListener(){
+//             guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE1).setActionListener(new ActionListener(){
+//            public void actionPerformed(ActionEvent ae)
+//           {   eventHandler.respondToStageRequest(STAGE1);    
+//           
+//           
+//           }
+//      });
+                   guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE1).setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
-           {   eventHandler.respondToStageRequest(STAGE1);    
+           {   eventHandler.respondToSelectLevelRequest(LEVEL1);    
            
            
            }
       });
+             
+             
            
         
 //           String exitButton = props.getProperty(PathXPropertyType.HOME_SCREEN_IMAGE_EXIT);

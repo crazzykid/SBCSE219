@@ -33,12 +33,23 @@ public class PathX
             // LOAD THE SETTINGS FOR STARTING THE APP
             PropertiesManager props = PropertiesManager.getPropertiesManager();
             props.addProperty(PropertiesManager.DATA_PATH_PROPERTY, PATH_DATA);
+           //  props.loadProperties(PROPERTIES_FILE_LEVEL, PROPERTIES_SCHEMA_FILE_LEVEL);
             props.loadProperties(PROPERTIES_FILE_NAME, PROPERTIES_SCHEMA_FILE_NAME);
+           
+            
             
             // THEN WE'LL LOAD THE GAME FLAVOR AS SPECIFIED BY THE PROPERTIES FILE
             String gameFlavorFile = props.getProperty(PathXPropertyType.FILE_GAME_PROPERTIES);
             props.loadProperties(gameFlavorFile, PROPERTIES_SCHEMA_FILE_NAME);
 
+            
+            
+    
+              // THEN WE'LL LOAD THE GAME FLAVOR AS SPECIFIED BY THE PROPERTIES FILE
+          //  String gameFile = props.getProperty(PathXPropertyType.FILE_LEVEL_RECORD);
+           // props.loadProperties(gameFile, PROPERTIES_SCHEMA_FILE_LEVEL);
+
+            
             
             // NOW WE CAN LOAD THE UI, WHICH WILL USE ALL THE FLAVORED CONTENT
             String appTitle = props.getProperty(PathXPropertyType.TEXT_TITLE_BAR_GAME);
@@ -69,6 +80,8 @@ public class PathX
         /* SETUP FILE NAMES */
         FILE_GAME_PROPERTIES,
         FILE_PLAYER_RECORD,
+        FILE_LEVEL_RECORD,
+      FILE_LEVEL_RECORD1,
 
         /* DIRECTORY PATHS FOR FILE LOADING */
        PATH_AUDIO,
@@ -87,7 +100,7 @@ public class PathX
         IMAGE_WINDOW_ICON,
         GAME_SCREEN_IMAGE_BUTTON_HOME,
         GAME_SCREEN_IMAGE_BUTTON_X,
-        
+        LEVEL_OPTIONS,
         GAME_SCREEN_IMAGE_BUTTON_HOME_MOUSE_OVER,
         GAME_SCREEN_IMAGE_BUTTON_X_MOUSE_OVER,
         
@@ -165,6 +178,7 @@ public class PathX
         SPECIAL_IMAGE_OPTIONS2,
         SPECIAL_IMAGE_OPTIONS3,
         SPECIAL_IMAGE_OPTIONS4,
+        IMAGE_EMPTY_DIALOG,
         HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS,
         HOME_SCREEN_IMAGE_EXIT
        

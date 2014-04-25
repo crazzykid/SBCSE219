@@ -19,7 +19,8 @@
           <property name="GAME_SCREEN_IMAGE_BUTTON_X"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_X1"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN1.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_HOME1"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN1.png"></property>
-
+         
+            <property name="IMAGE_EMPTY_DIALOG"            value="./pathx/IMAGE_EMPTY_DIALOG.png"></property>
           <property name="GAME_SCREEN_IMAGE_BUTTON_HOME_MOUSE_OVER"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN_MOUSE_OVER.png"></property>
           <property name="GAME_SCREEN_IMAGE_BUTTON_X_MOUSE_OVER"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN_MOUSE_OVER.png"></property>
           
@@ -101,15 +102,11 @@
     <!-- PLAYABLE LEVELS CREATED WITH THE LEVEL EDITOR 
    
         <property_options name="LEVEL_OPTIONS">
-            <option>./pathx/BubbleSortCoil.sort</option>
-             <option>./pathx/SelectionSortU.sort</option>
-            <option>./pathx/SelectionSortSine.sort</option> 
-            <option>./pathx/BubbleSortO.sort</option>
-             
-             
+            <option>./pathx/LEVEL1.xml</option>
+         
         </property_options>
-        -->
-        
+       
+         -->
          <property_options_list>
         
         
@@ -176,7 +173,7 @@
             <option>./pathx/ButtonBubbleSortOMouseOver.png</option>
             
              
-        </property_options>
-        -->
+    </property_options>
+    -->
    
 </properties>

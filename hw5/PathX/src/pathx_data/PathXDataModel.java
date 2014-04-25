@@ -1,6 +1,7 @@
 package pathx_data;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import pathX_ui.PathXCar;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -11,11 +12,14 @@ import pathx.PathX.PathXPropertyType;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
 import mini_game.SpriteType;
+import mini_game.Viewport;
 import properties_manager.PropertiesManager;
 import static pathx.PathXConstants.*;
 import pathX_ui.PathXMiniGame;
 import pathX_ui.PathXPanel;
 import pathX_ui.PathXCarState;
+import pathx_file.Intersection;
+import pathx_file.Road;
 
 /**
  * This class manages the game data for The Sorting Hat.
@@ -48,6 +52,7 @@ public class PathXDataModel extends MiniGameDataModel
     private int stackCarsX;
     private int stackCarsY;
     
+    private ArrayList<Intersection> snake;
    private ArrayList<PathXGameLevel> levelLocation; 
    
     // THESE ARE THE TILES THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
@@ -77,6 +82,39 @@ public class PathXDataModel extends MiniGameDataModel
     private ArrayList<FlyingTransaction> properTransactionOrder;
     private int transactionCounter;
   //  private boolean isUndo;
+   
+    PathXGameLevel level;
+    
+    
+
+    // DATA FOR RENDERING
+    Viewport viewport;
+
+    // WE ONLY NEED TO TURN THIS ON ONCE
+    boolean levelBeingEdited;
+    Image backgroundImage;
+    Image startingLocationImage;
+    Image destinationImage;
+
+    // THE SELECTED INTERSECTION OR ROAD MIGHT BE EDITED OR DELETED
+    // AND IS RENDERED DIFFERENTLY
+    Intersection selectedIntersection;
+    Road selectedRoad;
+    
+    // WE'LL USE THIS WHEN WE'RE ADDING A NEW ROAD
+    Intersection startRoadIntersection;
+
+    // IN CASE WE WANT TO TRACK MOVEMENTS
+    int lastMouseX;
+    int lastMouseY;    
+    
+    // THESE BOOLEANS HELP US KEEP TRACK OF
+    // @todo DO WE NEED THESE?
+    boolean isMousePressed;
+    boolean isDragging;
+    boolean dataUpdatedSinceLastSave;
+
+    
     
 
  
@@ -97,6 +135,12 @@ public class PathXDataModel extends MiniGameDataModel
         
        TTT= new String();
 
+          level = new PathXGameLevel();
+        viewport = new Viewport();
+        levelBeingEdited = false;
+        startRoadIntersection = null;
+        
+        
         // NOTHING IS BEING DRAGGED YET
         selectedCar = null;
         selectedCarIndex = -1;
@@ -115,9 +159,9 @@ public class PathXDataModel extends MiniGameDataModel
     }
 
     // ACCESSOR METHODS
-   // public ArrayList<SnakeCell> getSnake()
+    public ArrayList<Intersection> getSnake()
     {
-  //      return snake;
+        return snake;
     }
 //public String getAlgorithmName()
     {
@@ -190,23 +234,160 @@ public ArrayList getLevelLocation()
      * Called after a level has been selected, it initializes the grid so that
      * it is the proper dimensions.
      */
-    public void initLevel (String levelName) //(String levelName, ArrayList<SnakeCell> initSnake, SortingHatAlgorithm initSortingAlgorithm)
+    public void initLevel (String levelName , ArrayList<Intersection> intersections) 
     {
-        // KEEP THE TILE ORDER AND SORTING ALGORITHM FOR LATER
-  //      snake = initSnake;
-  //      sortingAlgorithm = initSortingAlgorithm;
+        
+        snake = intersections;
+// currentLevel = LEVEL1;
 
         // UPDATE THE VIEWPORT IF WE ARE SCROLLING (WHICH WE'RE NOT)
         viewport.updateViewportBoundaries();
 
         // INITIALIZE THE PLAYER RECORD IF NECESSARY
-        PathXRecord playerRecord = ((PathXMiniGame) miniGame).getPlayerRecord();
-        if (!playerRecord.hasLevel(levelName))
+     //   PathXRecord playerRecord = ((PathXMiniGame) miniGame).getPlayerRecord();
+//        if (!playerRecord.hasLevel(levelName))
         {
            // playerRecord.addLevel(levelName, initSortingAlgorithm.name);
         }
     }
+ public PathXGameLevel       getLevel()                  {   return level;                   }
 
+   // public Viewport         getViewport()               {   return viewport;                }
+
+
+    public Image            getBackgroundImage()        {   return backgroundImage;         }
+    public Image            getStartingLocationImage()  {   return startingLocationImage;   }
+    public Image            getDesinationImage()        {   return destinationImage;        }
+    public Intersection     getSelectedIntersection()   {   return selectedIntersection;    }
+    public Road             getSelectedRoad()           {   return selectedRoad;            }
+    public Intersection     getStartRoadIntersection()  {   return startRoadIntersection;   }
+    public int              getLastMouseX()             {   return lastMouseX;              }
+    public int              getLastMouseY()             {   return lastMouseY;              }
+    public Intersection     getStartingLocation()       {   return level.startingLocation;  }
+    public Intersection     getDestination()            {   return level.destination;       }
+ 
+    public boolean          isStartingLocation(Intersection testInt)  
+    {   return testInt == level.startingLocation;           }
+    public boolean isDestination(Intersection testInt)
+    {   return testInt == level.destination;                }
+    public boolean isSelectedIntersection(Intersection testIntersection)
+    {   return testIntersection == selectedIntersection;    }
+    public boolean isSelectedRoad(Road testRoad)
+    {   return testRoad == selectedRoad;                    }
+
+    // ITERATOR METHODS FOR GOING THROUGH THE GRAPH
+
+    public Iterator intersectionsIterator()
+    {
+        ArrayList<Intersection> intersections = snake;//level.getIntersections();
+        return intersections.iterator();
+    }
+    public Iterator roadsIterator()
+    {
+        ArrayList<Road> roads = level.roads;
+        return roads.iterator();
+    }
+    
+    
+    // MUTATOR METHODS
+
+  
+    
+    public void setLastMousePosition(int initX, int initY)
+    {
+        lastMouseX = initX;
+        lastMouseY = initY;
+       
+    }    
+    public void setSelectedIntersection(Intersection i)
+    {
+        selectedIntersection = i;
+        selectedRoad = null;
+  
+    }    
+    public void setSelectedRoad(Road r)
+    {
+        selectedRoad = r;
+        selectedIntersection = null;
+      
+    }
+    
+    // AND THEN ALL THE SERVICE METHODS FOR UPDATING THE LEVEL
+    // AND APP STATE
+
+    /**
+     * For selecting the first intersection when making a road. It will
+     * find the road at the (canvasX, canvasY) location.
+     */
+   
+    
+    /**
+     * For selecting the second intersection when making a road. It will
+     * find the road at the (canvasX, canvasY) location.
+     */
+   
+    
+    /**
+     * Sets up the model to edit a brand new level.
+     */
+   
+
+    /**
+     * Updates the background image.
+     */
+   
+    public double calculateDistanceBetweenPoints(int x1, int y1, int x2, int y2)
+    {
+        double diffXSquared = Math.pow(x1 - x2, 2);
+        double diffYSquared = Math.pow(y1 - y2, 2);
+        return Math.sqrt(diffXSquared + diffYSquared);
+    }
+    
+     /**
+     * Updates the background image.
+     */
+    public void updateBackgroundImage(String newBgImage)
+    {
+        // UPDATE THE LEVEL TO FIT THE BACKGROUDN IMAGE SIZE
+        level.backgroundImageFileName = newBgImage;
+        backgroundImage = miniGame.loadImage(LEVELS_PATH + level.backgroundImageFileName);
+        int levelWidth = backgroundImage.getWidth(null);
+        int levelHeight = backgroundImage.getHeight(null);
+        viewport.setLevelDimensions(levelWidth, levelHeight);
+        miniGame.getCanvas().repaint();
+    }
+
+    /**
+     * Updates the image used for the starting location and forces rendering.
+     */
+    public void updateStartingLocationImage(String newStartImage)
+    {
+        level.startingLocationImageFileName = newStartImage;
+        startingLocationImage = miniGame.loadImage(LEVELS_PATH + level.startingLocationImageFileName);
+        miniGame.getCanvas().repaint();
+    }
+
+    /**
+     * Updates the image used for the destination and forces rendering.
+     */
+    public void updateDestinationImage(String newDestImage)
+    {
+        level.destinationImageFileName = newDestImage;
+        destinationImage = miniGame.loadImage(LEVELS_PATH + level.destinationImageFileName);
+        miniGame.getCanvas().repaint();
+    }
+    
+     public void moveViewport(int incX, int incY)
+    {
+        // MOVE THE VIEWPORT
+        viewport.move(incX, incY);
+
+        // AND NOW FORCE A REDRAW
+        miniGame.getCanvas().repaint();
+    }
+
+    
+    
     /**
      * This method loads the tiles, creating an individual sprite for each. Note
      * that tiles may be of various types, which is important during the tile
@@ -628,14 +809,14 @@ public ArrayList getLevelLocation()
     // THE GRID LOCATION OF col, row, AND RETURNS IT'S INDEX
     private int getSnakeIndex(int col, int row)
     {
-        for (int i = 0; i < tilesToSort.size(); i++)
-        {
-            PathXCar tile = tilesToSort.get(i);
-            if ((tile.getGridColumn() == col) && tile.getGridRow() == row)
-            {
-                return i;
-            }
-        }
+//        for (int i = 0; i < tilesToSort.size(); i++)
+//        {
+//            PathXCar tile = tilesToSort.get(i);
+//            if ((tile.getGridColumn() == col) && tile.getGridRow() == row)
+//            {
+//                return i;
+//            }
+//        }
         return -1;
     }
 
@@ -865,4 +1046,13 @@ public ArrayList getLevelLocation()
     public void updateDebugText(MiniGame game)
     {
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
