@@ -57,9 +57,7 @@ public class PathXPanel extends JPanel
     
     // THIS IS FOR WHEN THE USE MOUSES OVER A TILE
     private BufferedImage blankTileMouseOverImage;
-    private PathXRecord theRecord;
-    private boolean perfectW;
-    private int count;
+    
     // private String perfectTime;
     private String pTime;
     
@@ -84,8 +82,7 @@ public class PathXPanel extends JPanel
     {
         game = initGame;
         data = initData;
-        perfectW = false;
-        count = 0;
+        
         //perfectWin = 0;
         numberFormatter = NumberFormat.getNumberInstance();
         numberFormatter.setMinimumFractionDigits(3);
@@ -93,7 +90,7 @@ public class PathXPanel extends JPanel
         //perfectTime = data.getCurrentLevel().//.gameTimeToText();
         pTime =data.gameTimeToText();
         
-      
+        
         // MAKE THE RENDER OBJECTS TO BE RECYCLED
         recyclableCircle = new Ellipse2D.Double(0, 0, INTERSECTION_RADIUS * 2, INTERSECTION_RADIUS * 2);
         recyclableLine = new Line2D.Double(0,0,0,0);
@@ -105,9 +102,9 @@ public class PathXPanel extends JPanel
         
         // MAKING THE TRIANGLE FOR ONE WAY STREETS IS A LITTLE MORE INVOLVED
         recyclableTriangle =  new GeneralPath(   GeneralPath.WIND_EVEN_ODD,
-                                                triangleXPoints.length);
+                triangleXPoints.length);
         recyclableTriangle.moveTo(triangleXPoints[0], triangleYPoints[0]);
-        for (int index = 1; index < triangleXPoints.length; index++) 
+        for (int index = 1; index < triangleXPoints.length; index++)
         {
             recyclableTriangle.lineTo(triangleXPoints[index], triangleYPoints[index]);
         };
@@ -163,11 +160,11 @@ public class PathXPanel extends JPanel
             // MAKE SURE WE HAVE EXCLUSIVE ACCESS TO THE GAME DATA
             game.beginUsingData();
             
-             Graphics2D g2 = (Graphics2D) g;
-             
+            Graphics2D g2 = (Graphics2D) g;
+            
             // CLEAR THE PANEL
             super.paintComponent(g);
-         
+            
             // RENDER THE BACKGROUND, WHICHEVER SCREEN WE'RE ON
             renderBackground(g);
             
@@ -185,19 +182,19 @@ public class PathXPanel extends JPanel
                 renderGrid(g);
                 
                 // RENDER THE HEADER
-              //  renderHeader(g);
+                //  renderHeader(g);
                 
-                 if (data.getCurrentLevel().equals(LEVEL1))
-                 { 
+                if (data.getCurrentLevel().equals(LEVEL1))
+                {
                     renderLevelBackground(g2);
-                     renderRoads(g2);
-                    renderIntersections(g2); 
-                 }
+                    renderRoads(g2);
+                    renderIntersections(g2);
+                }
             }
             
             // AND THE BUTTONS AND DECOR
             renderGUIControls(g);
-           
+            
             // AND FINALLY, TEXT FOR DEBUGGING
             renderDebuggingText(g);
         }
@@ -228,25 +225,27 @@ public class PathXPanel extends JPanel
         Sprite bg = game.getGUIDecor().get(BACKGROUND_TYPE);
         renderSprite(g, bg);
     }
-    
-     private void renderLevelBackground(Graphics2D g2)
+    private void renderLevelBackground(Graphics2D g2)
     {
-           Viewport viewport = data.getViewport();
+        Viewport viewport = data.getViewport();
         Image backgroundImage = data.getBackgroundImage();
-       
+        
         int viewPortX = viewport.getViewportX();
         int viewPortY = viewport.getViewportY();
         int moveX = VIEWPORT_OFFSET_Y + viewPortX;
         int moveY = VIEWPORT_OFFSET_X + viewPortY;
         
-       g2.drawImage(backgroundImage, 165, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
-       // g2.drawImage(backgroundImage, 0, 0, viewport.getViewportWidth() , viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), viewport.getViewportX() + viewport.getViewportWidth(), viewport.getViewportY() + viewport.getViewportHeight(), null);
+        viewport.setViewportSize(740, 840);
+       // System.out.println("ViewPort Width :"+ viewport.getViewportWidth() + "\nViewPort Height :"+ viewport.getViewportHeight());
+       // g2.drawImage(backgroundImage, 165, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
+         g2.drawImage(backgroundImage, 165, 100, viewport.getViewportWidth() , viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), viewport.getViewportX() + viewport.getViewportWidth(), viewport.getViewportY() + viewport.getViewportHeight(), null);
     }
-     // HELPER METHOD FOR RENDERING THE LEVEL ROADS
+    // HELPER METHOD FOR RENDERING THE LEVEL ROADS
     private void renderRoads(Graphics2D g2)
     {
         // GO THROUGH THE ROADS AND RENDER ALL OF THEM
         Viewport viewport = data.getViewport();
+        
         Iterator<Road> it = data.roadsIterator();
         g2.setStroke(recyclableStrokes.get(INT_STROKE));
         while (it.hasNext())
@@ -255,18 +254,6 @@ public class PathXPanel extends JPanel
             if (!data.isSelectedRoad(road))
                 renderRoad(g2, road, INT_OUTLINE_COLOR);
         }
-        
-        // NOW DRAW THE LINE BEING ADDED, IF THERE IS ONE
-       // if (data.isAddingRoadEnd())
-        {
-       //     Intersection startRoadIntersection = data.getStartRoadIntersection();
-      //      recyclableLine.x1 = startRoadIntersection.x-viewport.getViewportX();
-      //      recyclableLine.y1 = startRoadIntersection.y-viewport.getViewportY();
-      //      recyclableLine.x2 = data.getLastMouseX()-viewport.getViewportX();
-      //      recyclableLine.y2 = data.getLastMouseY()-viewport.getViewportY();
-      //      g2.draw(recyclableLine);
-        }
-
         // AND RENDER THE SELECTED ONE, IF THERE IS ONE
         Road selectedRoad = data.getSelectedRoad();
         if (selectedRoad != null)
@@ -274,27 +261,26 @@ public class PathXPanel extends JPanel
             renderRoad(g2, selectedRoad, HIGHLIGHTED_COLOR);
         }
     }
-    
-    
     // HELPER METHOD FOR RENDERING A SINGLE ROAD
     private void renderRoad(Graphics2D g2, Road road, Color c)
     {
         Viewport viewport = data.getViewport();
         g2.setColor(c);
         int strokeId = road.getSpeedLimit()/10;
-
+        
         // CLAMP THE SPEED LIMIT STROKE
         if (strokeId < 1) strokeId = 1;
         if (strokeId > 10) strokeId = 10;
         g2.setStroke(recyclableStrokes.get(strokeId));
-
+        
         // LOAD ALL THE DATA INTO THE RECYCLABLE LINE
-        recyclableLine.x1 = road.getNode1().x-viewport.getViewportX();
-        recyclableLine.y1 = road.getNode1().y-viewport.getViewportY();
-        recyclableLine.x2 = road.getNode2().x-viewport.getViewportX();
-        recyclableLine.y2 = road.getNode2().y-viewport.getViewportY();
-
+        recyclableLine.x1 = road.getNode1().x-viewport.getViewportX()+ VIEWPORT_OFFSET_X-160;
+        recyclableLine.y1 = road.getNode1().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220;
+        recyclableLine.x2 = road.getNode2().x-viewport.getViewportX()+ VIEWPORT_OFFSET_X-160;
+        recyclableLine.y2 = road.getNode2().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220;
+        
         // AND DRAW IT
+         if( road.getNode1().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
         g2.draw(recyclableLine);
         
         // AND IF IT'S A ONE WAY ROAD DRAW THE MARKER
@@ -307,13 +293,13 @@ public class PathXPanel extends JPanel
     // HELPER METHOD FOR RENDERING AN INTERSECTION
     private void renderIntersections(Graphics2D g2)
     {
-          Viewport viewport = data.getViewport();
-          
+        Viewport viewport = data.getViewport();
+        
         Iterator<Intersection> it = data.intersectionsIterator();
         while (it.hasNext())
         {
             Intersection intersection = it.next();
-
+            
             // ONLY RENDER IT THIS WAY IF IT'S NOT THE START OR DESTINATION
             // AND IT IS IN THE VIEWPORT
             if ((!data.isStartingLocation(intersection))
@@ -328,10 +314,10 @@ public class PathXPanel extends JPanel
                 {
                     g2.setColor(CLOSED_INT_COLOR);
                 }
-                recyclableCircle.x = intersection.x - viewport.getViewportX() - INTERSECTION_RADIUS;
-                recyclableCircle.y = intersection.y - viewport.getViewportY() - INTERSECTION_RADIUS;
+                recyclableCircle.x = intersection.x - viewport.getViewportX()+ VIEWPORT_OFFSET_X-160 - INTERSECTION_RADIUS;
+                recyclableCircle.y = intersection.y - viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 - INTERSECTION_RADIUS;
                 g2.fill(recyclableCircle);
-
+                
                 // AND NOW THE OUTLINE
                 if (data.isSelectedIntersection(intersection))
                 {
@@ -342,29 +328,24 @@ public class PathXPanel extends JPanel
                 }
                 Stroke s = recyclableStrokes.get(INT_STROKE);
                 g2.setStroke(s);
+                 if( intersection.y -viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
                 g2.draw(recyclableCircle);
             }
         }
-
+        
         // AND NOW RENDER THE START AND DESTINATION LOCATIONS
         Image startImage = data.getStartingLocationImage();
-        
-        
         Intersection startInt = data.getLevel().getStartingLocation();
-        
         renderIntersectionImage(g2, startImage, startInt);
-
         Image destImage = data.getDesinationImage();
         Intersection destInt = data.getDestination();
         renderIntersectionImage(g2, destImage, destInt);
     }
-
-    // HELPER METHOD FOR RENDERING AN IMAGE AT AN INTERSECTION, WHICH IS
+// HELPER METHOD FOR RENDERING AN IMAGE AT AN INTERSECTION, WHICH IS
     // NEEDED BY THE STARTING LOCATION AND THE DESTINATION
     private void renderIntersectionImage(Graphics2D g2, Image img, Intersection i)
     {
-                Viewport viewport = data.getViewport();
-
+        Viewport viewport = data.getViewport();
         // CALCULATE WHERE TO RENDER IT
         int w = img.getWidth(null);
         int h = img.getHeight(null);
@@ -376,10 +357,10 @@ public class PathXPanel extends JPanel
         // ONLY RENDER IF INSIDE THE VIEWPORT
         if (viewport.isRectInsideViewport(x1, y1, x2, y2));
         {
-            g2.drawImage(img, x1 - viewport.getViewportX(), y1 - viewport.getViewportY(), null);
-        }        
+            g2.drawImage(img, x1 - viewport.getViewportX()+ VIEWPORT_OFFSET_X-160, y1 - viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220, null);
+        }
     }
-
+    
     // HELPER METHOD FOR RENDERING SOME SCREEN STATS, WHICH CAN
     // HELP WITH DEBUGGING
     private void renderStats(Graphics2D g2)
@@ -388,7 +369,7 @@ public class PathXPanel extends JPanel
         g2.setColor(STATS_TEXT_COLOR);
         g2.setFont(STATS_TEXT_FONT);
         //g2.drawString(MOUSE_SCREEN_POSITION_TITLE + data.getLastMouseX() + ", " + data.getLastMouseY(),
-       //         STATS_X, MOUSE_SCREEN_POSITION_Y);
+        //         STATS_X, MOUSE_SCREEN_POSITION_Y);
         int levelMouseX = data.getLastMouseX() + viewport.getViewportX();
         int levelMouseY = data.getLastMouseY() + viewport.getViewportY();
         g2.drawString(MOUSE_LEVEL_POSITION_TITLE + levelMouseX + ", " + levelMouseY,
@@ -422,7 +403,7 @@ public class PathXPanel extends JPanel
         // MAKE A NEW TRANSFORM FOR THIS TRIANGLE AND SET IT
         // UP WITH WHERE WE WANT TO PLACE IT AND HOW MUCH WE
         // WANT TO ROTATE IT
-        AffineTransform at = new AffineTransform();        
+        AffineTransform at = new AffineTransform();
         at.setToIdentity();
         at.translate(midX, midY);
         at.rotate(theta);
@@ -454,7 +435,6 @@ public class PathXPanel extends JPanel
             
             if (s.getSpriteType().getSpriteTypeID() == LEVEL_SELECT_BACKGROUND_TYPE)
                 renderMap(g, s);
-            
         }
         
         // AND NOW RENDER THE BUTTONS
@@ -472,8 +452,8 @@ public class PathXPanel extends JPanel
         Collection<Sprite> buttonSprites2 = game.getGUIButtons().values();
         for (Sprite s : buttonSprites2)
         {
-            if (s.getSpriteType().getSpriteTypeID() == HELP_QUIT_TYPE2 
-                ||s.getSpriteType().getSpriteTypeID() == HELP_QUIT_TYPE)
+            if (s.getSpriteType().getSpriteTypeID() == HELP_QUIT_TYPE2
+                    ||s.getSpriteType().getSpriteTypeID() == HELP_QUIT_TYPE)
                 renderSprite(g, s);
             
             
@@ -1598,39 +1578,7 @@ public class PathXPanel extends JPanel
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    //System.out.println("s getX :" +(int)s.getX() + " \ns getY :" + (int)s.getY() + " \nbgST W :" +bgST.getWidth() + " \nbgst H :" + bgST.getHeight() );
-    
-    // if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE1 )
-    //  {
-    //    for(int i=0; i<levelLocation.size(); i++)
-    //    {
-    //        if(levelLocation.get(i).getLevelState().equals(RED_STATE) && !levelLocation.get(i).getCompletedLevel())
-    //        {
-    //             if (!s.getState().equals(PathXCarState.INVISIBLE_STATE.toString()))
-    //  {
-    //SpriteType bgST = s.getSpriteType();
-    //    Image img = bgST.getStateImage(s.getState());
-    //    g.drawImage(img, (int)s.getX(), (int)s.getY(), bgST.getWidth(), bgST.getHeight(), null);
-    
-    //System.out.println("s getX :" +(int)s.getX() + " \ns getY :" + (int)s.getY() + " \nbgST W :" +bgST.getWidth() + " \nbgst H :" + bgST.getHeight() );
-    //  }
-    //           }
-    //       }
-    //if(st.getState().equals(WHITE_STATE.toString()))
-    
-    //      }
-    
-    //  int x = TIME_X + TIME_OFFSET;
-    //  int y = TIME_Y + TIME_TEXT_OFFSET;
-    //   g.drawString(time, x, y);
-    
-    
+
     
     
     
@@ -1648,14 +1596,14 @@ public class PathXPanel extends JPanel
         Viewport viewport = data.getViewport();
         for (Intersection sC : snake)
         {
-        int x = sC.getY();//data.calculateGridTileX(sC.getY());
-        int y = sC.getX();//data.calculateGridTileY(sC.getX());
-        g.setColor(new Color(0, 0, red, 200));
-        g.fillRect(x, y, TILE_WIDTH, TILE_HEIGHT);
-        red -= COLOR_INC;
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, TILE_WIDTH, TILE_HEIGHT);
-        
+            int x = sC.getY();//data.calculateGridTileX(sC.getY());
+            int y = sC.getX();//data.calculateGridTileY(sC.getX());
+            g.setColor(new Color(0, 0, red, 200));
+            g.fillRect(x, y, TILE_WIDTH, TILE_HEIGHT);
+            red -= COLOR_INC;
+            g.setColor(Color.BLACK);
+            g.drawRect(x, y, TILE_WIDTH, TILE_HEIGHT);
+            
             System.out.println(x);
         }
         
@@ -1674,117 +1622,7 @@ public class PathXPanel extends JPanel
     {
         
         g.drawString("LEVEL CURRENTLY UNAVAILABLE",    300, 300);
-        /*
-        // RENDER THE GAME TIME AND THE TILES LEFT FOR IN-GAME
-        if (((SortingHatMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE)
-        && data.inProgress() || data.isPaused())
-        {
-        // RENDER THE TILES LEFT
-        g.setFont(FONT_TEXT_DISPLAY);
-        g.setColor(Color.BLACK);
-        
-        // RENDER THE TIME
-        String time = data.gameTimeToText();
-        int x = TIME_X + TIME_OFFSET;
-        int y = TIME_Y + TIME_TEXT_OFFSET;
-        g.drawString(time, x, y);
-        
-        
-        // RENDER THE MISCAST
-        String miscastCount = ""+data.getBadSpellsCounter();
-        int xm = TILE_COUNT_X +TILE_COUNT_OFFSET;
-        int ym = TILE_COUNT_Y +TILE_TEXT_OFFSET;
-        g.drawString(miscastCount, xm, ym);
-        
-        
-        // RENDER THE Algorithm Display
-        //  PropertiesManager props = PropertiesManager.getPropertiesManager();
-        // String algorithmPrompt = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_ALGORITHM);
-        //  g.drawString(algorithmPrompt + algorithm,                   STATS_LEVEL_X, STATS_ALGORITHM_Y);
-        //  String algorithm = ""+
-        ///SortingHatRecord algorithm1 = ((SortingHatMiniGame)game).getPlayerRecord();
-        SortingHatRecord record = ((SortingHatMiniGame)game).getPlayerRecord();
-        String algorithm =  data.getAlgorithmName();
-        //game.getDataModel().//algorithm1.getAlgorithm(data.getCurrentLevel());
-        int xa = ALGORITHM_TEMP_TILE_X;
-        int ya = ALGORITHM_TEMP_TILE_Y;
-        
-        g.setFont(FONT_SORT_NAME);
-        g.setColor(COLOR_ALGORITHM_HEADER);
-        g.drawString(algorithm, xa, ya);
-        
-        
-        
-        }
-        
-        
-        
-        /IF THE STATS DIALOG IS VISIBLE, ADD THE TEXTUAL STATS
-        if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(SortingHatTileState.VISIBLE_STATE.toString()))
-        {
-        g.setFont(FONT_STATS);
-        g.setColor(COLOR_STATS);
-        String currentLevel = data.getCurrentLevel();
-        int lastSlash = currentLevel.lastIndexOf("/");
-        String levelName = currentLevel.substring(lastSlash+1);
-        SortingHatRecord record = ((SortingHatMiniGame)game).getPlayerRecord();
-        
-        // GET ALL THE STATS
-        String algorithm = record.getAlgorithm(currentLevel);
-        int games = record.getGamesPlayed(currentLevel);
-        int wins = record.getWins(currentLevel);
-        int perfectWin=record.getPerfectWins(currentLevel);
-        String perfectTime = record.getPerfectFastTime(currentLevel);
-        
-        
-        
-        
-        
-        
-        //  if(data.getBadSpellsCounter()==0 && data.won() )
-        //  {
-        
-        
-        //   if(perfectTime==null){
-        //        System.out.println(" sesstion 1 "+perfectTime);
-        //            perfectTime = data.gameTimeToText();
-        
-        // pTime =perfectTime;
-        //  }
-        //     if((data.gameTimeToText().compareTo(perfectTime))<0)
-        //      {
-        //    perfectTime = data.gameTimeToText();
-        //       System.out.println("Thestint time askahglkdbelsbsdlgbdlghsl");
-        //  }
-        
-        
-        //else
-        //   perfectTime = perfectTime;
-        
-        // as
-        // }
-        
-        // GET ALL THE STATS PROMPTS
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String algorithmPrompt = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_ALGORITHM);
-        String gamesPrompt = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_GAMES);
-        String winsPrompt = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_WINS);
-        String perfectWins = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_PERFECT_WINS);
-        String fastPerfectWins = props.getProperty(PathXPropertyType.TEXT_LABEL_STATS_FASTEST_PERFECT_WIN);
-        
-        // NOW DRAW ALL THE STATS WITH THEIR LABELS
-        int dot = levelName.indexOf(".");
-        levelName = levelName.substring(0, dot);
-        
-        g.drawString(algorithmPrompt + algorithm,                   STATS_LEVEL_X, STATS_ALGORITHM_Y);
-        g.drawString(gamesPrompt + games,                           STATS_LEVEL_X, STATS_GAMES_Y);
-        g.drawString(winsPrompt + wins,                             STATS_LEVEL_X, STATS_WINS_Y);
-        
-        g.drawString(perfectWins + perfectWin,                      STATS_LEVEL_X, STATS_PERFECT_WINS_Y );
-        g.drawString(fastPerfectWins + perfectTime,                STATS_LEVEL_X, STATS_FASTEST_PERFECT_WIN_Y );
-        
-        }
-        */
+      
     }
     
     /**
@@ -1795,29 +1633,7 @@ public class PathXPanel extends JPanel
      */
     public void renderTiles(Graphics g)
     {
-        /*
-        // DRAW THE GRID
-        ArrayList<SortingHatTile> tilesToSort = data.getTilesToSort();
-        for (int i = 0; i < tilesToSort.size(); i++)
-        {
-        SortingHatTile tile = tilesToSort.get(i);
-        if (tile != null)
-        renderTile(g, tile);
-        }
         
-        // THEN DRAW ALL THE MOVING TILES
-        Iterator<SortingHatTile> movingTiles = data.getMovingTiles();
-        while (movingTiles.hasNext())
-        {
-        SortingHatTile tile = movingTiles.next();
-        renderTile(g, tile);
-        }
-        
-        // AND THE SELECTED TILE, IF THERE IS ONE
-        SortingHatTile selectedTile = data.getSelectedTile();
-        if (selectedTile != null)
-        renderTile(g, selectedTile);
-        */
     }
     
     /**
@@ -1879,7 +1695,7 @@ public class PathXPanel extends JPanel
         {
             SpriteType bgST = s.getSpriteType();
             Image img = bgST.getStateImage(s.getState());
-           
+            
             g.drawImage(img, (int)s.getX(), (int)s.getY(), bgST.getWidth(), bgST.getHeight(), null);
             
             //System.out.println("s getX :" +(int)s.getX() + " \ns getY :" + (int)s.getY() + " \nbgST W :" +bgST.getWidth() + " \nbgst H :" + bgST.getHeight() );

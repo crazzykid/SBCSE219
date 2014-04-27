@@ -6,6 +6,8 @@
 
 package pathx_file;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Crazzykid
@@ -22,10 +24,12 @@ public class Intersection
     // INTERSECTION LOCATION
     public int x;
     public int y;
-    
+    public String id;
     // IS IT OPEN OR NOT
     public boolean open;
-
+    
+    private int randNum;
+ private ArrayList<String> roadIDs; 
     /**
      * Constructor allows for a custom location, note that all
      * intersections start as open.
@@ -35,13 +39,26 @@ public class Intersection
         x = initX;
         y = initY;
         open = true;
+        randNum = (int)(Math.random()*100);
+        id =""+x+y+randNum;
+        
+       
+         roadIDs = new ArrayList();
     }
 
     // ACCESSOR METHODS
     public int getX()       {   return x;       }
     public int getY()       {   return y;       }
     public boolean isOpen() {   return open;    }
+    public ArrayList<String> getRoadIDs()   {   return roadIDs;         }
     
+     public void IDprint(){ System.out.println(roadIDs);}
+     
+    public void addRoadID(String idToAdd)
+    {
+        roadIDs.add(idToAdd);
+    }
+    public String getId() { return id; }
     // MUTATOR METHODS
     public void setX(int x)
     {   this.x = x;         }

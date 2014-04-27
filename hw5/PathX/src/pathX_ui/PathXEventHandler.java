@@ -344,6 +344,13 @@ public class PathXEventHandler
             }
             
         }
+        else     if (keyCode == KeyEvent.VK_M)
+        {
+             PathXFileManager fileManager = game.getFileManager();
+             fileManager.findShortestPath(fileManager.getInter(0), fileManager.getInter(1));
+           
+            
+        }
         
         
         

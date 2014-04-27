@@ -41,16 +41,7 @@ public class PathX
             // THEN WE'LL LOAD THE GAME FLAVOR AS SPECIFIED BY THE PROPERTIES FILE
             String gameFlavorFile = props.getProperty(PathXPropertyType.FILE_GAME_PROPERTIES);
             props.loadProperties(gameFlavorFile, PROPERTIES_SCHEMA_FILE_NAME);
-
-            
-            
-    
-              // THEN WE'LL LOAD THE GAME FLAVOR AS SPECIFIED BY THE PROPERTIES FILE
-          //  String gameFile = props.getProperty(PathXPropertyType.FILE_LEVEL_RECORD);
-           // props.loadProperties(gameFile, PROPERTIES_SCHEMA_FILE_LEVEL);
-
-            
-            
+ 
             // NOW WE CAN LOAD THE UI, WHICH WILL USE ALL THE FLAVORED CONTENT
             String appTitle = props.getProperty(PathXPropertyType.TEXT_TITLE_BAR_GAME);
             miniGame.initMiniGame(appTitle, FPS, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -117,29 +108,7 @@ public class PathX
         GAME_SCREEN_IMAGE_BUTTON_SCROLL_DOWN_MOUSE_OVER,
         GAME_SCREEN_IMAGE_BUTTON_SCROLL_RIGHT_MOUSE_OVER,
         GAME_SCREEN_IMAGE_BUTTON_SCROLL_UP_MOUSE_OVER,
-       // IMAGE_BUTTON_NEW_MOUSE_OVER,
-        /*IMAGE_BUTTON_BACK,
-        IMAGE_BUTTON_BACK_MOUSE_OVER,
-        IMAGE_BUTTON_STATS,
-        
-        IMAGE_BUTTON_UNDO_MOUSE_OVER,
-        IMAGE_BUTTON_UNDO,
-        
-        
-        IMAGE_BUTTON_STATS_MOUSE_OVER,
-        IMAGE_BUTTON_TEMP_TILE,
-        IMAGE_BUTTON_TEMP_TILE_MOUSE_OVER,
-        IMAGE_CURSOR_WAND,
-        IMAGE_DECOR_TIME,      
-       // IMAGE_DECOR_MISCASTS,
-       // IMAGE_DIALOG_STATS,
-       // IMAGE_DIALOG_WIN,
-       // IMAGE_SPRITE_SHEET_CHARACTER_TILES,        
-        IMAGE_TILE_BACKGROUND,
-        IMAGE_TILE_BACKGROUND_SELECTED,
-        IMAGE_TILE_BACKGROUND_MOUSE_OVER,
-        
-        */
+      
        
         /* GAME TEXT */
         TEXT_ERROR_LOADING_AUDIO,
@@ -147,13 +116,6 @@ public class PathX
         TEXT_ERROR_LOADING_RECORD,
         TEXT_ERROR_LOADING_XML_FILE,
         TEXT_ERROR_SAVING_RECORD,
-        
-        /*TEXT_LABEL_STATS_ALGORITHM,
-        TEXT_LABEL_STATS_GAMES,
-        TEXT_LABEL_STATS_WINS,
-        TEXT_LABEL_STATS_PERFECT_WINS,
-        TEXT_LABEL_STATS_FASTEST_PERFECT_WIN,
-        */
         
         TEXT_PROMPT_EXIT,
         TEXT_TITLE_BAR_GAME,
@@ -181,11 +143,6 @@ public class PathX
         IMAGE_EMPTY_DIALOG,
         HOME_SCREEN_MOUSE_OVER_IMAGE_OPTIONS,
         HOME_SCREEN_IMAGE_EXIT
-       
-       
-       
-       
-       
       
           
     }
