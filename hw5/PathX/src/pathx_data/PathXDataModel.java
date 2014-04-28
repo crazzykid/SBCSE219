@@ -2,12 +2,15 @@ package pathx_data;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Line2D;
 import pathX_ui.PathXCar;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import javax.swing.JPanel;
 import pathx.PathX.PathXPropertyType;
 import mini_game.MiniGame;
 import mini_game.MiniGameDataModel;
@@ -85,7 +88,7 @@ public class PathXDataModel extends MiniGameDataModel
     
     PathXGameLevel level;
     
-    
+   private PathXCarState  mode;
     
     // DATA FOR RENDERING
     Viewport viewport;
@@ -115,8 +118,9 @@ public class PathXDataModel extends MiniGameDataModel
     boolean dataUpdatedSinceLastSave;
     
     
-    
-    
+    public static int mousePressX;
+    public static int mousePressY;
+
     
     /**
      * Constructor for initializing this data model, it will create the data
@@ -139,7 +143,7 @@ public class PathXDataModel extends MiniGameDataModel
         viewport = new Viewport();
         levelBeingEdited = false;
         startRoadIntersection = null;
-        
+       mode = PathXCarState.NOTHING_SELECTED;
         
         // NOTHING IS BEING DRAGGED YET
         selectedCar = null;
@@ -261,11 +265,16 @@ public class PathXDataModel extends MiniGameDataModel
     public Intersection     getSelectedIntersection()   {   return selectedIntersection;    }
     public Road             getSelectedRoad()           {   return selectedRoad;            }
     public Intersection     getStartRoadIntersection()  {   return startRoadIntersection;   }
-    public int              getLastMouseX()             {   return lastMouseX;              }
-    public int              getLastMouseY()             {   return lastMouseY;              }
+   // public int              getLastMouseX()             {   return lastMouseX;              }
+  //  public int              getLastMouseY()             {   return lastMouseY;              }
     public Intersection     getStartingLocation()       {   return level.startingLocation;  }
     public Intersection     getDestination()            {   return level.destination;       }
-    
+    public boolean          isNothingSelected()      { return mode == PathXCarState.NOTHING_SELECTED; }
+    public boolean isIntersectionSelected() { return mode == PathXCarState.INTERSECTION_SELECTED; }
+    public boolean isIntersectionDragged()  { return mode == PathXCarState.PLAYER_DRAGGED; }
+    public boolean isRoadSelected()         { return mode == PathXCarState.ROAD_SELECTED; }
+    public PathXCarState getMode()                { return mode;}
+   
     public boolean          isStartingLocation(Intersection testInt)
     {   return testInt == level.startingLocation;           }
     public boolean isDestination(Intersection testInt)
@@ -290,7 +299,16 @@ public class PathXDataModel extends MiniGameDataModel
     
     
     // MUTATOR METHODS
-    
+    public void switchState(PathXCarState initMode)
+    {
+
+            // SET THE NEW EDIT MODE
+            mode = initMode;
+            
+            // RENDER
+            miniGame.getCanvas().repaint();
+  
+    }
     
     
     public void setLastMousePosition(int initX, int initY)
@@ -342,7 +360,63 @@ public class PathXDataModel extends MiniGameDataModel
         double diffYSquared = Math.pow(y1 - y2, 2);
         return Math.sqrt(diffXSquared + diffYSquared);
     }
-    
+     public Intersection findIntersectionAtCanvasLocation(int canvasX, int canvasY)
+    {
+        // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
+        for (Intersection i : level.intersections)
+        {
+            double distance = calculateDistanceBetweenPoints(i.x, i.y, canvasX + viewport.getViewportX(), canvasY + viewport.getViewportY());
+            if (distance < INTERSECTION_RADIUS)
+            {
+                // MAKE THIS THE SELECTED INTERSECTION
+                return i;
+            }
+        }
+        return null;
+    }
+      public void unselectEverything()
+    {
+        selectedIntersection = null;
+        selectedRoad = null;
+        startRoadIntersection = null;
+        miniGame.getCanvas().repaint();
+    }
+      
+      /**
+     * Searches to see if there is a road at (canvasX, canvasY), and if
+     * there is, it selects and returns it.
+     */
+    public Road selectRoadAtCanvasLocation(int canvasX, int canvasY)
+    {
+        Iterator<Road> it = level.roads.iterator();
+        Line2D.Double tempLine = new Line2D.Double();
+        while (it.hasNext())
+        {
+            Road r = it.next();
+            tempLine.x1 = r.getNode1().getX();
+            tempLine.y1 = r.getNode1().getY();
+            tempLine.x2 = r.getNode2().getX();
+            tempLine.y2 = r.getNode2().getY();
+            double distance = tempLine.ptSegDist(canvasX+viewport.getViewportX(), canvasY+viewport.getViewportY());
+            
+            // IS IT CLOSE ENOUGH?
+            if (distance <= INT_STROKE)
+            {
+                // SELECT IT
+                this.selectedRoad = r;
+                mode = PathXCarState.ROAD_SELECTED;
+                return selectedRoad;
+            }
+        }
+        return null;
+    }
+     public void moveSelectedPlayer(int canvasX, int canvasY)
+    {
+        selectedIntersection.x = canvasX + viewport.getViewportX();
+        selectedIntersection.y = canvasY + viewport.getViewportY();
+        miniGame.getCanvas().repaint();
+    }
+     
     /**
      * Updates the background image.
      */
@@ -654,6 +728,9 @@ public class PathXDataModel extends MiniGameDataModel
      *
      * @param y The y-axis pixel location of the mouse click.
      */
+    public int getMousePressX() { return mousePressX;}
+    public int getMousePressY() { return mousePressY;}
+            
     @Override
     public void checkMousePressOnSprites(MiniGame game, int x, int y)
     {
@@ -661,6 +738,14 @@ public class PathXDataModel extends MiniGameDataModel
         int col = calculateGridCellColumn(x);
         int row = calculateGridCellRow(y);
         
+        mousePressX = x;
+        mousePressY = y;
+        
+        
+        System.out.println("testing mouse press on for X:" + x+ "\t and for col "+col);
+        
+                System.out.println("testing mouse press on for Y:" + y+ "\t and for row "+row);
+
         // DISABLE THE STATS DIALOG IF IT IS OPEN
         //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
         {
@@ -670,6 +755,14 @@ public class PathXDataModel extends MiniGameDataModel
         
         
     }
+     /**
+     * Responds to when the user presses the mouse button on the canvas,
+     * it may respond in a few different ways depending on what the 
+     * current edit mode is.
+     */
+   
+    
+    
     
     
     /**

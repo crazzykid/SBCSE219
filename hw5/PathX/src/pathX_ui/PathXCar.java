@@ -30,11 +30,11 @@ public class PathXCar extends Sprite
     private float targetY;
     
     // WIN ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
-    private ArrayList<Integer> winPath;
+    private ArrayList<Integer> movePath;
     
     // THIS INDEX KEEPS TRACK OF WHICH NODE ON THE WIN ANIMATION PATH
     // THIS TILE IS CURRENTLY TARGETING
-    private int winPathIndex;
+    private int movePathIndex;
     
     /**
      * This constructor initializes this tile for use, including all the
@@ -194,22 +194,23 @@ public class PathXCar extends Sprite
      * win animations by slightly randomizing the locations
      * of the nodes in the winPathNodes argument.
      */
-    public void initWinPath(ArrayList<Integer> winPathNodes)
+    public void initRoadPath(ArrayList<Integer> intersectionNodes)
     {
-        /*
+        
         // CONSTRUCT THE PATH
-        winPath = new ArrayList(winPathNodes.size());
-        for (int i = 0; i < winPathNodes.size(); i+=2)
+        movePath = new ArrayList(intersectionNodes.size());
+        for (int i = 0; i < intersectionNodes.size(); i+=2)
         {
             // AND FILL IT WITH FUZZY PATH NODES
-            int toleranceX = (int)(WIN_PATH_TOLERANCE * Math.random()) - (WIN_PATH_TOLERANCE/2);
-            int toleranceY = (int)(WIN_PATH_TOLERANCE * Math.random()) - (WIN_PATH_TOLERANCE/2);
-            int x = winPathNodes.get(i) + toleranceX;
-            int y = winPathNodes.get(i+1) + toleranceY;
-            winPath.add(x);
-            winPath.add(y);
+            int toleranceX = (int)(MOVE_PATH_TOLERANCE * Math.random()) - (MOVE_PATH_TOLERANCE/2);
+            int toleranceY = (int)(MOVE_PATH_TOLERANCE * Math.random()) - (MOVE_PATH_TOLERANCE/2);
+            int x = intersectionNodes.get(i) + toleranceX;
+            int y = intersectionNodes.get(i+1) + toleranceY;
+            movePath.add(x);
+            movePath.add(y);
         }
-        */
+        movePath = intersectionNodes;
+        
     }    
     
     /**
@@ -253,7 +254,7 @@ public class PathXCar extends Sprite
      * 
      * @param game The Sorting Hat game we are updating.
      */
-    public void updateWinPath(MiniGame game)
+    public void updateMovePath(MiniGame game)
     {
         // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
         if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
@@ -263,14 +264,14 @@ public class PathXCar extends Sprite
             y = targetY;
             
             // AND TARGET THE NEXT NODE IN THE PATH
-            targetX = winPath.get(winPathIndex);
-            targetY = winPath.get(winPathIndex+1);
+            targetX = movePath.get(movePathIndex);
+            targetY = movePath.get(movePathIndex+1);
             
             // START THE TILE MOVING AGAIN AND RANDOMIZE IT'S SPEED
-            startMovingToTarget((int)(Math.random() * MAX_TILE_VELOCITY) + 1);
+            startMovingToTarget(MAX_TILE_VELOCITY);
             
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
-            winPathIndex += 2;
+            movePathIndex += 2;
            // winPathIndex %= (WIN_PATH_NODES * 2);
         }
         // JUST A NORMAL PATHING UPDATE
@@ -295,13 +296,13 @@ public class PathXCar extends Sprite
     {
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
-        if (game.getDataModel().won())
+       // if (game.getDataModel().won())
         {
-            updateWinPath(game);
+       //     updateMovePath(game);
         }
         // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
         // JUST GO TO THE TARGET AND THEN STOP MOVING
-        else if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
+       if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
         {
             vX = 0;
             vY = 0;

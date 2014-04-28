@@ -1569,6 +1569,8 @@ public class PathXMiniGame extends MiniGame
                 eventHandler.respondToKeyPress(ke.getKeyCode());
             }
         });
+        
+      
     }
     
     /**

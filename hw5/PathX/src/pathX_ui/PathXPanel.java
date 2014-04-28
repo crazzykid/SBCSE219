@@ -58,16 +58,18 @@ public class PathXPanel extends JPanel
     // THIS IS FOR WHEN THE USE MOUSES OVER A TILE
     private BufferedImage blankTileMouseOverImage;
     
+    PathXGameLevel playerLevel;
     // private String perfectTime;
     private String pTime;
     
     Ellipse2D.Double recyclableCircle;
+    public static Ellipse2D.Double playerCircle;
     Line2D.Double recyclableLine;
     HashMap<Integer, BasicStroke> recyclableStrokes;
     int triangleXPoints[] = {-ONE_WAY_TRIANGLE_WIDTH/2,  -ONE_WAY_TRIANGLE_WIDTH/2,  ONE_WAY_TRIANGLE_WIDTH/2};
     int triangleYPoints[] = {ONE_WAY_TRIANGLE_WIDTH/2, -ONE_WAY_TRIANGLE_WIDTH/2, 0};
     GeneralPath recyclableTriangle;
-    
+    Graphics2D first ;
     
     /**
      * This constructor stores the game and data references,
@@ -83,6 +85,7 @@ public class PathXPanel extends JPanel
         game = initGame;
         data = initData;
         
+        playerLevel = data.getLevel();
         //perfectWin = 0;
         numberFormatter = NumberFormat.getNumberInstance();
         numberFormatter.setMinimumFractionDigits(3);
@@ -95,6 +98,8 @@ public class PathXPanel extends JPanel
         recyclableCircle = new Ellipse2D.Double(0, 0, INTERSECTION_RADIUS * 2, INTERSECTION_RADIUS * 2);
         recyclableLine = new Line2D.Double(0,0,0,0);
         recyclableStrokes = new HashMap();
+        playerCircle = new Ellipse2D.Double(0, 0, INTERSECTION_RADIUS * 2, INTERSECTION_RADIUS * 2);
+       
         for (int i = 1; i <= 10; i++)
         {
             recyclableStrokes.put(i, new BasicStroke(i*2));
@@ -162,6 +167,7 @@ public class PathXPanel extends JPanel
             
             Graphics2D g2 = (Graphics2D) g;
             
+            first = (Graphics2D) g;
             // CLEAR THE PANEL
             super.paintComponent(g);
             
@@ -189,6 +195,7 @@ public class PathXPanel extends JPanel
                     renderLevelBackground(g2);
                     renderRoads(g2);
                     renderIntersections(g2);
+                    renderPlayer(g2);
                 }
             }
             
@@ -204,6 +211,7 @@ public class PathXPanel extends JPanel
             game.endUsingData();
         }
     }
+    
     
     // RENDERING HELPER METHODS
     // - renderBackground
@@ -289,7 +297,40 @@ public class PathXPanel extends JPanel
             this.renderOneWaySignalsOnRecyclableLine(g2);
         }
     }
+    int count = 0;
+       
+    public static double playerX = 0;
+    public static double playerY = 0;
+    private void renderPlayer(Graphics2D g2)
+    {
+         Viewport viewport = data.getViewport();
+       
+                  g2.setColor(Color.BLUE);
+        if (count == 0) {
+            playerCircle.x = playerLevel.getStartingLocation().x - viewport.getViewportX() + VIEWPORT_OFFSET_X - 160 - INTERSECTION_RADIUS + 35 + playerX;
+            playerCircle.y = playerLevel.getStartingLocation().y - viewport.getViewportY() + VIEWPORT_OFFSET_Y - 220 - INTERSECTION_RADIUS - 50 + playerY;
+            count++;
+        }
+                g2.fill(playerCircle);
+                    g2.draw(playerCircle);
+                    
+                    
+    }
+ 
     
+    public void renderPlayerMove()
+    {
+           
+//        first.setColor(Color.BLUE);
+//           
+//            playerCircle.x = viewport.getViewportX()+ VIEWPORT_OFFSET_X + playerX;
+//              playerCircle.y = ((PathXDataModel)data).getMousePressY() + playerY;
+//                
+//             
+//                first.fill(playerCircle);
+//                    first.draw(playerCircle);
+//        
+    }
     // HELPER METHOD FOR RENDERING AN INTERSECTION
     private void renderIntersections(Graphics2D g2)
     {

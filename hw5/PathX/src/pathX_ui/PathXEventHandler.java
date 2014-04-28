@@ -1,8 +1,12 @@
 package pathX_ui;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.TreeMap;
 import static pathx.PathXConstants.GAME_SCREEN_STATE;
 import static pathx.PathXConstants.MENU_SCREEN_STATE;
 import static pathx.PathXConstants.VIEWPORT_INC;
@@ -12,6 +16,7 @@ import static pathx.PathXConstants.SCROLL_RIGHT;
 import static pathx.PathXConstants.SCROLL_UP;
 import pathx.PathX;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import mini_game.Sprite;
 import mini_game.Viewport;
 import static pathx.PathXConstants.GAME_DIALOG_STATE;
@@ -24,7 +29,11 @@ import static pathx.PathXConstants.HELP_QUIT_TYPE2;
 import static pathx.PathXConstants.PATH_DATA;
 import pathx_file.PathXFileManager;
 import pathx_data.PathXDataModel;
+import pathx_file.Intersection;
+import pathx_file.Road;
 import properties_manager.PropertiesManager;
+import pathX_ui.PathXPanel.*;
+import pathx_file.Connection;
 //import sorting_hat.data.SortingHatDataModel;
 //import sorting_hat.file.SortingHatFileManager;
 
@@ -32,12 +41,13 @@ import properties_manager.PropertiesManager;
  *
  * @author Richard McKenna & __Lamar Myles_________
  */
-public class PathXEventHandler
+public class PathXEventHandler implements MouseListener, MouseMotionListener
 {
     // THE SORTING HAT GAME, IT PROVIDES ACCESS TO EVERYTHING
     private PathXMiniGame game;
     private int viewPortX;
     private int viewPortY;
+         PathXDataModel model;
     /**
      * Constructor, it just keeps the game for when the events happen.
      */
@@ -46,8 +56,11 @@ public class PathXEventHandler
         game = initGame;
         viewPortX =0;
         viewPortY = 0;
+        
+        
+         model = (PathXDataModel)game.getDataModel();
     }
-    
+
     /**
      * Called when the user clicks the close window button.
      */
@@ -201,7 +214,6 @@ public class PathXEventHandler
         PathXDataModel data = (PathXDataModel)game.getDataModel();
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         
-        
         // ONLY DO THIS IF THE GAME IS NO OVER
         if (game.getDataModel().inProgress())
         {
@@ -299,6 +311,8 @@ public class PathXEventHandler
         // game.displayStats();
     }
     
+    public static int position = 0;
+    
     /**
      * Called when the user presses a key on the keyboard.
      */
@@ -346,16 +360,156 @@ public class PathXEventHandler
         }
         else     if (keyCode == KeyEvent.VK_M)
         {
-             PathXFileManager fileManager = game.getFileManager();
-             fileManager.findShortestPath(fileManager.getInter(0), fileManager.getInter(1));
-           
+            PathXFileManager fileManager = game.getFileManager();
+            ArrayList<Connection> pathParser = fileManager.findShortestPath(fileManager.getInter(0), fileManager.getInter(1));
+            TreeMap<String, Road> roadMapCopy = fileManager.getRoadMap();
+            TreeMap<String, Intersection> intersectionMapCopy = fileManager.getIntersectionMap();
             
+            int moveX = 0;
+            int moveY = 0;
+            //for(int i = 0; i < pathParser.size(); i++) {
+                //System.out.println("ID 2: " + connection.Intersection2ID);
+                Road aRoad = roadMapCopy.get(pathParser.get(position).road);
+                Intersection aIntersection = intersectionMapCopy.get(pathParser.get(position).Intersection2ID);
+//                moveX =  Integer.parseInt(pathParser.get(i).Intersection2ID.substring(0, 3));
+//                moveY =  Integer.parseInt(pathParser.get(i).Intersection2ID.substring(3, 5));
+                System.out.println("X: " + aIntersection.x + "\n" + "Y: " + aIntersection.y);
+                //    }
+            position++;
+            PathXPanel.playerCircle.x = aIntersection.x;
+            PathXPanel.playerCircle.y = aIntersection.y;
         }
         
-        
-        
-        
-        
-        
     }
+     
+    /**
+     * Constructor for initializing this controller. It will update the
+     * model (i.e. the app data), so it needs a reference to it.
+     */
+    
+
+    /**
+     * Responds to when the user presses the mouse button on the canvas,
+     * it may respond in a few different ways depending on what the 
+     * current edit mode is.
+     */
+    @Override
+    public void mousePressed(MouseEvent me)
+    {
+        // MAKE SURE THE CANVAS HAS FOCUS SO THAT IT
+        // WILL PROCESS THE PROPER KEY PRESSES
+        ((JPanel)me.getSource()).requestFocusInWindow();
+        
+        // THESE ARE CANVAS COORDINATES
+        int canvasX = me.getX();
+        int canvasY = me.getY();
+        
+      
+        // IF WE ARE IN ONE OF THESE MODES WE MAY WANT TO SELECT
+        // ANOTHER INTERSECTION ROAD
+       if (model.isNothingSelected()
+                || model.isIntersectionSelected()
+                || model.isRoadSelected())
+        {
+            // CHECK TO SEE IF THE USER IS SELECTING A PLAYER
+            Intersection i = model.findIntersectionAtCanvasLocation(canvasX, canvasY);
+            if (i != null)
+            {
+                // MAKE THIS THE SELECTED INTERSECTION
+                model.setSelectedIntersection(i);
+                model.switchState(PathXCarState.PLAYER_DRAGGED);
+                return;
+            }                      
+            
+            // IF NO INTERSECTION WAS SELECTED THEN CHECK TO SEE IF 
+            // THE USER IS SELECTING A ROAD
+            Road r = model.selectRoadAtCanvasLocation(canvasX, canvasY);
+            if (r != null)
+            {
+                // MAKE THIS THE SELECTED ROAD
+                model.setSelectedRoad(r);
+                model.switchState(PathXCarState.ROAD_SELECTED);
+                return;
+            }
+
+            // OTHERWISE DESELECT EVERYTHING
+            model.unselectEverything();            
+        }
+        // PERHAPS THE USER IS WANTING TO ADD THE FIRST INTERSECTION OF A ROAD
+ 
+    }
+  
+    /**
+     * This method is called when the user releases the mouse button
+     * over the canvas. This will end intersection dragging if that is
+     * currently happening.
+     */
+    @Override
+    public void mouseReleased(MouseEvent me)
+    {
+        // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
+        PathXCarState mode = model.getMode();
+        if (mode == PathXCarState.PLAYER_DRAGGED)
+        {
+            // RELEASE IT, BUT KEEP IT AS THE SELECTED ITEM
+            model.switchState(PathXCarState.INTERSECTION_SELECTED);
+        }
+    }
+
+    /**
+     * This method will be used to respond to right-button mouse clicks
+     * on intersections so that we can toggle them open or closed.
+     */
+    @Override
+    public void mouseClicked(MouseEvent me)
+    {
+        // RIGHT MOUSE BUTTON IS TO TOGGLE OPEN/CLOSE INTERSECTION
+        if (me.getButton() == MouseEvent.BUTTON3)
+        {
+            // SEE IF WE CLICKED ON AN INTERSECTION
+            Intersection i = model.findIntersectionAtCanvasLocation(me.getX(), me.getY());
+            if (i != null)
+            {
+                // TOGGLE THE INTERSECTION
+                i.toggleOpen();
+                model.switchState(PathXCarState.NOTHING_SELECTED);
+            }            
+        }
+    }
+
+    /**
+     * This method is called every time the user moves the mouse. We
+     * use this to keep track of where the mouse is at all times on
+     * the canvas, which helps us render the road being added after
+     * the user has selected the first intersection.
+     */
+    @Override
+    public void mouseMoved(MouseEvent me)
+    {
+        // UPDATE THE POSITION
+        model.setLastMousePosition(me.getX(), me.getY());
+    }
+    
+    /**
+     * This function is called when we drag the mouse across the canvas with
+     * the mouse button pressed. We use this to drag items intersections
+     * across the canvas.
+     */
+    @Override
+    public void mouseDragged(MouseEvent me)
+    {
+        // WE ONLY CARE IF WE ARE IN INTERSECTION DRAGGED MODE
+        PathXCarState mode = model.getMode();
+        if (mode == PathXCarState.PLAYER_DRAGGED)
+        {
+            // DRAG IT
+            model.moveSelectedPlayer(me.getX(), me.getY());
+        }    
+    }
+    
+    // WE WON'T BE USING THESE METHODS, BUT NEED TO OVERRIDE
+    // THEM TO KEEP THE COMPILER HAPPY
+    @Override
+    public void mouseEntered(MouseEvent me)     {}    
+    public void mouseExited(MouseEvent me)      {}   
 }

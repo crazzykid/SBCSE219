@@ -189,8 +189,8 @@ public class PathXConstants
     
     // FOR TILE RENDERING
     public static final int NUM_TILES = 30;
-    public static final int TILE_WIDTH = 135;
-    public static final int TILE_HEIGHT = 126;
+    public static final int TILE_WIDTH = 64;
+    public static final int TILE_HEIGHT = 64;
     public static final int TILE_IMAGE_OFFSET_X = 45;
     public static final int TILE_IMAGE_OFFSET_Y = 30;
     public static final String TILE_SPRITE_TYPE_PREFIX = "TILE_";
@@ -285,9 +285,9 @@ public class PathXConstants
     public static final long MILLIS_IN_AN_HOUR  = 1000 * 60 * 60;
     
     // USED FOR DOING OUR VICTORY ANIMATION
-    //  public static final int WIN_PATH_NODES = 5;
-    //  public static final int WIN_PATH_TOLERANCE = 100;
-    //  public static final int WIN_PATH_COORD = 100;
+      public static final int MOVE_PATH_NODES = 5;
+    public static final int MOVE_PATH_TOLERANCE = 100;
+     public static final int MOVE_PATH_COORD = 100;
     
     // COLORS USED FOR RENDERING VARIOUS THINGS, INCLUDING THE
     // COLOR KEY, WHICH REFERS TO THE COLOR TO IGNORE WHEN

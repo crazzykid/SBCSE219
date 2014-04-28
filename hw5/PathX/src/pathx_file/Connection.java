@@ -68,6 +68,6 @@ public class Connection implements Comparable, Comparator
 	}
          public String toString()
     {
-        return Intersection1ID + road + Intersection2ID;
+        return "Intersection 1 ID : "+Intersection1ID + "  Road ID : " +road + "  Intersection 2 ID : "+ Intersection2ID;
     }
 }

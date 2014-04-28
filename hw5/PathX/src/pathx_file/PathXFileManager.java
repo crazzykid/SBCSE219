@@ -87,13 +87,16 @@ public class PathXFileManager
     }
     public PathXGameLevel       getLevel()                  {   return level;}
 public Intersection getInter(int i){     return intersectionToLoad.get(i); }
-    public boolean loadLevel(String levelFile)
+  
+public boolean loadLevel(String levelFile)
     {
         try
         {
              data = (PathXDataModel)miniGame.getDataModel();
              File fileToOpen = new File(levelFile);
+             
              levelSchema = new File(PATH_DATA + "PathXLevelSchema.xsd");
+             
             // WE'LL FILL IN SOME OF THE LEVEL OURSELVES
             PathXGameLevel levelToLoad = data.getLevel();
             
@@ -526,6 +529,13 @@ public Intersection getInter(int i){     return intersectionToLoad.get(i); }
                   
     }
     
+    public TreeMap<String, Road> getRoadMap() {
+        return roadMap;
+    }
+    
+    public TreeMap<String, Intersection> getIntersectionMap() {
+        return intersectionMap;
+    }
     
     public ArrayList<Connection> findShortestPath(Intersection startLocation, Intersection endLocation)
     {
@@ -534,6 +544,11 @@ public Intersection getInter(int i){     return intersectionToLoad.get(i); }
         TreeMap<String, ArrayList<Connection>> shortestPaths;
         shortestPaths = new TreeMap();
 
+        boolean sameLocation = false;
+        
+        if(startLocation.x == endLocation.x && startLocation.y == endLocation.y)
+            sameLocation = true;
+        
         // THIS WILL STORE THE PATH WE ARE CURRENTLY
         // BUILDING UPON
         
@@ -546,29 +561,29 @@ public Intersection getInter(int i){     return intersectionToLoad.get(i); }
         // BECAUSE WE WILL USE ONE AS A LIST OF 
         // ITEMS TO CHECK IN ORDER, AND ANOTHER
         // FOR FAST SEARCHING
-        ArrayList<Intersection> actorsVisited = new ArrayList();
-        TreeMap<String, Intersection> actorsVisitedFast = new TreeMap();
-        ArrayList<Road> filmsVisited = new ArrayList();
-        TreeMap<String, Road> filmsVisitedFast = new TreeMap();
+        ArrayList<Intersection> roadsVisited = new ArrayList();
+        TreeMap<String, Intersection> roadsVisitedFast = new TreeMap();
+        ArrayList<Road> intersectionsVisited = new ArrayList();
+        TreeMap<String, Road> intersectionsVisitedFast = new TreeMap();
 
         // INDEX OF Intersections AND Roads TO CHECK
-        int actorIndex = 0;
-        int filmIndex = 0;
+        int roadIndex = 0;
+        int intersectionIndex = 0;
 
 	// THE SHORTEST PATH FROM THE START ACTOR
         // TO THE START ACTOR IS NOTHING, SO WE'll
         // START OUT WITH AN EMPTY ArrayList
-        actorsVisited.add(startLocation);
-        actorsVisitedFast.put(startLocation.getId(), startLocation);
+        roadsVisited.add(startLocation);
+        roadsVisitedFast.put(startLocation.getId(), startLocation);
         shortestPaths.put(startLocation.getId(), new ArrayList<Connection>());
 
 	// GO THROUGH ALL THE ACTORS WE HAVE REACHED
         // NEVER RE-VISITING AN ACTOR
-        while (actorIndex < actorsVisited.size())
+        while (roadIndex < roadsVisited.size())
         {
             // FIRST GET ALL THE MOVIES FOR THE
-            // ACTOR AT THE actorIndex
-            Intersection currentIntersection = actorsVisited.get(actorIndex);
+            // ACTOR AT THE roadIndex
+            Intersection currentIntersection = roadsVisited.get(roadIndex);
 
             // MAKE THE SHORTEST PATH FOR THE CURRENT
             // ACTOR THE CURRENT PATH, SINCE WE WILL
@@ -583,16 +598,16 @@ public Intersection getInter(int i){     return intersectionToLoad.get(i); }
              
                   String Id = loadRoads.next();
                   Road Rd = roadMap.get(Id);
-                  
+                 
                 
-                if (!filmsVisitedFast.containsKey(Id))
+                if (!intersectionsVisitedFast.containsKey(Id) )
                 {
-                    filmsVisited.add(Rd);
-                    filmsVisitedFast.put(Rd.getRoadId(), Rd);
+                    intersectionsVisited.add(Rd);
+                    intersectionsVisitedFast.put(Rd.getRoadId(), Rd);
                 }
             }
 
-            while (filmIndex < filmsVisited.size())
+            while (intersectionIndex < intersectionsVisited.size())
             {
 		// NOW GO THROUGH THE FILMS AND GET
                 // ALL THE ACTORS WHO WERE IN THOSE
@@ -600,56 +615,61 @@ public Intersection getInter(int i){     return intersectionToLoad.get(i); }
                 // VISITED
              
                 
-                Road currentRoad = filmsVisited.get(filmIndex);
-                
-                 Iterator<String> loadIntersection =currentRoad.getIntersectionIDs().iterator();
+                Road currentRoad = intersectionsVisited.get(intersectionIndex);
+                Iterator<String> loadIntersection =currentRoad.getIntersectionIDs().iterator();
          
-                
-                
                 while (loadIntersection.hasNext())
                 {
                     String intersecID = loadIntersection.next();
-                    Intersection actorToTest = intersectionMap.get(intersecID);
+                    Intersection roadToTest = intersectionMap.get(intersecID);
                     
-                    if (!actorsVisitedFast.containsKey(intersecID))
+                    if(!roadToTest.isOpen())
                     {
-                        actorsVisited.add(actorToTest);
-                        actorsVisitedFast.put(intersecID, actorToTest);
-                        ArrayList<Connection> actorPath;
-                        actorPath = (ArrayList<Connection>) currentPath.clone();
+                        
+                      //roadsVisited.add(roadToTest);
+                        //roadsVisitedFast.put(intersecID, roadToTest);
+                        System.out.println("Testing to see if this get called");
+                    
+                    }
+                    if (!roadsVisitedFast.containsKey(intersecID))
+                    {
+                        roadsVisited.add(roadToTest);
+                        roadsVisitedFast.put(intersecID, roadToTest);
+                        ArrayList<Connection> roadPath;
+                        roadPath = (ArrayList<Connection>) currentPath.clone();
                         
                         // currentPath = shortestPaths.get(currentIntersection.getId());
                          
                          
                         Connection c = new Connection(currentRoad.getRoadId(), 
-                                currentIntersection.getId(), actorToTest.getId());
+                                currentIntersection.getId(), roadToTest.getId());
                    
-                        actorPath.add(c);
+                        roadPath.add(c);
                         
                         
-                        shortestPaths.put(intersecID, actorPath);
+                        shortestPaths.put(intersecID, roadPath);
 
                         // IF THIS IS KEVIN BACON WE'RE DONE
-                        if (intersecID.equals(endLocation.getId()))
+                        if (intersecID.equals(endLocation.getId())||sameLocation==true)
                         {
                             System.out.println(startLocation.toString() +"  " + endLocation);
                             int i=0;
-                            while(actorPath.size()>i)
+                            while(roadPath.size()>i)
                                     {
-                                      actorPath.get(i).toString();
+                                      roadPath.get(i).toString();
                                        i++;
                                     }
-                                   System.out.println( "Size Of array"+actorPath.size());
-                                 System.out.println(actorPath.toString());
+                                   System.out.println( "Size Of array"+roadPath.size());
+                                 System.out.println(roadPath.toString());
                                  
-                            return actorPath;
+                            return roadPath;
                             
                         }
                     }
                 }
-                filmIndex++;
+                intersectionIndex++;
             }
-            actorIndex++;
+            roadIndex++;
         }
         return new ArrayList();
     }
