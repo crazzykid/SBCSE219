@@ -91,7 +91,9 @@ public class PathXDataModel extends MiniGameDataModel
    private PathXCarState  mode;
     
     // DATA FOR RENDERING
-    Viewport viewport;
+    private Viewport viewport;
+    
+    Viewport vPort;
     
     // WE ONLY NEED TO TURN THIS ON ONCE
     boolean levelBeingEdited;
@@ -141,6 +143,8 @@ public class PathXDataModel extends MiniGameDataModel
         
         level = new PathXGameLevel();
         viewport = new Viewport();
+        
+        vPort = new Viewport();
         levelBeingEdited = false;
         startRoadIntersection = null;
        mode = PathXCarState.NOTHING_SELECTED;
@@ -247,6 +251,10 @@ public class PathXDataModel extends MiniGameDataModel
         // UPDATE THE VIEWPORT IF WE ARE SCROLLING (WHICH WE'RE NOT)
         viewport.updateViewportBoundaries();
         
+        vPort.updateViewportBoundaries();
+        
+        
+        
         // INITIALIZE THE PLAYER RECORD IF NECESSARY
         //   PathXRecord playerRecord = ((PathXMiniGame) miniGame).getPlayerRecord();
 //        if (!playerRecord.hasLevel(levelName))
@@ -256,7 +264,9 @@ public class PathXDataModel extends MiniGameDataModel
     }
     public PathXGameLevel       getLevel()                  {   return level;                   }
     
-     public Viewport         getVport()               {   return viewport;                }
+    public Viewport         getVport()               {   return vPort;   }
+     
+     public Viewport getVport2  (){ return viewport;}
     
     
     public Image            getBackgroundImage()        {   return backgroundImage;         }
@@ -281,6 +291,9 @@ public class PathXDataModel extends MiniGameDataModel
     {   return testInt == level.destination;                }
     public boolean isSelectedIntersection(Intersection testIntersection)
     {   return testIntersection == selectedIntersection;    }
+    
+    
+    public boolean isPlayerSelected(){ return true;}
     public boolean isSelectedRoad(Road testRoad)
     {   return testRoad == selectedRoad;                    }
     
@@ -397,7 +410,7 @@ public class PathXDataModel extends MiniGameDataModel
             tempLine.y1 = r.getNode1().getY();
             tempLine.x2 = r.getNode2().getX();
             tempLine.y2 = r.getNode2().getY();
-            double distance = tempLine.ptSegDist(canvasX+viewport.getViewportX(), canvasY+viewport.getViewportY());
+            double distance = tempLine.ptSegDist(canvasX+vPort.getViewportX(), canvasY+vPort.getViewportY());
             
             // IS IT CLOSE ENOUGH?
             if (distance <= INT_STROKE)
@@ -412,8 +425,8 @@ public class PathXDataModel extends MiniGameDataModel
     }
      public void moveSelectedPlayer(int canvasX, int canvasY)
     {
-        selectedIntersection.x = canvasX + viewport.getViewportX();
-        selectedIntersection.y = canvasY + viewport.getViewportY();
+        selectedIntersection.x = canvasX + vPort.getViewportX();
+        selectedIntersection.y = canvasY + vPort.getViewportY();
         miniGame.getCanvas().repaint();
     }
      
@@ -422,12 +435,18 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public void updateBackgroundImage(String newBgImage)
     {
+       
         // UPDATE THE LEVEL TO FIT THE BACKGROUDN IMAGE SIZE
         level.backgroundImageFileName = newBgImage;
         backgroundImage = miniGame.loadImage(LEVELS_PATH + level.backgroundImageFileName);
         int levelWidth = backgroundImage.getWidth(null);
         int levelHeight = backgroundImage.getHeight(null);
-        viewport.setLevelDimensions(levelWidth, levelHeight);
+        vPort.setLevelDimensions(levelWidth, levelHeight);
+       
+        vPort.setGameWorldSize(backgroundImage.getWidth(null), backgroundImage.getHeight(null));
+        vPort.setNorthPanelHeight(100);
+        vPort.setViewportSize(740, 620);
+        
         miniGame.getCanvas().repaint();
     }
     
@@ -451,15 +470,24 @@ public class PathXDataModel extends MiniGameDataModel
         miniGame.getCanvas().repaint();
     }
     
-    public void moveViewport(int incX, int incY)
+    public void moveViewport2(int incX, int incY)
     {
         // MOVE THE VIEWPORT
-        viewport.move(incX, incY);
+        viewport.scroll(incX, incY);
         
         // AND NOW FORCE A REDRAW
         miniGame.getCanvas().repaint();
     }
     
+        
+    public void moveViewport(int incX, int incY)
+    {
+        // MOVE THE VIEWPORT
+        vPort.scroll(incX, incY);
+        
+        // AND NOW FORCE A REDRAW
+        miniGame.getCanvas().repaint();
+    }
     
     
     /**
@@ -741,6 +769,10 @@ public class PathXDataModel extends MiniGameDataModel
         mousePressX = x;
         mousePressY = y;
         
+         // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
+      
+         mode = PathXCarState.PLAYER_SELECTED;
+     
         
         System.out.println("testing mouse press on for X:" + x+ "\t and for col "+col);
         

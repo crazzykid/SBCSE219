@@ -157,8 +157,51 @@ public class PathXConstants
     public static final String SCROLL_DOWN = "SCROLL_DOWN";
     
     public static final String LEVEL1 = "LEVEL1";
-    
+    //    public static final int SCROLL_SPEED = 6;
     // ANIMATION SPEED
+    
+    public static final int LEVEL_OFFSET_LOCATION_X = 50;
+    public static final int LEVEL_OFFSET_LOCATION_Y = 320;
+    public static final int LEVEL_OFFSET_LOCATION_X1 = 80;
+    public static final int LEVEL_OFFSET_LOCATION_Y1 = 470;
+    public static final int LEVEL_OFFSET_LOCATION_X2 = 300;
+    public static final int LEVEL_OFFSET_LOCATION_Y2 = 530;
+    public static final int LEVEL_OFFSET_LOCATION_X3 =300;
+    public static final int LEVEL_OFFSET_LOCATION_Y3 = 415;
+    public static final int LEVEL_OFFSET_LOCATION_X4 = 295;
+    public static final int LEVEL_OFFSET_LOCATION_Y4 = 500;
+    public static final int LEVEL_OFFSET_LOCATION_X5 = 305;
+    public static final int LEVEL_OFFSET_LOCATION_Y5 = 650;
+    public static final int LEVEL_OFFSET_LOCATION_X6 = 500;
+    public static final int LEVEL_OFFSET_LOCATION_Y6 = 570;
+    public static final int LEVEL_OFFSET_LOCATION_X7 = 580;
+    public static final int LEVEL_OFFSET_LOCATION_Y7 = 415;
+    public static final int LEVEL_OFFSET_LOCATION_X8 = 610;
+    public static final int LEVEL_OFFSET_LOCATION_Y8 = 650;
+    public static final int LEVEL_OFFSET_LOCATION_X9 = 605;
+    public static final int LEVEL_OFFSET_LOCATION_Y9 = 870;
+    public static final int LEVEL_OFFSET_LOCATION_X10 = 605;
+    public static final int LEVEL_OFFSET_LOCATION_Y10 = 500;
+    public static final int LEVEL_OFFSET_LOCATION_X11 = 705;
+    public static final int LEVEL_OFFSET_LOCATION_Y11 = 550;
+    public static final int LEVEL_OFFSET_LOCATION_X12 = 650;
+    public static final int LEVEL_OFFSET_LOCATION_Y12 = 770;
+    public static final int LEVEL_OFFSET_LOCATION_X13 = 700;
+    public static final int LEVEL_OFFSET_LOCATION_Y13 = 700;
+    public static final int LEVEL_OFFSET_LOCATION_X14 = 730;
+    public static final int LEVEL_OFFSET_LOCATION_Y14 = 740;
+    public static final int LEVEL_OFFSET_LOCATION_X15 = 760;
+    public static final int LEVEL_OFFSET_LOCATION_Y15 = 650;
+    public static final int LEVEL_OFFSET_LOCATION_X16 = 870;
+    public static final int LEVEL_OFFSET_LOCATION_Y16 = 670;
+    public static final int LEVEL_OFFSET_LOCATION_X17 = 850;
+    public static final int LEVEL_OFFSET_LOCATION_Y17 = 585;
+    public static final int LEVEL_OFFSET_LOCATION_X18 = 919;
+    public static final int LEVEL_OFFSET_LOCATION_Y18 = 785;
+    public static final int LEVEL_OFFSET_LOCATION_X19 = 930;
+    public static final int LEVEL_OFFSET_LOCATION_Y19 = 705;
+    public static final int LEVEL_OFFSET_LOCATION_X20 = 1100;
+    public static final int LEVEL_OFFSET_LOCATION_Y20 = 765;
     public static final int FPS = 30;
     
     // UI CONTROL SIZE AND POSITION SETTINGS
@@ -294,6 +337,7 @@ public class PathXConstants
     // LOADING ART.
     public static final Color COLOR_KEY = new Color(255, 174, 201);
     public static final Color COLOR_DEBUG_TEXT = Color.BLACK;
+    public static final Color COLOR_IMGAE = Color.GRAY;
     public static final Color COLOR_TEXT_DISPLAY = new Color (10, 160, 10);
     public static final Color COLOR_STATS = new Color(0, 60, 0);
     public static final Color COLOR_ALGORITHM_HEADER = Color.WHITE;

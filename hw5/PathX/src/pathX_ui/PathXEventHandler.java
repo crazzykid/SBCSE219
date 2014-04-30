@@ -33,6 +33,8 @@ import pathx_file.Intersection;
 import pathx_file.Road;
 import properties_manager.PropertiesManager;
 import pathX_ui.PathXPanel.*;
+import static pathx.PathXConstants.LEVEL1;
+import static pathx.PathXConstants.SCROLL_SPEED;
 import pathx_file.Connection;
 //import sorting_hat.data.SortingHatDataModel;
 //import sorting_hat.file.SortingHatFileManager;
@@ -47,6 +49,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
     private PathXMiniGame game;
     private int viewPortX;
     private int viewPortY;
+    private int  vPortX;
          PathXDataModel model;
     /**
      * Constructor, it just keeps the game for when the events happen.
@@ -56,7 +59,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
         game = initGame;
         viewPortX =0;
         viewPortY = 0;
-        
+         vPortX = 0;
         
          model = (PathXDataModel)game.getDataModel();
     }
@@ -91,6 +94,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
             game.switchToSplashScreen();
         viewPortX =0;
         viewPortY = 0;
+        
+        vPortX = 0;
         viewport.resetScroll();
         // IF THERE IS A GAME UNDERWAY, COUNT IT AS A LOSS
         if (game.getDataModel().inProgress())
@@ -100,6 +105,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
             //
             
         }
+         data.getVport().reset();
+            data.getVport2().reset();
         
         // RESET THE GAME AND ITS DATA
         //game.reset();
@@ -125,6 +132,8 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
         
         game.switchToSplashScreen();
         
+     
+        
         //  }
         // RESET THE GAME AND ITS DATA
         // game.reset();
@@ -144,7 +153,12 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
             fileManager.loadLevel(PATH_DATA + levelFile +".xml");
             data.reset(game);
 
+            data.setCurrentLevel(LEVEL1);
             // GO TO THE GAME
+            data.getVport().reset();
+            data.getVport2().reset();
+         //   viewPortX =0;
+        viewPortY = 0;
             game.switchToGameScreen();
         }        
     }
@@ -166,15 +180,26 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
     public void respondToScrollRequest(String scrollType)
     {
         PathXDataModel data = (PathXDataModel)game.getDataModel();
-        Viewport viewport = data.getViewport();
+        Viewport viewport = data.getVport2();
         
         
-        if(scrollType.equals(SCROLL_DOWN) )
+        if(scrollType.equals(SCROLL_DOWN) ) 
         {
-            if(viewPortY <=600)
+            if(viewPortY <=380)
             {
-                viewPortY+=50;
-                viewport.scroll(0, 50);
+                viewPortY+=SCROLL_SPEED;
+                
+               // viewport.scroll(0, 50);
+              if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                data.moveViewport2(0, SCROLL_SPEED);
+               
+               if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+                       if( viewPortY <= 35)
+                        data.moveViewport(0, SCROLL_SPEED);
+                      else
+                         viewPortY+=-SCROLL_SPEED;
+                
+                //viewport.move(0, 30);
             }
             
         }
@@ -182,25 +207,48 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
         {
             if(viewPortY >0)
             {
-                viewPortY+= -50;
-                viewport.scroll(0, -50);
+                viewPortY+= -SCROLL_SPEED;
+               // viewport.scroll(0, -50);
+                
+               // viewport.move(0, -30);
+                  if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(0, -SCROLL_SPEED);
+                  
+                  if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+                       data.moveViewport(0, -SCROLL_SPEED);
             }
         }
-        else if(scrollType.equals(SCROLL_RIGHT))
+     
+        else if(scrollType.equals(SCROLL_RIGHT) )
         {
-            if(viewPortX <850)
+            if(vPortX <462)
             {
-                viewPortX +=50;
-                viewport.scroll(50, 0);
-                
+             
+               vPortX += SCROLL_SPEED;
+                //viewport.scroll(50, 0);
+                  if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(SCROLL_SPEED, 0);
+                  
+                      if( game.isCurrentScreenState(GAME_SCREEN_STATE) )
+                          if(vPortX <= 310)
+                        data.moveViewport(SCROLL_SPEED, 0);
+                    else
+                     vPortX+= -SCROLL_SPEED;
+            
             }
         }
         else if(scrollType.equals(SCROLL_LEFT))
         {
-            if(viewPortX>0)
+            if(vPortX>0)
             {
-                viewPortX += -50;
-                viewport.scroll(-50, 0);
+                vPortX += -SCROLL_SPEED;
+               // viewport.scroll(-50, 0);
+                    if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(-SCROLL_SPEED, 0);
+                    
+                         if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+                                       data.moveViewport(-SCROLL_SPEED, 0);
+               // viewport.move(-30, 0);
                 
             }
         }
@@ -324,20 +372,33 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
         // KEY DOWN IT WILL CONTINUALLY CHEAT
         if (keyCode == KeyEvent.VK_LEFT)
         {
-            if(viewPortX>0)
+            if(vPortX>0)
             {
-                viewPortX += -50;
-                viewport.scroll(-50, 0);
+                vPortX += -SCROLL_SPEED;
+               // viewport.scroll(-50, 0);
+                    if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(-SCROLL_SPEED, 0);
+                    
+                         if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+                                       data.moveViewport(-SCROLL_SPEED, 0);
+               // viewport.move(-30, 0);
             }
         }
         
         else if (keyCode == KeyEvent.VK_RIGHT)
         {
-            if(viewPortX <850)
+            if(vPortX <462)
             {
-                viewPortX +=50;
-                viewport.scroll(50, 0);
-                
+               vPortX += SCROLL_SPEED;
+                //viewport.scroll(50, 0);
+                  if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(SCROLL_SPEED, 0);
+                  
+                      if( game.isCurrentScreenState(GAME_SCREEN_STATE) )
+                          if(vPortX <= 310)
+                        data.moveViewport(SCROLL_SPEED, 0);
+                    else
+                     vPortX+= -SCROLL_SPEED;
             }
         }
         
@@ -345,16 +406,34 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
         {
             if(viewPortY >0)
             {
-                viewPortY+= -50;
-                viewport.scroll(0, -50);
+                viewPortY+= -SCROLL_SPEED;
+               // viewport.scroll(0, -50);
+                
+               // viewport.move(0, -30);
+                  if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                 data.moveViewport2(0, -SCROLL_SPEED);
+                  
+                  if( game.isCurrentScreenState(GAME_SCREEN_STATE))
+                       data.moveViewport(0, -SCROLL_SPEED);
             }
         }
-        else     if (keyCode == KeyEvent.VK_DOWN)
+        else if (keyCode == KeyEvent.VK_DOWN)
         {
-            if(viewPortY <=600)
+            if(viewPortY <=380)
             {
-                viewPortY+=50;
-                viewport.scroll(0, 50);
+                viewPortY+=SCROLL_SPEED;
+                 // viewport.scroll(0, 50);
+              if( game.isCurrentScreenState(GAME_LEVEL_STATE))
+                data.moveViewport2(0, SCROLL_SPEED);
+               
+               if( game.isCurrentScreenState(GAME_SCREEN_STATE) )
+                   if(viewPortY <= 35)
+                data.moveViewport(0, SCROLL_SPEED);
+               else
+                    viewPortY+=-SCROLL_SPEED;
+               
+               
+               
             }
             
         }
@@ -463,6 +542,7 @@ public class PathXEventHandler implements MouseListener, MouseMotionListener
     @Override
     public void mouseClicked(MouseEvent me)
     {
+        System.out.println("testing mouseclick function");
         // RIGHT MOUSE BUTTON IS TO TOGGLE OPEN/CLOSE INTERSECTION
         if (me.getButton() == MouseEvent.BUTTON3)
         {

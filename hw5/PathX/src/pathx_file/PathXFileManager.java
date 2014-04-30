@@ -172,10 +172,10 @@ public boolean loadLevel(String levelFile)
             
                 // EVERYTHING WENT AS PLANNED SO LET'S MAKE IT PERMANENT
            // PathXDataModel dataModel = (PathXDataModel)miniGame.getDataModel();
-            Viewport viewport = data.getViewport();
+           // Viewport viewport = data.getViewport();
         //    viewport.setGameWorldSize(numColumns * TILE_WIDTH, numRows * TILE_HEIGHT);
-            viewport.setNorthPanelHeight(NORTH_PANEL_HEIGHT);
-            viewport.initViewportMargins();
+          //  viewport.setNorthPanelHeight(NORTH_PANEL_HEIGHT);
+          //  viewport.initViewportMargins();
             data.setCurrentLevel(LEVEL1);
             data.initLevel(LEVEL1, intersections);
             
@@ -253,6 +253,7 @@ public boolean loadLevel(String levelFile)
             newRoad.setNode2(intersections.get(int_id2));
             newRoad.setOneWay(oneWay);
             newRoad.setSpeedLimit(speedLimit);
+            newRoad.calculateWeight();
             roads.add(newRoad);
             
         

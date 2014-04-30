@@ -30,7 +30,7 @@ public class Road
     
     // false IF IT'S TWO-WAY, true IF IT'S ONE WAY
     boolean oneWay;
-    
+    private double weight;
     // ROAD SPEED LIMIT
     int speedLimit;
      private ArrayList<String> intersectionIDs;  
@@ -38,6 +38,7 @@ public class Road
      public Road()
              {
      intersectionIDs = new ArrayList();
+    weight =0;
   
         
 
@@ -49,7 +50,7 @@ public class Road
     public int getSpeedLimit()      {   return speedLimit;  }
     
     public String getRoadId()       { return (""+node1.getId()+node2.getId()); }
-    
+    public double getWeight()       { return weight;}
     public void IDprint(){ System.out.println(intersectionIDs);}
     // MUTATOR METHODS
     public void setNode1(Intersection node1)    {   this.node1 = node1;             }
@@ -62,17 +63,24 @@ public class Road
     {  
         intersectionIDs.add(idToAdd);
     }
-    
-    public float calWeight()
+    public void calculateWeight()
     {
-       int distanceX = node2.getX() - node1.getX();
-       int distanceY = node2.getY() - node1.getY();
+        weight = this.calWeight();
+    }
+    private double calWeight()
+    {
+       //int distanceX = node2.getX() - node1.getX();
+       //int distanceY = node2.getY() - node1.getY();
        
-       int totalDis = Math.abs(distanceX)+Math.abs(distanceY);
-       
-       
-      return (totalDis/speedLimit);
+       double diffXSquared = Math.pow(node2.getX() - node1.getX(), 2);
+        double diffYSquared = Math.pow(node2.getY() - node1.getY(), 2);
         
+        return (Math.sqrt(diffXSquared + diffYSquared))/speedLimit;
+       
+  
+       
+       
+     
     }
     /**
      * Builds and returns a textual representation of this road.

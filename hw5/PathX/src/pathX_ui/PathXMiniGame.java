@@ -176,6 +176,9 @@ public class PathXMiniGame extends MiniGame
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_LEVEL_STATE);
         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
+        
+         guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+         
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(false);
         for(int i=1; i<21; i++)
@@ -233,7 +236,7 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(false);
         
         
-        guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+       
         
         guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         currentScreenState = GAME_LEVEL_STATE;
@@ -664,7 +667,7 @@ public class PathXMiniGame extends MiniGame
         // CONSTRUCT THE PANEL WHERE WE'LL DRAW EVERYTHING
         canvas = new PathXPanel(this, (PathXDataModel)data);
         
-        Viewport viewport = data.getViewport();
+        Viewport viewport = ((PathXDataModel)data).getVport2();
         
         ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
         level.get(0).setStageUnlock(true);
@@ -677,7 +680,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(BACKGROUND_TYPE);
         sT.addState(MENU_SCREEN_STATE, img);
         
-        img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GAME));
+        img = loadImageWithColorKey(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GAME), COLOR_IMGAE);
         sT.addState(GAME_SCREEN_STATE, img);
         
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_SETTINGS_WINDOW));
@@ -685,11 +688,12 @@ public class PathXMiniGame extends MiniGame
         
         
         img = loadImage(imgPath + props.getProperty(PathXPropertyType.IMAGE_BACKGROUND_GREEN));
-        sT.addState(GAME_LEVEL_STATE , img);
+        sT.addState(GAME_LEVEL_STATE, img);
         
         
         s = new Sprite(sT, 0, 0, 0, 0, MENU_SCREEN_STATE);
         guiDecor.put(BACKGROUND_TYPE, s);
+        
         
         data.getViewport().initViewportMargins();
         //Add LEVEL SELECT MAP
@@ -852,6 +856,12 @@ public class PathXMiniGame extends MiniGame
         sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
         s = new Sprite(sT, 0, 200, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiDecor.put(LEVEL_SELECT_BACKGROUND_TYPE, s);
+        viewport = ((PathXDataModel)data).getVport2();
+        viewport.setGameWorldSize(img.getWidth(), img.getHeight());
+        viewport.setNorthPanelHeight(100);
+        viewport.setViewportSize(740, 620);
+        
+        viewport.setLevelDimensions(img.getWidth(null), img.getHeight(null));
         
         //The PUT THE LEFT SCROLL BUTTON
         String scrollLeftButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_SCROLL_LEFT);
