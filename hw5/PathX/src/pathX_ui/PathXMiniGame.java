@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import pathx_data.PathXDataModel;
 import mini_game.MiniGame;
+import mini_game.MiniGameEventRelayer;
 import mini_game.MiniGameState;
 import static pathx.PathXConstants.*;
 import mini_game.Sprite;
@@ -37,6 +38,7 @@ import mini_game.Viewport;
 import properties_manager.PropertiesManager;
 import pathx.PathXConstants;
 import pathx.PathX.PathXPropertyType;
+import pathx_data.MouseController;
 import pathx_file.PathXFileManager;
 import pathx_data.PathXRecord;
 import static pathx_data.PathXGameLevel.*;
@@ -77,7 +79,7 @@ public class PathXMiniGame extends MiniGame
     private JButton exitButton;
     private JScrollPane statsScrollPane;
     private ArrayList<PathXGameLevel> levelLocation;
-    
+    private MouseController levelHandler;    
     
     // ACCESSOR METHODS
     // - getPlayerRecord
@@ -187,6 +189,7 @@ public class PathXMiniGame extends MiniGame
             guiButtons.get(str).setState(PathXCarState.WHITE_STATE.toString());
             guiButtons.get(str).setEnabled(true);
             
+            
             str = "GAME_PLAY_LEVEL_RED_TYPE"+i;
             guiButtons.get(str).setState(PathXCarState.RED_STATE.toString());
             guiButtons.get(str).setEnabled(true);
@@ -215,6 +218,9 @@ public class PathXMiniGame extends MiniGame
         
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setEnabled(true);
+        
+        guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setEnabled(false);
         
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(true);
@@ -344,7 +350,7 @@ public class PathXMiniGame extends MiniGame
     {
         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
-        marginlessInsets = new Insets(0,0,0,0);
+        
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
@@ -428,6 +434,9 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setEnabled(true);
         
+        guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setEnabled(true);
+        
         guiButtons.get(GAME_HOME_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_TYPE).setEnabled(true);
         
@@ -459,7 +468,7 @@ public class PathXMiniGame extends MiniGame
         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
-        marginlessInsets = new Insets(0,0,0,0);
+       
         // CHANGE THE BACKGROUND
         guiDecor.get(BACKGROUND_TYPE).setState(MENU_SCREEN_STATE);
         
@@ -534,6 +543,9 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_SCROLL_DOWN_BUTTON_TYPE).setEnabled(false);
         
+         guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setEnabled(false);
+        
         guiButtons.get(GAME_HOME_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_TYPE).setEnabled(false);
         
@@ -542,6 +554,8 @@ public class PathXMiniGame extends MiniGame
         
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
+        
+        
         
         guiDecor.get(LEVEL_SELECT_BACKGROUND_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
@@ -639,6 +653,27 @@ public class PathXMiniGame extends MiniGame
         
         // INIT OUR DATA MANAGER
         data = new PathXDataModel(this);
+        
+        levelHandler = new MouseController((PathXDataModel)data);
+         
+        
+        ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
+        level.get(0).setStageUnlock(true);
+        level.get(0).setLevelState(RED_STATE);
+        level.get(0).setLevelName(LEVEL1);
+    }
+    
+     @Override
+    public void initHandler()
+    {
+        // SETUP THE LOW-LEVEL HANDLER WHO WILL
+        // RELAY EVERYTHING
+       
+        canvas.addMouseListener(levelHandler);
+        canvas.addMouseMotionListener(levelHandler);
+        // AND NOW LET THE GAME DEVELOPER PROVIDE
+        // CUSTOM HANDLERS
+
     }
     
     /**
@@ -650,6 +685,7 @@ public class PathXMiniGame extends MiniGame
     @Override
     public void initGUIControls()
     {
+      
         // WE'LL USE AND REUSE THESE FOR LOADING STUFF
         BufferedImage img;
         float x, y;
@@ -669,10 +705,9 @@ public class PathXMiniGame extends MiniGame
         
         Viewport viewport = ((PathXDataModel)data).getVport2();
         
-        ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
-        level.get(0).setStageUnlock(true);
-        level.get(0).setLevelState(RED_STATE);
         
+      
+                  
         
         // LOAD THE BACKGROUNDS, WHICH ARE GUI DECOR
         currentScreenState = MENU_SCREEN_STATE;
@@ -915,6 +950,16 @@ public class PathXMiniGame extends MiniGame
         sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, SCROLL_DOWN_BUTTON_X, SCROLL_DOWN_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_SCROLL_DOWN_BUTTON_TYPE, s);
+        
+        //The PUT THE PAUSE SCROLL BUTTON
+        String pauseButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_PAUSE);
+        sT = new SpriteType(GAME_SCROLL_PAUSE_BUTTON_TYPE);
+        img = loadImage(imgPath + pauseButton);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        s = new Sprite(sT, SCROLL_PAUSE_BUTTON_X, SCROLL_PAUSE_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SCROLL_PAUSE_BUTTON_TYPE, s);
+        
+        
         
         //The PUT THE QUIT BUTTON
         String closeButton = props.getProperty(PathXPropertyType.HELP_SCREEN_IMAGE_BUTTON_QUIT);
@@ -1567,11 +1612,467 @@ public class PathXMiniGame extends MiniGame
 //      });
         guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE1).setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
-            {   eventHandler.respondToSelectLevelRequest(LEVEL1);
+            {   eventHandler.respondToSelectLevelRequest(LEVEL1, 0);
             
             
             }
         });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE1).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL1, 0);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE1).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL1 , 0);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE2).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL2, 1);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE2).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL2 ,1 );
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE2).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL2 , 1);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE3).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL3, 2);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE3).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL3, 2);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE3).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL3, 2);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE4).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL4, 3);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE4).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL4, 3);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE4).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL4, 3);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE5).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL5, 4);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE5).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL5, 4);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE5).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL5, 4);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE6).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL6, 5);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE6).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL6, 5);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE6).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL6, 5);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE7).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL7, 6);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE7).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL7, 6);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE7).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL7, 6);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE8).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL8, 7);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE8).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL8, 7);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE8).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL8, 7);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE9).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL9, 8);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE9).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL9, 8);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE9).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL9, 8);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE10).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL10, 9);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE10).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL10, 9);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE10).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL10, 9);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE11).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL11, 10);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE11).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL11, 10);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE11).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL11, 10);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE12).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL12, 11);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE12).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL12, 11);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE12).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL12, 11);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE13).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL13, 12);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE13).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL13, 12);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE13).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL13, 12);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE14).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL14, 13);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE14).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL14, 13);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE14).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL14, 13);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE15).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL15, 14);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE15).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL15, 14);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE15).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL15, 14);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE16).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL16, 15);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE16).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL16, 15);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE16).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL16, 15);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE17).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL17, 16);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE17).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL17, 16);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE17).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL17, 16);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE18).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL18, 17);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE18).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL18, 17);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE18).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL18, 17);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE19).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL19, 18);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE19).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL19, 18);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE19).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL19, 18);
+            
+            
+            }
+        });
+              guiButtons.get(GAME_PLAY_LEVEL_RED_TYPE20).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL20, 19);
+            
+            
+            }
+        });
+        
+           guiButtons.get(GAME_PLAY_LEVEL_WHITE_TYPE20).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL20, 19);
+            
+            
+            }
+        });
+           
+              guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE20).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {   eventHandler.respondToSelectLevelRequest(LEVEL20, 19);
+            
+            
+            }
+        });
+        
+        
+        
         // KEY LISTENER - LET'S US PROVIDE CUSTOM RESPONSES
         this.setKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent ke)

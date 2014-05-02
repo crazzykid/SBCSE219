@@ -199,7 +199,7 @@ public class PathXPanel extends JPanel
                     renderIntersections(g2);
                     renderPlayer(g2);
                     
-                    System.out.println("testing");
+                   
                 }
             }
             
@@ -260,7 +260,7 @@ public class PathXPanel extends JPanel
         int moveY = VIEWPORT_OFFSET_X + viewPortY;
         
         viewport.setViewportSize(740, 840);
-        System.out.println("ViewPort Width :"+ viewport.getViewportWidth() + "\nViewPort Height :"+ viewport.getViewportHeight());
+      //  System.out.println("ViewPort Width :"+ viewport.getViewportWidth() + "\nViewPort Height :"+ viewport.getViewportHeight());
        // g2.drawImage(backgroundImage, 165, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
          g2.drawImage(backgroundImage, 165, 0, viewport.getViewportWidth() , viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), viewport.getViewportX() + viewport.getViewportWidth(), viewport.getViewportY() + viewport.getViewportHeight(), null);
          
@@ -324,14 +324,14 @@ public class PathXPanel extends JPanel
          Viewport viewport = data.getVport();
        
                   g2.setColor(Color.BLUE);
-        if (count == 0) {
-            playerCircle.x = playerLevel.getStartingLocation().x - viewport.getViewportX() + VIEWPORT_OFFSET_X - 160 - INTERSECTION_RADIUS + 35 + playerX;
-            playerCircle.y = playerLevel.getStartingLocation().y - viewport.getViewportY() + VIEWPORT_OFFSET_Y - 220 - INTERSECTION_RADIUS - 50 + playerY;
-            count++;
-        }
+       // if (count == 0) {
+            playerCircle.x = playerLevel.getStartingLocation().x - viewport.getViewportX() + playerLevel.getPlayerX()  - INTERSECTION_RADIUS + playerX;
+            playerCircle.y = playerLevel.getStartingLocation().y - viewport.getViewportY() + playerLevel.getPlayerY() - INTERSECTION_RADIUS  + playerY;
+            //count++;
+      //  }
                
                     
-                    if(data.isPlayerSelected() && data.getMode() == PLAYER_SELECTED)
+                    if(data.isPlayerSelected() )
                 {
                      g2.setColor(Color.PINK);
                 } else
@@ -580,7 +580,7 @@ public class PathXPanel extends JPanel
 
      
 
-                System.out.println(" Move X "+ (viewport.getViewportX() + viewport.getViewportWidth()) + " Move Y " + (viewport.getViewportY() + viewport.getViewportHeight()) );
+              //  System.out.println(" Move X "+ (viewport.getViewportX() + viewport.getViewportWidth()) + " Move Y " + (viewport.getViewportY() + viewport.getViewportHeight()) );
         
      //   System.out.println(viewport.getViewportWidth()+"       "+ viewport.getViewportHeight());
       //  System.out.println("X & Y :  "+viewport.getViewportY() +"     "+viewport.getViewportX() );
@@ -1341,8 +1341,8 @@ public class PathXPanel extends JPanel
                             && levelLocation.get(15).getCompletedLevel()
                             && levelLocation.get(15).getStageUnlock())
                     {
-                        int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
+                        int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
                         if( y>100 && x>=8)
                         {
                             SpriteType r = st.getSpriteType();
@@ -1362,14 +1362,17 @@ public class PathXPanel extends JPanel
                             && levelLocation.get(16).getCompletedLevel()
                             && levelLocation.get(16).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1380,14 +1383,17 @@ public class PathXPanel extends JPanel
                             && levelLocation.get(17).getCompletedLevel()
                             && levelLocation.get(17).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1398,14 +1404,17 @@ public class PathXPanel extends JPanel
                             && levelLocation.get(18).getCompletedLevel()
                             && levelLocation.get(18).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1416,14 +1425,17 @@ public class PathXPanel extends JPanel
                             && levelLocation.get(19).getCompletedLevel()
                             && levelLocation.get(19).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1437,13 +1449,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(0).getCompletedLevel()
                             && !levelLocation.get(0).getStageUnlock() )
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>180 && x>0)
+                        int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1454,13 +1470,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(1).getCompletedLevel()
                             && !levelLocation.get(1).getStageUnlock() )
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>180 && x>0)
+                        int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1471,14 +1491,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(2).getCompletedLevel()
                             && !levelLocation.get(2).getStageUnlock() )
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1489,14 +1512,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(3).getCompletedLevel()
                             && !levelLocation.get(3).getStageUnlock())
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1507,14 +1533,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(4).getCompletedLevel()
                             && !levelLocation.get(4).getStageUnlock())
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1525,14 +1554,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(5).getCompletedLevel()
                             && !levelLocation.get(4).getStageUnlock())
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1543,14 +1575,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(6).getCompletedLevel()
                             && !levelLocation.get(6).getStageUnlock())
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1561,14 +1596,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(7).getCompletedLevel()
                             && !levelLocation.get(7).getStageUnlock())
                     {
-                        int x = ((int)st.getX() -(2*viewPortX));
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1579,14 +1617,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(8).getCompletedLevel()
                             && !levelLocation.get(8).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1597,14 +1638,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(9).getCompletedLevel()
                             && !levelLocation.get(9).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1615,14 +1659,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(10).getCompletedLevel()
                             && !levelLocation.get(10).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1633,14 +1680,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(11).getCompletedLevel()
                             && !levelLocation.get(11).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1651,14 +1701,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(12).getCompletedLevel()
                             && !levelLocation.get(12).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1669,14 +1722,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(13).getCompletedLevel()
                             && !levelLocation.get(13).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1687,14 +1743,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(14).getCompletedLevel()
                             && !levelLocation.get(14).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1705,14 +1764,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(15).getCompletedLevel()
                             && !levelLocation.get(15).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1723,14 +1785,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(16).getCompletedLevel()
                             && !levelLocation.get(16).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1741,14 +1806,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(17).getCompletedLevel()
                             && !levelLocation.get(17).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1759,14 +1827,17 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(18).getCompletedLevel()
                             && !levelLocation.get(18).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
+                        if( y>100 && x>=8)
                         {
-                            
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     
@@ -1777,14 +1848,19 @@ public class PathXPanel extends JPanel
                             && !levelLocation.get(19).getCompletedLevel()
                             && !levelLocation.get(19).getStageUnlock())
                     {
-                        int x = ( (((int)st.getX()*5 )/4)- ((2*viewPortX)) );
-                        int y = (((int)st.getY()) -((7*viewPortY)/6));
-                        if( y>182 && x>0 )
+                        int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
+                        int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
+                        if( y<590 &&  x<=722)
                         {
                             
+                           // System.out.println(x);
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
-                            g.drawImage(img1, x, y, r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                            
+                            st.setX(x);
+                            st.setY(y);
                         }
                     }
                     

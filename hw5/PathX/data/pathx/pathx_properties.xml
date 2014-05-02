@@ -20,6 +20,16 @@
          <property name="GAME_SCREEN_IMAGE_BUTTON_X1"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN1.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_HOME1"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN1.png"></property>
          
+         
+          <property name="GAME_SCREEN_IMAGE_BUTTON_POLICE"            value="./pathx/IMAGE_ZOMBIE_CAR.png"></property>
+           <property name="GAME_SCREEN_IMAGE_BUTTON_ZOMBIE"            value="./pathx/IMAGE_POLICE_CAR.png"></property>
+            <property name="GAME_SCREEN_IMAGE_BUTTON_PLAYER"            value="./pathx/IMAGE_PLAYER_CAR.png"></property>
+             <property name="GAME_SCREEN_IMAGE_BUTTON_BANDIT"            value="./pathx/IMAGE_BANDIT_CAR.png"></property>
+         
+                  
+                       
+                            
+         
             <property name="IMAGE_EMPTY_DIALOG"            value="./pathx/IMAGE_EMPTY_DIALOG.png"></property>
           <property name="GAME_SCREEN_IMAGE_BUTTON_HOME_MOUSE_OVER"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN_MOUSE_OVER.png"></property>
           <property name="GAME_SCREEN_IMAGE_BUTTON_X_MOUSE_OVER"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN_MOUSE_OVER.png"></property>
@@ -47,7 +57,8 @@
            <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_DOWN"            value="./pathx/IMGAE_BUTTON_SCROLL_DOWN.png"></property>
            <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_RIGHT"            value="./pathx/IMGAE_BUTTON_SCROLL_RIGHT.png"></property>
             <property name="GAME_SCREEN_IMAGE_BUTTON_SCROLL_UP"            value="./pathx/IMGAE_BUTTON_SCROLL_UP.png"></property>
-           
+                      <property name="GAME_SCREEN_IMAGE_BUTTON_PAUSE"            value="./pathx/IMGAE_BUTTON_SCROLL_PAUSE.png"></property>
+
           
         <!--<property name="IMAGE_BUTTON_NEW"                   value="./pathx/ButtonNewGame.png"></property>
         <property name="IMAGE_BUTTON_NEW_MOUSE_OVER"        value="./pathx/ButtonNewGameMouseOver.png"></property>

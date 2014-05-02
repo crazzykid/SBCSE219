@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<level image="images-9.png" name="LEVEL9">
+     <intersections>
+          <intersection id="0" open="true" x="992" y="103"/>
+          <intersection id="1" open="false" x="114" y="582"/>
+          <intersection id="2" open="true" x="933" y="566"/>
+          <intersection id="3" open="true" x="40" y="40"/>
+          <intersection id="4" open="true" x="620" y="22"/>
+          <intersection id="5" open="true" x="359" y="237"/>
+          <intersection id="6" open="true" x="552" y="357"/>
+          <intersection id="7" open="true" x="89" y="356"/>
+          <intersection id="8" open="false" x="566" y="594"/>
+          <intersection id="9" open="true" x="367" y="601"/>
+          <intersection id="10" open="true" x="953" y="317"/>
+          <intersection id="11" open="true" x="792" y="270"/>
+     </intersections>
+     <roads>
+          <road int_id1="1" int_id2="7" one_way="true" speed_limit="30"/>
+          <road int_id1="7" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="4" int_id2="9" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="8" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="11" one_way="false" speed_limit="30"/>
+          <road int_id1="11" int_id2="4" one_way="false" speed_limit="30"/>
+          <road int_id1="8" int_id2="11" one_way="false" speed_limit="30"/>
+          <road int_id1="11" int_id2="2" one_way="false" speed_limit="30"/>
+          <road int_id1="2" int_id2="10" one_way="false" speed_limit="30"/>
+          <road int_id1="10" int_id2="0" one_way="true" speed_limit="30"/>
+     </roads>
+     <start_intersection id="0" image="DefaultStartLocation.png"/>
+     <destination_intersection id="1" image="DefaultDestination.png"/>
+     <money amount="480"/>
+     <police num="0"/>
+     <bandits num="0"/>
+     <zombies num="5"/>
+</level>

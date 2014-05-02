@@ -21,8 +21,11 @@ public class Connection implements Comparable, Comparator
 		Intersection1ID = initIntersection1ID;
 		Intersection2ID = initIntersection2ID;
 	}
-	
-	public boolean hasActor(String intersectionID)
+	public String getRoadID() { return road;}
+        public String getIntersection1ID() { return Intersection1ID;}
+        public String getIntersection2ID() { return Intersection2ID;}
+        
+	public boolean hasIntersection(String intersectionID)
 	{
 		if (Intersection1ID.equals(intersectionID))
 			return true;
@@ -68,6 +71,6 @@ public class Connection implements Comparable, Comparator
 	}
          public String toString()
     {
-        return "Intersection 1 ID : "+Intersection1ID + "  Road ID : " +road + "  Intersection 2 ID : "+ Intersection2ID;
+        return "Intersection 1 ID : "+Intersection1ID + "\n  Road ID : " +road + " \n Intersection 2 ID : "+ Intersection2ID;
     }
 }

@@ -21,6 +21,10 @@ public class PathXGameLevel
     private int bankBalance;
     private int levelTotal;
     private boolean stageUnlock;
+    int playerX;
+    int playerY;
+            
+    private boolean load;
     // EVERY LEVEL HAS A NAME
     String levelName;
 
@@ -46,7 +50,7 @@ public class PathXGameLevel
     int numPolice;
     int numBandits;
     int numZombies;
-    
+
     
    
     
@@ -58,6 +62,8 @@ public class PathXGameLevel
         levelState = WHITE_STATE;
         stageUnlock = false;
         
+        playerX = LEVEL1X;
+        playerY =LEVEL1Y;
         levelName = "";
         bankBalance = 0;
         levelTotal = 0;
@@ -66,7 +72,7 @@ public class PathXGameLevel
         // INIT THE GRAPH DATA STRUCTURES
         intersections = new ArrayList();
         roads = new ArrayList();         
-        
+        load = false;
         
     }
      public void init (  String initLevelName,
@@ -98,7 +104,8 @@ public class PathXGameLevel
     }
     
     // ACCESSOR METHODS
-    
+    public void setload (){ load = true;}
+    public boolean getLoad () { return load; }
     public String                   getLevelName()                      {   return levelName;                       }
     public String                   getStartingLocationImageFileName()  {   return startingLocationImageFileName;   }
     public String                   getBackgroundImageFileName()        {   return backgroundImageFileName;         }
@@ -111,7 +118,9 @@ public class PathXGameLevel
     public int                      getNumPolice()                      {   return numPolice;                       }
     public int                      getNumBandits()                     {   return numBandits;                      }
     public int                      getNumZombies()                     {   return numZombies;                      }
+    public int                      getPlayerX()                    { return playerX;}
     
+        public int                      getPlayerY()                    { return playerY;}
     // MUTATOR METHODS
     public void setLevelName(String levelName)    
     {   this.levelName = levelName;                                             }

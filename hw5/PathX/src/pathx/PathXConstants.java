@@ -45,6 +45,11 @@ public class PathXConstants
     public static final String EXIT_GAME_BUTTON_TYPE = "EXIT_GAME_BUTTON_TYPE";
     public static final String GAME_HOME_BUTTON_TYPE = "GAME_HOME_BUTTON_TYPE";
     public static final String GAME_HOME_BUTTON_SETTING_TYPE = "GAME_HOME_SETTING_BUTTON_TYPE";
+     public static final String GAME_BUTTON_ZOMBIE_TYPE = "GAME_BUTTON_ZOMBIE_TYPE";
+      public static final String GAME_BUTTON_PLAYER_TYPE = "GAME_BUTTON_PLAYER_TYPE";
+       public static final String GAME_BUTTON_POLICE_TYPE = "GAME_BUTTON_POLICE_TYPE";
+        public static final String GAME_BUTTON_BANDIT_TYPE = "GAME_BUTTON_BANDIT_TYPE";
+        
     public static final String GAME_X_BUTTON_TYPE = "GAME_X_BUTTON_TYPE";
     public static final String GAME_SETTINGS_X_BUTTON_TYPE = "GAME_SETTINGS_X_BUTTON_TYPE";
     public static final String GAME_START_BUTTON_TYPE = "GAME_START_BUTTON_TYPE";
@@ -52,6 +57,7 @@ public class PathXConstants
     public static final String GAME_SCROLL_RIGHT_BUTTON_TYPE = "GAME_SCROLL_RIGHT_BUTTON_TYPE";
     public static final String GAME_SCROLL_UP_BUTTON_TYPE = "GAME_SCROLL_UP_BUTTON_TYPE";
     public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
+      public static final String GAME_SCROLL_PAUSE_BUTTON_TYPE = "GAME_SCROLL_PAUSE_BUTTON_TYPE";
     public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
     
     public static final String HELP_QUIT_TYPE = "HELP_QUIT_TYPE";
@@ -157,6 +163,37 @@ public class PathXConstants
     public static final String SCROLL_DOWN = "SCROLL_DOWN";
     
     public static final String LEVEL1 = "LEVEL1";
+      public static final String LEVEL = "LEVEL";
+        public static final String LEVEL2 = "LEVEL2";
+          public static final String LEVEL3 = "LEVEL3";
+            public static final String LEVEL4 = "LEVEL4";
+              public static final String LEVEL5 = "LEVEL5";
+                public static final String LEVEL6 = "LEVEL6";
+                  public static final String LEVEL7 = "LEVEL7";
+                   public static final String LEVEL8 = "LEVEL8";
+                    public static final String LEVEL9 = "LEVEL9";
+                     public static final String LEVEL10 = "LEVEL10";
+                      public static final String LEVEL11 = "LEVEL11";
+                       public static final String LEVEL12 = "LEVEL12";
+                        public static final String LEVEL13 = "LEVEL13";
+                         public static final String LEVEL14 = "LEVEL14";
+                          public static final String LEVEL15 = "LEVEL15";
+                           public static final String LEVEL16 = "LEVEL16";
+                            public static final String LEVEL17 = "LEVEL17";
+                             public static final String LEVEL18 = "LEVEL18";
+                              public static final String LEVEL19 = "LEVEL19";
+                               public static final String LEVEL20 = "LEVEL20"; 
+                       
+                               public static final String POLICE = "POLICE";
+                               
+                                public static final String BANDIT = "BANDIT";
+                                public static final String ZOMBIE = "ZOMBIE";
+                               
+                                      public static final String PLAYER = "PLAYER";
+                               
+                               
+                  
+    
     //    public static final int SCROLL_SPEED = 6;
     // ANIMATION SPEED
     
@@ -217,6 +254,9 @@ public class PathXConstants
     public static final int VIEWPORT_OFFSET_X = 350;
     public static final int VIEWPORT_OFFSET_Y = 350;
     
+     public static final int LEVEL1X  = VIEWPORT_OFFSET_X-190;
+    public static final int LEVEL1Y  = VIEWPORT_OFFSET_X-220;
+         
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
     
@@ -239,6 +279,11 @@ public class PathXConstants
     public static final String TILE_SPRITE_TYPE_PREFIX = "TILE_";
     public static final int COLOR_INC = 10;
     
+    
+     public static final int ZOMBIEID = 10;
+      public static final int BANDITID = 100;
+       public static final int POLICEID = 200;
+      
     // FOR MOVING TILES AROUND
     public static final int MAX_TILE_VELOCITY = 20;
     
@@ -255,6 +300,13 @@ public class PathXConstants
     public static final int HOME_BUTTON_SETTING_X = 620;
     public static final int HOME_BUTTON_SETTING_Y = 5;
     
+    
+     public static final int PLAYERLEVEL1X = 50;
+    public static final int PLAYERLEVEL1Y = 51;
+    
+    
+    
+    
     public static final int HOME_SETTINGS_X_BUTTON_X = 685;
     public static final int HOME_SETTINGS_X_BUTTON_Y = 5;
     
@@ -265,18 +317,21 @@ public class PathXConstants
     public static final int HOME_X_BUTTON_Y = 128;
     
     
-    public static final int SCROLL_LEFT_BUTTON_X = 20;
+    public static final int SCROLL_LEFT_BUTTON_X = 40;
     public static final int SCROLL_LEFT_BUTTON_Y = 525;;
     
     
-    public static final int SCROLL_RIGHT_BUTTON_X = 114;
+    public static final int SCROLL_RIGHT_BUTTON_X = 102;
     public static final int SCROLL_RIGHT_BUTTON_Y = 525;
     
     public static final int SCROLL_UP_BUTTON_X = 72;
-    public static final int SCROLL_UP_BUTTON_Y = 495;
+    public static final int SCROLL_UP_BUTTON_Y = 488;
     
     public static final int SCROLL_DOWN_BUTTON_X = 72;
     public static final int SCROLL_DOWN_BUTTON_Y = 560;
+    
+    public static final int SCROLL_PAUSE_BUTTON_X = 70;
+    public static final int SCROLL_PAUSE_BUTTON_Y = 515;
     
     public static final int QUIT_BUTTON_X = 285;
     public static final int QUIT_BUTTON_Y = 425;

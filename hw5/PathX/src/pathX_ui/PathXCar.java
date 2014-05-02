@@ -5,6 +5,7 @@ import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import static pathx.PathXConstants.*;
+import pathx_file.Intersection;
 
 /**
  * This class represents a single tile in the game world.
@@ -16,6 +17,7 @@ public class PathXCar extends Sprite
     // EACH TILE HAS AN ID, WHICH WE'LL USE FOR SORTING
     private int tileId;
     
+    private String carType;
     // WHEN WE PUT A TILE IN THE GRID WE TELL IT WHAT COLUMN AND ROW
     // IT IS LOCATED TO MAKE THE UNDO OPERATION EASY LATER ON
     private int gridColumn;
@@ -32,10 +34,13 @@ public class PathXCar extends Sprite
     // WIN ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
     private ArrayList<Integer> movePath;
     
+    private ArrayList<Intersection>playerPath;
+    
     // THIS INDEX KEEPS TRACK OF WHICH NODE ON THE WIN ANIMATION PATH
     // THIS TILE IS CURRENTLY TARGETING
     private int movePathIndex;
     
+    private String imageFileName;
     /**
      * This constructor initializes this tile for use, including all the
      * sprite-related data from its ancestor class, Sprite.
@@ -50,6 +55,8 @@ public class PathXCar extends Sprite
         super(initSpriteType, initX, initY, initVx, initVy, initState);
         
         tileId = initTileId;
+        carType ="";
+        imageFileName ="";
     }
     
     // ACCESSOR METHODS
@@ -71,6 +78,10 @@ public class PathXCar extends Sprite
         return tileId;
     }
     
+    public void setImageFileName(String ImageFileName)    
+    {   this.imageFileName = ImageFileName;    
+    
+    }
     /**
      * Accessor method for getting the tile grid column that this tile
      * is either currently in, or was most recently in.
@@ -128,7 +139,9 @@ public class PathXCar extends Sprite
     // MUTATOR METHODS
         // -setGridCell
         // -setTarget
+    public void setCarType(String type)     { carType = type;}
     
+      public String getCarType()     { return carType; }
     /**
      * Mutator method for setting both the grid column and row that
      * this tile is being placed in.
@@ -213,6 +226,10 @@ public class PathXCar extends Sprite
         
     }    
     
+    public void updatePlayerMove()
+    {
+        
+    }
     /**
      * Allows the tile to start moving by initializing its properly
      * scaled velocity vector pointed towards it target coordinates.

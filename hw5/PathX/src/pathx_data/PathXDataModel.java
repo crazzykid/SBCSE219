@@ -3,6 +3,8 @@ package pathx_data;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import pathX_ui.PathXCar;
 import java.awt.image.BufferedImage;
@@ -29,7 +31,7 @@ import pathx_file.Road;
  *
  * @author Richard McKenna
  */
-public class PathXDataModel extends MiniGameDataModel
+public class PathXDataModel extends MiniGameDataModel 
 {
     
     // THIS CLASS HAS A REFERERENCE TO THE MINI GAME SO THAT IT
@@ -89,7 +91,7 @@ public class PathXDataModel extends MiniGameDataModel
     PathXGameLevel level;
     
    private PathXCarState  mode;
-    
+
     // DATA FOR RENDERING
     private Viewport viewport;
     
@@ -118,7 +120,7 @@ public class PathXDataModel extends MiniGameDataModel
     boolean isMousePressed;
     boolean isDragging;
     boolean dataUpdatedSinceLastSave;
-    
+    boolean playerselected;
     
     public static int mousePressX;
     public static int mousePressY;
@@ -133,6 +135,8 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public PathXDataModel(MiniGame initMiniGame)
     {
+        
+      
         // KEEP THE GAME FOR LATER
         miniGame = initMiniGame;
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
@@ -144,6 +148,7 @@ public class PathXDataModel extends MiniGameDataModel
         level = new PathXGameLevel();
         viewport = new Viewport();
         
+        playerselected = false;
         vPort = new Viewport();
         levelBeingEdited = false;
         startRoadIntersection = null;
@@ -268,6 +273,10 @@ public class PathXDataModel extends MiniGameDataModel
      
      public Viewport getVport2  (){ return viewport;}
     
+    public void setLevel(PathXGameLevel level, int num) 
+    {   
+        
+        levelLocation.add(num, level); }
     
     public Image            getBackgroundImage()        {   return backgroundImage;         }
     public Image            getStartingLocationImage()  {   return startingLocationImage;   }
@@ -293,7 +302,10 @@ public class PathXDataModel extends MiniGameDataModel
     {   return testIntersection == selectedIntersection;    }
     
     
-    public boolean isPlayerSelected(){ return true;}
+    public boolean isPlayerSelected(){ return playerselected;}
+    
+    public void setPlayerSelected(boolean mode) { playerselected = mode;}
+    
     public boolean isSelectedRoad(Road testRoad)
     {   return testRoad == selectedRoad;                    }
     
@@ -336,6 +348,7 @@ public class PathXDataModel extends MiniGameDataModel
         selectedRoad = null;
         
     }
+    
     public void setSelectedRoad(Road r)
     {
         selectedRoad = r;
@@ -373,6 +386,7 @@ public class PathXDataModel extends MiniGameDataModel
         double diffYSquared = Math.pow(y1 - y2, 2);
         return Math.sqrt(diffXSquared + diffYSquared);
     }
+    
      public Intersection findIntersectionAtCanvasLocation(int canvasX, int canvasY)
     {
         // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
@@ -386,6 +400,21 @@ public class PathXDataModel extends MiniGameDataModel
             }
         }
         return null;
+    }
+     
+      public boolean findPlayerAtCanvasLocation(int canvasX, int canvasY)
+    {
+        // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
+        
+       
+            double distance = calculateDistanceBetweenPoints(level.playerX, level.playerY, canvasX + viewport.getViewportX(), canvasY + viewport.getViewportY());
+            if (distance < INTERSECTION_RADIUS)
+            {
+                // MAKE THIS THE SELECTED INTERSECTION
+                return true;
+            }
+        
+        return false;
     }
       public void unselectEverything()
     {
@@ -425,9 +454,13 @@ public class PathXDataModel extends MiniGameDataModel
     }
      public void moveSelectedPlayer(int canvasX, int canvasY)
     {
-        selectedIntersection.x = canvasX + vPort.getViewportX();
-        selectedIntersection.y = canvasY + vPort.getViewportY();
-        miniGame.getCanvas().repaint();
+        
+        level.playerX = (canvasX ); 
+        level.playerY = canvasY ;
+        System.out.println("playerx : " + level.playerX);
+           System.out.println("playerY : " + level.playerY);
+           
+        ((PathXMiniGame)miniGame).getCanvas().repaint();
     }
      
     /**
@@ -756,8 +789,8 @@ public class PathXDataModel extends MiniGameDataModel
      *
      * @param y The y-axis pixel location of the mouse click.
      */
-    public int getMousePressX() { return mousePressX;}
-    public int getMousePressY() { return mousePressY;}
+    //public int getMousePressX() { return mousePressX;}
+   // public int getMousePressY() { return mousePressY;}
             
     @Override
     public void checkMousePressOnSprites(MiniGame game, int x, int y)
@@ -769,6 +802,7 @@ public class PathXDataModel extends MiniGameDataModel
         mousePressX = x;
         mousePressY = y;
         
+      
          // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
       
          mode = PathXCarState.PLAYER_SELECTED;
@@ -776,7 +810,7 @@ public class PathXDataModel extends MiniGameDataModel
         
         System.out.println("testing mouse press on for X:" + x+ "\t and for col "+col);
         
-                System.out.println("testing mouse press on for Y:" + y+ "\t and for row "+row);
+       System.out.println("testing mouse press on for Y:" + y+ "\t and for row "+row);
 
         // DISABLE THE STATS DIALOG IF IT IS OPEN
         //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
@@ -882,18 +916,17 @@ public class PathXDataModel extends MiniGameDataModel
      * the GUI.
      *
      * @param game The Sorting Hat game about which to display info.
+*/
+    /**
+     * Responds to when the user presses the mouse button on the canvas,
+     * it may respond in a few different ways depending on what the 
+     * current edit mode is.
      */
+         
     @Override
     public void updateDebugText(MiniGame game)
     {
     }
-    
-    
-    
-    
-    
-    
-    
     
     
 }
