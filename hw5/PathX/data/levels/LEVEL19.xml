@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<level image="images-3.png" name="LEVEL19">
+     <intersections>
+          <intersection id="0" open="true" x="155" y="308"/>
+          <intersection id="1" open="true" x="596" y="280"/>
+          <intersection id="2" open="true" x="257" y="445"/>
+          <intersection id="3" open="true" x="403" y="428"/>
+          <intersection id="4" open="true" x="344" y="163"/>
+          <intersection id="5" open="true" x="534" y="64"/>
+          <intersection id="6" open="false" x="142" y="116"/>
+          <intersection id="7" open="true" x="107" y="472"/>
+          <intersection id="8" open="true" x="739" y="105"/>
+          <intersection id="9" open="true" x="585" y="511"/>
+          <intersection id="10" open="true" x="756" y="385"/>
+     </intersections>
+     <roads>
+          <road int_id1="7" int_id2="6" one_way="false" speed_limit="30"/>
+          <road int_id1="2" int_id2="0" one_way="false" speed_limit="30"/>
+          <road int_id1="6" int_id2="3" one_way="false" speed_limit="30"/>
+          <road int_id1="3" int_id2="4" one_way="true" speed_limit="30"/>
+          <road int_id1="4" int_id2="9" one_way="false" speed_limit="30"/>
+          <road int_id1="9" int_id2="5" one_way="false" speed_limit="30"/>
+          <road int_id1="5" int_id2="8" one_way="false" speed_limit="30"/>
+          <road int_id1="8" int_id2="10" one_way="false" speed_limit="30"/>
+          <road int_id1="10" int_id2="1" one_way="true" speed_limit="30"/>
+     </roads>
+     <start_intersection id="0" image="DefaultStartLocation.png"/>
+     <destination_intersection id="1" image="DefaultDestination.png"/>
+     <money amount="1080"/>
+     <police num="2"/>
+     <bandits num="3"/>
+     <zombies num="1"/>
+</level>

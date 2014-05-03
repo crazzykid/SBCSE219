@@ -60,7 +60,7 @@ public class PathXGameLevel
     {
         completeLevel = false;
         levelState = WHITE_STATE;
-        stageUnlock = false;
+        stageUnlock = true;
         
         playerX = LEVEL1X;
         playerY =LEVEL1Y;

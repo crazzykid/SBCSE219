@@ -1,15 +1,17 @@
 package pathX_ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import static pathx.PathXConstants.*;
+import pathx_file.Connection;
 import pathx_file.Intersection;
 
 /**
  * This class represents a single tile in the game world.
- * 
+ *
  * @author Richard McKenna
  */
 public class PathXCar extends Sprite
@@ -31,10 +33,10 @@ public class PathXCar extends Sprite
     private float targetX;
     private float targetY;
     
-    // WIN ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH    
+    // WIN ANIMATIONS CAN BE GENERATED SIMPLY BY PUTTING TILES ON A PATH
     private ArrayList<Integer> movePath;
     
-    private ArrayList<Intersection>playerPath;
+    private ArrayList<Integer>playerPath;
     
     // THIS INDEX KEEPS TRACK OF WHICH NODE ON THE WIN ANIMATION PATH
     // THIS TILE IS CURRENTLY TARGETING
@@ -45,11 +47,11 @@ public class PathXCar extends Sprite
      * This constructor initializes this tile for use, including all the
      * sprite-related data from its ancestor class, Sprite.
      */
-    public PathXCar(    SpriteType initSpriteType, 
-                                    float initX, 	float initY,
-                                    float initVx, 	float initVy,
-                                    String initState,
-                                    int initTileId)
+    public PathXCar(    SpriteType initSpriteType,
+            float initX, 	float initY,
+            float initVx, 	float initVy,
+            String initState,
+            int initTileId)
     {
         // SEND ALL THE Sprite DATA TO A Sprite CONSTRUCTOR
         super(initSpriteType, initX, initY, initVx, initVy, initState);
@@ -57,20 +59,22 @@ public class PathXCar extends Sprite
         tileId = initTileId;
         carType ="";
         imageFileName ="";
+        
+          playerPath = new  ArrayList<Integer>();
     }
     
     // ACCESSOR METHODS
-        // -getTileId
-        // -getTileType
-        // -getGridColumn
-        // -getGridRow
-        // -getTargetX
-        // -getTargetY
-        // -isMovingToTarget
-
+    // -getTileId
+    // -getTileType
+    // -getGridColumn
+    // -getGridRow
+    // -getTargetX
+    // -getTargetY
+    // -isMovingToTarget
+    
     /**
      * Accessor method for getting the tile id for this tile.
-     * 
+     *
      * @return The id for this tile, which should match the rendered id.
      */
     public int getTileId()
@@ -78,77 +82,77 @@ public class PathXCar extends Sprite
         return tileId;
     }
     
-    public void setImageFileName(String ImageFileName)    
-    {   this.imageFileName = ImageFileName;    
+    public void setImageFileName(String ImageFileName)
+    {   this.imageFileName = ImageFileName;
     
     }
     /**
      * Accessor method for getting the tile grid column that this tile
      * is either currently in, or was most recently in.
-     * 
+     *
      * @return The grid column this tile is or most recently was located in.
      */
-    public int getGridColumn() 
-    { 
-        return gridColumn; 
+    public int getGridColumn()
+    {
+        return gridColumn;
     }
     
     /**
      * Accessor method for getting the tile grid row that this tile
      * is either currently in, or was most recently in.
-     * 
+     *
      * @return The grid row this tile is or most recently was located in.
      */
-    public int getGridRow() 
-    { 
-        return gridRow; 
+    public int getGridRow()
+    {
+        return gridRow;
     }
     
     /**
      * Accessor method for getting the x-axis target coordinate for this tile.
-     * 
+     *
      * @return The x-axis target coordinate for this tile.
      */
-    public float getTargetX() 
-    { 
-        return targetX; 
+    public float getTargetX()
+    {
+        return targetX;
     }
     
     /**
      * Accessor method for getting the y-axis target coordinate for this tile.
-     * 
+     *
      * @return The y-axis target coordinate for this teil.
      */
-    public float getTargetY() 
-    { 
-        return targetY; 
+    public float getTargetY()
+    {
+        return targetY;
     }
     
     /**
      * Accessor method for getting whether this tile is currently moving toward
      * target coordinates or not.
-     * 
+     *
      * @return true if this tile is currently moving toward target coordinates,
      * false otherwise.
      */
-    public boolean isMovingToTarget() 
-    { 
-        return movingToTarget; 
+    public boolean isMovingToTarget()
+    {
+        return movingToTarget;
     }
     
     // MUTATOR METHODS
-        // -setGridCell
-        // -setTarget
+    // -setGridCell
+    // -setTarget
     public void setCarType(String type)     { carType = type;}
     
-      public String getCarType()     { return carType; }
+    public String getCarType()     { return carType; }
     /**
      * Mutator method for setting both the grid column and row that
      * this tile is being placed in.
-     * 
+     *
      * @param initGridColumn The column this tile is being placed in
      * in The Sorting Hat game grid.
-     * 
+     *
      * @param initGridRow The row this tile is being placed in
      * in The Sorting Hat game grid.
      */
@@ -161,29 +165,29 @@ public class PathXCar extends Sprite
     /**
      * Mutator method for setting bot the x-axis and y-axis target
      * coordinates for this tile.
-     * 
+     *
      * @param initTargetX The x-axis target coordinate to move this
      * tile towards.
-     * 
+     *
      * @param initTargetY The y-axis target coordinate to move this
      * tile towards.
      */
-    public void setTarget(float initTargetX, float initTargetY) 
+    public void setTarget(float initTargetX, float initTargetY)
     {
-        targetX = initTargetX; 
+        targetX = initTargetX;
         targetY = initTargetY;
-    }  
-
+    }
+    
     // PATHFINDING METHODS
-        // -calculateDistanceToTarget
-        // -initWinPath
-        // -startMovingToTarget
-        // -updateWinPath
+    // -calculateDistanceToTarget
+    // -initWinPath
+    // -startMovingToTarget
+    // -updateWinPath
     
     /**
      * This method calculates the distance from this tile's current location
      * to the target coordinates on a direct line.
-     * 
+     *
      * @return The total distance on a direct line from where the tile is
      * currently, to where its target is.
      */
@@ -203,7 +207,7 @@ public class PathXCar extends Sprite
     }
     
     /**
-     * This method builds a path for this tile for the 
+     * This method builds a path for this tile for the
      * win animations by slightly randomizing the locations
      * of the nodes in the winPathNodes argument.
      */
@@ -224,16 +228,27 @@ public class PathXCar extends Sprite
         }
         movePath = intersectionNodes;
         
-    }    
+    }
     
-    public void updatePlayerMove()
+    public void updatePlayerMove(ArrayList<Intersection> init)
     {
+        Iterator<Intersection> path = init.iterator();
+        
+        while (path.hasNext())
+        {
+            Intersection temp = path.next();
+            
+            playerPath.add(temp.getX());
+            playerPath.add(temp.getY());
+            
+        }
+        movePath = playerPath;
         
     }
     /**
      * Allows the tile to start moving by initializing its properly
      * scaled velocity vector pointed towards it target coordinates.
-     * 
+     *
      * @param maxVelocity The maximum velocity of this tile, which
      * we'll then compute the x and y axis components for taking into
      * account the trajectory angle.
@@ -257,7 +272,7 @@ public class PathXCar extends Sprite
         if ((diffX > 0) && (vX < 0)) vX *= -1;
         
         // COMPUTE THE Y VELOCITY COMPONENT
-        vY = (float)(maxVelocity * Math.sin(angleInRadians));        
+        vY = (float)(maxVelocity * Math.sin(angleInRadians));
         
         // CLAMP THE VELOCITY IN CASE OF NEGATIVE ANGLES
         if ((diffY < 0) && (vY > 0)) vY *= -1;
@@ -268,7 +283,7 @@ public class PathXCar extends Sprite
      * After a win, while the tiles are animating, this method is called
      * each frame to make sure that when the tile reaches the next node
      * in the path, it moves on to the following path node.
-     * 
+     *
      * @param game The Sorting Hat game we are updating.
      */
     public void updateMovePath(MiniGame game)
@@ -289,23 +304,23 @@ public class PathXCar extends Sprite
             
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
             movePathIndex += 2;
-           // winPathIndex %= (WIN_PATH_NODES * 2);
+            // winPathIndex %= (WIN_PATH_NODES * 2);
         }
         // JUST A NORMAL PATHING UPDATE
         else
         {
             // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
             super.update(game);
-        }        
-    }    
+        }
+    }
     
     // METHODS OVERRIDDEN FROM Sprite
-        // -update
-
+    // -update
+    
     /**
      * Called each frame, this method ensures that this tile is updated
      * according to the path it is on.
-     * 
+     *
      * @param game The Sorting Hat game this tile is part of.
      */
     @Override
@@ -313,13 +328,25 @@ public class PathXCar extends Sprite
     {
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
-       // if (game.getDataModel().won())
+        if (movePath!=null)
         {
-       //     updateMovePath(game);
+            Iterator move = movePath.iterator();
+            while(move.hasNext())
+            {
+                int xx =(int)move.next();
+                int yyy =(int)move.next();
+                
+                targetX =62;
+                 targetY =369;
+               updateMovePath(game);
+                
+                
+            }
+            
         }
         // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
         // JUST GO TO THE TARGET AND THEN STOP MOVING
-       if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
+        if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
         {
             vX = 0;
             vY = 0;

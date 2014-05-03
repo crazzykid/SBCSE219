@@ -179,7 +179,7 @@ public class PathXPanel extends JPanel
             if (!data.notStarted())
             {
                 // AND THE TILES
-                renderTiles(g);
+                
                 
                 // AND THE DIALOGS, IF THERE ARE ANY
                 renderDialogs(g);
@@ -197,9 +197,9 @@ public class PathXPanel extends JPanel
                     renderLevelBackground(g2);
                     renderRoads(g2);
                     renderIntersections(g2);
-                    renderPlayer(g2);
-                    
-                   
+                    //renderPlayer(g2);
+                   renderPlayerTiles(g); 
+                   renderTile(g);
                 }
             }
             
@@ -561,7 +561,9 @@ public class PathXPanel extends JPanel
        
         Viewport viewport = data.getVport2();
         
-        ArrayList<PathXGameLevel>  levelLocation = data.getLevelLocation();
+        //ArrayList<PathXGameLevel>  levelLocation = data.getLevelLocation();
+        
+        PathXGameLevel levelLocation = data.getLevel();
         int viewPortX = viewport.getViewportX();
         int viewPortY = viewport.getViewportY();
         int moveX = VIEWPORT_OFFSET_Y + viewPortX;
@@ -596,9 +598,9 @@ public class PathXPanel extends JPanel
             {
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE1 )
                 {
-                    if(levelLocation.get(0).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(0).getCompletedLevel()
-                            && levelLocation.get(0).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                      
                         
@@ -620,9 +622,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE2 )
                 {
-                    if(levelLocation.get(1).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(1).getCompletedLevel()
-                            && levelLocation.get(1).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                        int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
@@ -641,9 +643,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE3 )
                 {
-                    if(levelLocation.get(2).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(2).getCompletedLevel()
-                            && levelLocation.get(2).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                        int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
@@ -662,9 +664,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE4 )
                 {
-                    if(levelLocation.get(3).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(3).getCompletedLevel()
-                            && levelLocation.get(3).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
@@ -683,9 +685,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE5 )
                 {
-                    if(levelLocation.get(4).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(4).getCompletedLevel()
-                            && levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
@@ -704,9 +706,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE6 )
                 {
-                    if(levelLocation.get(5).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(5).getCompletedLevel()
-                            && levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
@@ -725,9 +727,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE7 )
                 {
-                    if(levelLocation.get(6).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(6).getCompletedLevel()
-                            && levelLocation.get(6).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
@@ -746,9 +748,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE8 )
                 {
-                    if(levelLocation.get(7).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(7).getCompletedLevel()
-                            && levelLocation.get(7).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
@@ -767,9 +769,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE9 )
                 {
-                    if(levelLocation.get(8).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(8).getCompletedLevel()
-                            && levelLocation.get(8).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
@@ -788,9 +790,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE10 )
                 {
-                    if(levelLocation.get(9).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(9).getCompletedLevel()
-                            && levelLocation.get(9).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
@@ -809,9 +811,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE11 )
                 {
-                    if(levelLocation.get(10).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(10).getCompletedLevel()
-                            && levelLocation.get(10).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
@@ -830,9 +832,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE12 )
                 {
-                    if(levelLocation.get(11).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(11).getCompletedLevel()
-                            && levelLocation.get(11).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
@@ -851,9 +853,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE13 )
                 {
-                    if(levelLocation.get(12).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(12).getCompletedLevel()
-                            && levelLocation.get(12).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                        int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
@@ -872,9 +874,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE14 )
                 {
-                    if(levelLocation.get(13).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(13).getCompletedLevel()
-                            && levelLocation.get(13).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
@@ -893,9 +895,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE15 )
                 {
-                    if(levelLocation.get(14).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(14).getCompletedLevel()
-                            && levelLocation.get(14).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
@@ -914,9 +916,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE16 )
                 {
-                    if(levelLocation.get(15).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(15).getCompletedLevel()
-                            && levelLocation.get(15).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
@@ -935,9 +937,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE17 )
                 {
-                    if(levelLocation.get(16).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(16).getCompletedLevel()
-                            && levelLocation.get(16).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
@@ -956,9 +958,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE18 )
                 {
-                    if(levelLocation.get(17).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(17).getCompletedLevel()
-                            && levelLocation.get(17).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                        int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
@@ -977,9 +979,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE19 )
                 {
-                    if(levelLocation.get(18).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(18).getCompletedLevel()
-                            && levelLocation.get(18).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
@@ -998,9 +1000,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE20 )
                 {
-                    if(levelLocation.get(19).getLevelState().equals(RED_STATE)
-                            && !levelLocation.get(19).getCompletedLevel()
-                            && levelLocation.get(19).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(RED_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
@@ -1022,9 +1024,9 @@ public class PathXPanel extends JPanel
             {
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE1 )
                 {
-                    if(levelLocation.get(0).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(0).getCompletedLevel()
-                            && levelLocation.get(0).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
@@ -1043,9 +1045,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE2 )
                 {
-                    if(levelLocation.get(1).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(1).getCompletedLevel()
-                            && levelLocation.get(1).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
@@ -1064,9 +1066,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE3 )
                 {
-                    if(levelLocation.get(2).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(2).getCompletedLevel()
-                            && levelLocation.get(2).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
@@ -1085,9 +1087,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE4 )
                 {
-                    if(levelLocation.get(3).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(3).getCompletedLevel()
-                            && levelLocation.get(3).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
@@ -1106,9 +1108,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE5 )
                 {
-                    if(levelLocation.get(4).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(4).getCompletedLevel()
-                            && levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
@@ -1127,9 +1129,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE6 )
                 {
-                    if(levelLocation.get(5).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(5).getCompletedLevel()
-                            && levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
@@ -1148,9 +1150,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE7 )
                 {
-                    if(levelLocation.get(6).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(6).getCompletedLevel()
-                            && levelLocation.get(6).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
@@ -1169,9 +1171,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE8 )
                 {
-                    if(levelLocation.get(7).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(7).getCompletedLevel()
-                            && levelLocation.get(7).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                        int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
@@ -1190,9 +1192,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE9 )
                 {
-                    if(levelLocation.get(8).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(8).getCompletedLevel()
-                            && levelLocation.get(8).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
@@ -1211,9 +1213,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE10 )
                 {
-                    if(levelLocation.get(9).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(9).getCompletedLevel()
-                            && levelLocation.get(9).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
@@ -1232,9 +1234,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE11 )
                 {
-                    if(levelLocation.get(10).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(10).getCompletedLevel()
-                            && levelLocation.get(10).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
@@ -1253,9 +1255,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE12 )
                 {
-                    if(levelLocation.get(11).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(11).getCompletedLevel()
-                            && levelLocation.get(11).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
@@ -1274,9 +1276,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE13 )
                 {
-                    if(levelLocation.get(12).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(12).getCompletedLevel()
-                            && levelLocation.get(12).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y13-((5*viewPortY)/6));
@@ -1295,9 +1297,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE14 )
                 {
-                    if(levelLocation.get(13).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(13).getCompletedLevel()
-                            && levelLocation.get(13).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
@@ -1316,9 +1318,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE15 )
                 {
-                    if(levelLocation.get(14).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(14).getCompletedLevel()
-                            && levelLocation.get(14).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
@@ -1337,9 +1339,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE16 )
                 {
-                    if(levelLocation.get(15).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(15).getCompletedLevel()
-                            && levelLocation.get(15).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
@@ -1358,9 +1360,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE17 )
                 {
-                    if(levelLocation.get(16).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(16).getCompletedLevel()
-                            && levelLocation.get(16).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
@@ -1379,9 +1381,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE18 )
                 {
-                    if(levelLocation.get(17).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(17).getCompletedLevel()
-                            && levelLocation.get(17).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
@@ -1400,9 +1402,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE19 )
                 {
-                    if(levelLocation.get(18).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(18).getCompletedLevel()
-                            && levelLocation.get(18).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
@@ -1421,9 +1423,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE20 )
                 {
-                    if(levelLocation.get(19).getLevelState().equals(WHITE_STATE)
-                            && levelLocation.get(19).getCompletedLevel()
-                            && levelLocation.get(19).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && levelLocation.getCompletedLevel()
+                            && levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
@@ -1445,9 +1447,9 @@ public class PathXPanel extends JPanel
             {
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE1 )
                 {
-                    if(levelLocation.get(0).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(0).getCompletedLevel()
-                            && !levelLocation.get(0).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
@@ -1466,9 +1468,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE2 )
                 {
-                    if(levelLocation.get(1).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(1).getCompletedLevel()
-                            && !levelLocation.get(1).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
@@ -1487,9 +1489,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE3 )
                 {
-                    if(levelLocation.get(2).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(2).getCompletedLevel()
-                            && !levelLocation.get(2).getStageUnlock() )
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock() )
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
@@ -1508,9 +1510,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE4 )
                 {
-                    if(levelLocation.get(3).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(3).getCompletedLevel()
-                            && !levelLocation.get(3).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
@@ -1529,9 +1531,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE5 )
                 {
-                    if(levelLocation.get(4).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(4).getCompletedLevel()
-                            && !levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
@@ -1550,9 +1552,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE6 )
                 {
-                    if(levelLocation.get(5).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(5).getCompletedLevel()
-                            && !levelLocation.get(4).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
@@ -1571,9 +1573,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE7 )
                 {
-                    if(levelLocation.get(6).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(6).getCompletedLevel()
-                            && !levelLocation.get(6).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
@@ -1592,9 +1594,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE8 )
                 {
-                    if(levelLocation.get(7).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(7).getCompletedLevel()
-                            && !levelLocation.get(7).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
@@ -1613,9 +1615,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE9 )
                 {
-                    if(levelLocation.get(8).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(8).getCompletedLevel()
-                            && !levelLocation.get(8).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
@@ -1634,9 +1636,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE10 )
                 {
-                    if(levelLocation.get(9).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(9).getCompletedLevel()
-                            && !levelLocation.get(9).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
@@ -1655,9 +1657,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE11 )
                 {
-                    if(levelLocation.get(10).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(10).getCompletedLevel()
-                            && !levelLocation.get(10).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
@@ -1676,9 +1678,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE12 )
                 {
-                    if(levelLocation.get(11).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(11).getCompletedLevel()
-                            && !levelLocation.get(11).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
@@ -1697,9 +1699,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE13 )
                 {
-                    if(levelLocation.get(12).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(12).getCompletedLevel()
-                            && !levelLocation.get(12).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
@@ -1718,9 +1720,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE14 )
                 {
-                    if(levelLocation.get(13).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(13).getCompletedLevel()
-                            && !levelLocation.get(13).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
@@ -1739,9 +1741,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE15 )
                 {
-                    if(levelLocation.get(14).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(14).getCompletedLevel()
-                            && !levelLocation.get(14).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
@@ -1760,9 +1762,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE16 )
                 {
-                    if(levelLocation.get(15).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(15).getCompletedLevel()
-                            && !levelLocation.get(15).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
@@ -1781,9 +1783,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE17 )
                 {
-                    if(levelLocation.get(16).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(16).getCompletedLevel()
-                            && !levelLocation.get(16).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
@@ -1802,9 +1804,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE18 )
                 {
-                    if(levelLocation.get(17).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(17).getCompletedLevel()
-                            && !levelLocation.get(17).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
@@ -1823,9 +1825,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE19 )
                 {
-                    if(levelLocation.get(18).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(18).getCompletedLevel()
-                            && !levelLocation.get(18).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
@@ -1844,9 +1846,9 @@ public class PathXPanel extends JPanel
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE20 )
                 {
-                    if(levelLocation.get(19).getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.get(19).getCompletedLevel()
-                            && !levelLocation.get(19).getStageUnlock())
+                    if(levelLocation.getLevelState().equals(WHITE_STATE)
+                            && !levelLocation.getCompletedLevel()
+                            && !levelLocation.getStageUnlock())
                     {
                         int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
                         int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
@@ -1933,10 +1935,14 @@ public class PathXPanel extends JPanel
      *
      * @param tileToRender Tile to render to this panel.
      */
-    public void renderTile(Graphics g, PathXCar tileToRender)
+    public void renderTile(Graphics g)
     {
+         ArrayList<PathXCar> tile = ((PathXMiniGame)game).getFileManager().tileToRender();
+         for(int i =0; i<tile.size();i++)
+         { PathXCar tileToRender = tile.get(i);
+         
         // ONLY RENDER VISIBLE TILES
-        if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString()))
+        if (!tileToRender.getCarType().equals(PLAYER))
         {
             Viewport viewport = data.getViewport();
             int correctedTileX = (int)(tileToRender.getX());
@@ -1949,8 +1955,27 @@ public class PathXPanel extends JPanel
                     correctedTileY,
                     bgST.getWidth(), bgST.getHeight(), null);
         }
+         }
     }
     
+    public void renderPlayerTiles( Graphics g)
+    {
+     
+       PathXCar renderPlayer = ((PathXMiniGame)game).getFileManager().playerToRender();
+        Viewport viewport = data.getViewport();
+            int correctedTileX = (int)(renderPlayer.getX());
+            int correctedTileY = (int)(renderPlayer.getY());
+        // THEN DRAW ALL THE MOVING TILES
+      
+        
+        SpriteType bgST = renderPlayer.getSpriteType();
+            Image img = bgST.getStateImage(renderPlayer.getState());
+            g.drawImage(img,    correctedTileX,
+                    correctedTileY,
+                    bgST.getWidth(), bgST.getHeight(), null);
+      
+        
+    }
     /**
      * Renders the game dialog boxes.
      *

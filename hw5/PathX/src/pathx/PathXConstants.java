@@ -285,7 +285,7 @@ public class PathXConstants
        public static final int POLICEID = 200;
       
     // FOR MOVING TILES AROUND
-    public static final int MAX_TILE_VELOCITY = 20;
+    public static final int MAX_TILE_VELOCITY = 50;
     
     // UI CONTROLS POSITIONS IN THE GAME SCREEN
     public static final int NORTH_PANEL_HEIGHT = 130;

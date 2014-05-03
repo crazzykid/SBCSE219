@@ -51,7 +51,7 @@ public class PathXDataModel extends MiniGameDataModel
     private int numGameGridColumns;
     private int numGameGridRows;
     private String TTT ;
-    
+    private boolean move;
     // THESE ARE THE TILES STACKED AT THE START OF THE GAME
     private ArrayList<PathXCar> stackCars;
     private int stackCarsX;
@@ -135,7 +135,7 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public PathXDataModel(MiniGame initMiniGame)
     {
-        
+        move = false;
       
         // KEEP THE GAME FOR LATER
         miniGame = initMiniGame;
@@ -159,15 +159,15 @@ public class PathXDataModel extends MiniGameDataModel
         selectedCarIndex = -1;
         tempCar = null;
         
-        levelLocation = new ArrayList<PathXGameLevel>();
-        
-        for(int i =0; i<20; i++ )
-        {
-            PathXGameLevel GameLevel;
-            GameLevel = new PathXGameLevel();
-            
-            levelLocation.add(i, GameLevel);
-        }
+//        levelLocation = new ArrayList<PathXGameLevel>();
+//        
+//        for(int i =0; i<20; i++ )
+//        {
+//            PathXGameLevel GameLevel;
+//            GameLevel = new PathXGameLevel();
+//            
+//            levelLocation.add(i, GameLevel);
+//        }
         
     }
     
@@ -273,11 +273,13 @@ public class PathXDataModel extends MiniGameDataModel
      
      public Viewport getVport2  (){ return viewport;}
     
-    public void setLevel(PathXGameLevel level, int num) 
-    {   
-        
-        levelLocation.add(num, level); }
+//    public void setLevel(PathXGameLevel level, int num) 
+//    {   
+//        
+//        levelLocation.add(num, level); }
+    public void setMove( boolean mode)     {   move = mode;}
     
+    public boolean getMove() { return move;}
     public Image            getBackgroundImage()        {   return backgroundImage;         }
     public Image            getStartingLocationImage()  {   return startingLocationImage;   }
     public Image            getDesinationImage()        {   return destinationImage;        }
@@ -874,13 +876,16 @@ public class PathXDataModel extends MiniGameDataModel
     @Override
     public void updateAll(MiniGame game)
     {
+      
         try
         {
             // MAKE SURE THIS THREAD HAS EXCLUSIVE ACCESS TO THE DATA
             game.beginUsingData();
             
             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
-            for (int i = 0; i < movingCars.size(); i++)
+           
+            
+           for (int i = 0; i < movingCars.size(); i++)
             {
                 // GET THE NEXT TILE
                 PathXCar tile = movingCars.get(i);

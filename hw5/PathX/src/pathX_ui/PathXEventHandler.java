@@ -147,7 +147,7 @@ public class PathXEventHandler
       //  if (game.isCurrentScreenState(MENU_SCREEN_STATE))
         
         PathXDataModel data = (PathXDataModel)game.getDataModel();
-      PathXGameLevel level = (PathXGameLevel)data.getLevelLocation().get(pos);
+      PathXGameLevel level = (PathXGameLevel)data.getLevel();
       
       if( level.getStageUnlock())
         {
@@ -445,11 +445,13 @@ public class PathXEventHandler
         }
         else     if (keyCode == KeyEvent.VK_M)
         {
+           data.setMove(true);
+           
             PathXFileManager fileManager = game.getFileManager();
             ArrayList<Connection> pathParser = fileManager.findShortestPath(fileManager.getInter(0), fileManager.getInter(1));
             TreeMap<String, Road> roadMapCopy = fileManager.getRoadMap();
             TreeMap<String, Intersection> intersectionMapCopy = fileManager.getIntersectionMap();
-            
+            data.setMove(false);
             //ArrayList<Connection> str = fileManager.getAllNeighbors(fileManager.getInter(3).getId());
           //  System.out.println("SIZE OF ARRAY: " + str.size());
            // for(int i=0; i < str.size(); i++)

@@ -654,13 +654,13 @@ public class PathXMiniGame extends MiniGame
         // INIT OUR DATA MANAGER
         data = new PathXDataModel(this);
         
-        levelHandler = new MouseController((PathXDataModel)data);
+       // levelHandler = new MouseController((PathXDataModel)data);
          
         
-        ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
-        level.get(0).setStageUnlock(true);
-        level.get(0).setLevelState(RED_STATE);
-        level.get(0).setLevelName(LEVEL1);
+      //  ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
+      //  level.get(0).setStageUnlock(true);
+      //  level.get(0).setLevelState(RED_STATE);
+      //  level.get(0).setLevelName(LEVEL1);
     }
     
      @Override

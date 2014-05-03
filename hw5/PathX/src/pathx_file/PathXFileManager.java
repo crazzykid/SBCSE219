@@ -129,25 +129,27 @@ public class PathXFileManager
                     
                     ArrayList<Connection> startLocation = this.getAllNeighbors(data.getLevel().getStartingLocation().getId());
                     
-                    int totalX = (startX + intersectionMap.get(startLocation.get(0).Intersection2ID).getX())/2;
+                    int totalX = (startX + intersectionMap.get(startLocation.get(1).Intersection2ID).getX())/2 + LEVEL1X;
                     
-                     int totalY = (startX + intersectionMap.get(startLocation.get(0).Intersection2ID).getY())/2;
+                     int totalY = (startX + intersectionMap.get(startLocation.get(1).Intersection2ID).getY())/2 + LEVEL1Y;
                     
+                     System.out.println("level run " + totalX +"         " + totalY);
                     
                     PathXCar player = new PathXCar(sT, totalX, totalY, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), 1);
                     
                     player.setCarType(PLAYER);
+                  
                     gameCars.add(player);
     }
     
     public boolean loadLevel(String levelFile, int pos)
     {
-       
+        // gameCars = new ArrayList<PathXCar>();
         data = (PathXDataModel)miniGame.getDataModel();
         
-        levelList = ((PathXDataModel)data).getLevelLocation();
+       // levelList = ((PathXDataModel)data).getLevelLocation();
         
-        level = levelList.get(pos);
+       // level = levelList.get(pos);
         
         
         if(!level.getLoad() && level.getStageUnlock())
@@ -160,7 +162,7 @@ public class PathXFileManager
                 levelSchema = new File(PATH_DATA + "PathXLevelSchema.xsd");
                 
                 // WE'LL FILL IN SOME OF THE LEVEL OURSELVES
-                PathXGameLevel levelToLoad = data.getLevel();
+                PathXGameLevel levelToLoad = ((PathXDataModel)data).getLevel();
                 
                 levelToLoad.reset();
                 
@@ -341,8 +343,8 @@ public class PathXFileManager
                         
                         if (random.getId() != levelToLoad.getStartingLocation().getId() && random.getId() != levelToLoad.getDestination().getId() && Vx==0)
                         { 
-                            Vx = random.getX();
-                             Vy = random.getY();
+                            Vx = random.getX() ;
+                             Vy = random.getY() ;
                              
                         }
                     }
@@ -362,12 +364,12 @@ public class PathXFileManager
                 data.setCurrentLevel(levelFile);
                 data.initLevel(levelFile, intersections);
                 
-                if(levelFile.equals(LEVEL1))
-                    levelToLoad.setStageUnlock(true);
-                data.setLevel(levelToLoad, count);
+               // if(levelFile.equals(LEVEL1))
+                   // levelToLoad.setStageUnlock(true);
+               // data.setLevel(levelToLoad, count);
                 
                 this.initIDs();
-                addPlayer();
+                this.addPlayer();
                 return true;
             }
             catch(Exception e)
@@ -663,6 +665,23 @@ public class PathXFileManager
     }
     return new ArrayList();
     } */
+    
+    public PathXCar playerToRender()
+    {
+        for(int i =0; i< gameCars.size(); i++)
+        {
+            if (gameCars.get(i).getCarType().equals(PLAYER) )
+                return gameCars.get(i);
+        }
+        return null;
+    }
+    public ArrayList<PathXCar> tileToRender()
+    {
+        
+                return gameCars;
+     
+    }
+    
     public void initIDs()
     {
         
@@ -1064,6 +1083,7 @@ public class PathXFileManager
                                       playerPath.add(intersectionMap.get(temp.Intersection2ID));
                                  }
                            
+                           gameCars.get(5).updatePlayerMove(playerPath);
                             return intersecionPath;
                         }
                             // IF THIS IS KEVIN BACON WE'RE DONE
