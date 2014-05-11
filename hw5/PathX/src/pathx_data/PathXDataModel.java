@@ -8,8 +8,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import pathX_ui.PathXCar;
 import java.awt.image.BufferedImage;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.JPanel;
@@ -23,7 +25,9 @@ import static pathx.PathXConstants.*;
 import pathX_ui.PathXMiniGame;
 import pathX_ui.PathXPanel;
 import pathX_ui.PathXCarState;
+import pathx_file.Connection;
 import pathx_file.Intersection;
+import pathx_file.PathXSpecial;
 import pathx_file.Road;
 
 /**
@@ -31,7 +35,7 @@ import pathx_file.Road;
  *
  * @author Richard McKenna
  */
-public class PathXDataModel extends MiniGameDataModel 
+public class PathXDataModel extends MiniGameDataModel
 {
     
     // THIS CLASS HAS A REFERERENCE TO THE MINI GAME SO THAT IT
@@ -56,12 +60,30 @@ public class PathXDataModel extends MiniGameDataModel
     private ArrayList<PathXCar> stackCars;
     private int stackCarsX;
     private int stackCarsY;
+    private int dragX;
+    private int dragY;
+    private ArrayList<Integer> zombiePath ;
+    private  ArrayList<Integer> policePath ;
+    private ArrayList<Integer> banditPath ;
+    private boolean addingSpecial;
+    float targetX;
+    float targetY;
+    float policeTargetX ;
+    float policeTargetY ;
+    float banditTargetX ;
+    float banditTargetY ;
+    float zombieTargetX ;
+    float zombieTargetY;
+    
+    
     
     private ArrayList<Intersection> snake;
     private ArrayList<PathXGameLevel> levelLocation;
     
     // THESE ARE THE TILES THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
     private ArrayList<PathXCar> movingCars;
+    
+    private ArrayList<PathXCar> carsToRender;
     
     // THIS IS THE TILE THE USER IS DRAGGING
     private PathXCar selectedCar;
@@ -70,6 +92,7 @@ public class PathXDataModel extends MiniGameDataModel
     // THIS IS THE TEMP TILE
     private PathXCar tempCar;
     
+    private MouseController levelHandler;
     // KEEPS TRACK OF HOW MANY BAD SPELLS WERE CAST
     private int badSpellsCounter;
     
@@ -90,8 +113,8 @@ public class PathXDataModel extends MiniGameDataModel
     
     PathXGameLevel level;
     
-   private PathXCarState  mode;
-
+    private PathXCarState  mode;
+    
     // DATA FOR RENDERING
     private Viewport viewport;
     
@@ -111,6 +134,9 @@ public class PathXDataModel extends MiniGameDataModel
     // WE'LL USE THIS WHEN WE'RE ADDING A NEW ROAD
     Intersection startRoadIntersection;
     
+    Intersection startIntersection;
+    
+    private ArrayList<PathXSpecial> specials;
     // IN CASE WE WANT TO TRACK MOVEMENTS
     int lastMouseX;
     int lastMouseY;
@@ -121,10 +147,13 @@ public class PathXDataModel extends MiniGameDataModel
     boolean isDragging;
     boolean dataUpdatedSinceLastSave;
     boolean playerselected;
-    
+    private int total;
     public static int mousePressX;
     public static int mousePressY;
-
+    
+    int playerMoveX;
+    int playerMoveY;
+    
     
     /**
      * Constructor for initializing this data model, it will create the data
@@ -135,14 +164,24 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public PathXDataModel(MiniGame initMiniGame)
     {
+        
+        zombiePath = new ArrayList<Integer>();
+        policePath = new ArrayList<Integer>();
+        banditPath = new ArrayList<Integer>();
         move = false;
-      
+        playerMoveX = 0;
+        playerMoveY = 0;
         // KEEP THE GAME FOR LATER
         miniGame = initMiniGame;
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
         stackCars = new ArrayList();
         movingCars = new ArrayList();
+        specials = new ArrayList<PathXSpecial>();
         
+        dragX = 0;
+        dragY = 0;
+        total =0;
+        addingSpecial = false;
         TTT= new String();
         
         level = new PathXGameLevel();
@@ -152,24 +191,22 @@ public class PathXDataModel extends MiniGameDataModel
         vPort = new Viewport();
         levelBeingEdited = false;
         startRoadIntersection = null;
-       mode = PathXCarState.NOTHING_SELECTED;
+        mode = PathXCarState.NOTHING_SELECTED;
         
         // NOTHING IS BEING DRAGGED YET
         selectedCar = null;
         selectedCarIndex = -1;
         tempCar = null;
         
-//        levelLocation = new ArrayList<PathXGameLevel>();
-//        
-//        for(int i =0; i<20; i++ )
-//        {
-//            PathXGameLevel GameLevel;
-//            GameLevel = new PathXGameLevel();
-//            
-//            levelLocation.add(i, GameLevel);
-//        }
+        targetX =0;
+        targetY =0;
+        
+        
+        levelLocation = new ArrayList<PathXGameLevel>();
+        this.initLevelStorage();
         
     }
+    
     
     // ACCESSOR METHODS
     public ArrayList<Intersection> getSnake()
@@ -214,14 +251,20 @@ public class PathXDataModel extends MiniGameDataModel
     {
         return currentLevel;
     }
-    public ArrayList getLevelLocation()
+    public ArrayList<PathXGameLevel> getLevelLocation()
     {
         return levelLocation;
     }
-    // public ArrayList<PathXCar> getTilesToSort()
+    public int getTotalBalance()
     {
-    //     return tilesToSort;
-}
+        
+        return total;
+    }
+    public void setTotalBalance(int num)
+    {
+        
+        total = num;
+    }
     
     //  public ArrayList<PathXCar> getStackTiles()
     {
@@ -232,6 +275,12 @@ public class PathXDataModel extends MiniGameDataModel
     {
         return movingCars.iterator();
     }
+    
+    public Iterator<PathXCar> getAllTiles()
+    {
+        return carsToRender.iterator();
+    }
+    
     
     // MUTATOR METHODS
     public void setCurrentLevel(String initCurrentLevel)
@@ -270,12 +319,36 @@ public class PathXDataModel extends MiniGameDataModel
     public PathXGameLevel       getLevel()                  {   return level;                   }
     
     public Viewport         getVport()               {   return vPort;   }
-     
-     public Viewport getVport2  (){ return viewport;}
     
-//    public void setLevel(PathXGameLevel level, int num) 
-//    {   
-//        
+    public Viewport getVport2  (){ return viewport;}
+    
+    
+    public ArrayList<Integer> zombiePath()
+    {
+        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(5));
+        
+    }
+    
+    public ArrayList<Integer> banditPath()
+    {
+        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(10));
+        
+    }
+    
+    
+    public ArrayList<Integer> policePath()
+    {
+        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(0),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(12));
+        
+    }
+    
+    
+//    public void setLevel(PathXGameLevel level, int num)
+//    {
+//
 //        levelLocation.add(num, level); }
     public void setMove( boolean mode)     {   move = mode;}
     
@@ -286,8 +359,8 @@ public class PathXDataModel extends MiniGameDataModel
     public Intersection     getSelectedIntersection()   {   return selectedIntersection;    }
     public Road             getSelectedRoad()           {   return selectedRoad;            }
     public Intersection     getStartRoadIntersection()  {   return startRoadIntersection;   }
-   // public int              getLastMouseX()             {   return lastMouseX;              }
-  //  public int              getLastMouseY()             {   return lastMouseY;              }
+    // public int              getLastMouseX()             {   return lastMouseX;              }
+    //  public int              getLastMouseY()             {   return lastMouseY;              }
     public Intersection     getStartingLocation()       {   return level.startingLocation;  }
     public Intersection     getDestination()            {   return level.destination;       }
     public boolean          isNothingSelected()      { return mode == PathXCarState.NOTHING_SELECTED; }
@@ -295,7 +368,7 @@ public class PathXDataModel extends MiniGameDataModel
     public boolean isIntersectionDragged()  { return mode == PathXCarState.PLAYER_DRAGGED; }
     public boolean isRoadSelected()         { return mode == PathXCarState.ROAD_SELECTED; }
     public PathXCarState getMode()                { return mode;}
-   
+    
     public boolean          isStartingLocation(Intersection testInt)
     {   return testInt == level.startingLocation;           }
     public boolean isDestination(Intersection testInt)
@@ -328,13 +401,18 @@ public class PathXDataModel extends MiniGameDataModel
     // MUTATOR METHODS
     public void switchState(PathXCarState initMode)
     {
-
-            // SET THE NEW EDIT MODE
-            mode = initMode;
-            
-            // RENDER
-            miniGame.getCanvas().repaint();
-  
+        levelHandler = ((PathXMiniGame)miniGame).getMouseController();
+        
+        // SET THE NEW EDIT MODE
+        mode = initMode;
+        // UPDATE THE CURSOR
+        levelHandler.updateCursor(initMode);
+        
+        // selectedIntersection = null;
+        //   selectedRoad = null;
+        // RENDER
+        miniGame.getCanvas().repaint();
+        
     }
     
     
@@ -347,7 +425,16 @@ public class PathXDataModel extends MiniGameDataModel
     public void setSelectedIntersection(Intersection i)
     {
         selectedIntersection = i;
+        if(!this.isPlayerMoving())
+        {
+             ((PathXMiniGame)miniGame).getFileManager().findShortestPath(startIntersection, i);
+                this.moveAnimation();
+        }
+        
+        ((PathXMiniGame)miniGame).getFileManager().clearPath();
+        startIntersection = i;
         selectedRoad = null;
+        
         
     }
     
@@ -389,12 +476,12 @@ public class PathXDataModel extends MiniGameDataModel
         return Math.sqrt(diffXSquared + diffYSquared);
     }
     
-     public Intersection findIntersectionAtCanvasLocation(int canvasX, int canvasY)
+    public Intersection findIntersectionAtCanvasLocation(int canvasX, int canvasY)
     {
         // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
         for (Intersection i : level.intersections)
         {
-            double distance = calculateDistanceBetweenPoints(i.x, i.y, canvasX + viewport.getViewportX(), canvasY + viewport.getViewportY());
+            double distance = calculateDistanceBetweenPoints(i.x  + LEVEL1X, i.y  + LEVEL1Y, canvasX +vPort.getViewportX() , canvasY + vPort.getViewportY() );
             if (distance < INTERSECTION_RADIUS)
             {
                 // MAKE THIS THE SELECTED INTERSECTION
@@ -403,30 +490,30 @@ public class PathXDataModel extends MiniGameDataModel
         }
         return null;
     }
-     
-      public boolean findPlayerAtCanvasLocation(int canvasX, int canvasY)
+    
+    public boolean findPlayerAtCanvasLocation(int canvasX, int canvasY)
     {
         // CHECK TO SEE IF THE USER IS SELECTING AN INTERSECTION
         
-       
-            double distance = calculateDistanceBetweenPoints(level.playerX, level.playerY, canvasX + viewport.getViewportX(), canvasY + viewport.getViewportY());
-            if (distance < INTERSECTION_RADIUS)
-            {
-                // MAKE THIS THE SELECTED INTERSECTION
-                return true;
-            }
+        
+        double distance = calculateDistanceBetweenPoints(level.playerX, level.playerY, canvasX + viewport.getViewportX(), canvasY + viewport.getViewportY());
+        if (distance < INTERSECTION_RADIUS)
+        {
+            // MAKE THIS THE SELECTED INTERSECTION
+            return true;
+        }
         
         return false;
     }
-      public void unselectEverything()
+    public void unselectEverything()
     {
         selectedIntersection = null;
         selectedRoad = null;
         startRoadIntersection = null;
         miniGame.getCanvas().repaint();
     }
-      
-      /**
+    
+    /**
      * Searches to see if there is a road at (canvasX, canvasY), and if
      * there is, it selects and returns it.
      */
@@ -454,30 +541,101 @@ public class PathXDataModel extends MiniGameDataModel
         }
         return null;
     }
-     public void moveSelectedPlayer(int canvasX, int canvasY)
+    public void draggPlayer(int canvasX, int canvasY)
     {
         
-        level.playerX = (canvasX ); 
-        level.playerY = canvasY ;
-        System.out.println("playerx : " + level.playerX);
-           System.out.println("playerY : " + level.playerY);
-           
-        ((PathXMiniGame)miniGame).getCanvas().repaint();
+        for (int i = 0; i < stackCars.size(); i++)
+        {
+            // GET EACH TILE
+            PathXCar tile = stackCars.get(i);
+            
+            if(tile.getCarType()==PLAYER)
+            {
+                Intersection in = findIntersectionAtCanvasLocation(canvasX, canvasY);
+                Intersection inter = findIntersectionAtCanvasLocation((int)dragX, (int)dragY);
+                
+                if(inter!=null)
+                {
+                    ArrayList<Connection> neighb = ((PathXMiniGame)miniGame).getFileManager().getAllNeighbors(inter.getId());
+                    for(Connection c : neighb)
+                    {
+                        
+                        if(in.getId()==c.getIntersection1ID() || in.getId()== c.getIntersection2ID())
+                        {
+                            tile.setX(in.getX() + LEVEL1X);
+                            tile.setY(in.getY() + LEVEL1Y);
+                            
+                            ((PathXMiniGame)miniGame).getCanvas().repaint();
+                            dragX =0;
+                            dragY =0;
+                            return;
+                        }
+                    }
+                    
+                    
+                }
+                tile.setX(dragX);
+                tile.setY(dragY);
+                dragX =0;
+                dragY =0;
+                
+            }
+            
+        }
+        
     }
-     
+    public void moveSelectedPlayer(int canvasX, int canvasY)
+    {
+        for (int i = 0; i < stackCars.size(); i++)
+        {
+            // GET EACH TILE
+            PathXCar tile = stackCars.get(i);
+            
+            if(tile.getCarType()==PLAYER &&  ((PathXMiniGame)miniGame).isCurrentScreenState(GAME_SCREEN_STATE))
+            {
+                ArrayList<Connection> startLocation = ((PathXMiniGame)miniGame).getFileManager().getAllNeighbors(level.getStartingLocation().getId());
+                
+                int startX = level.getStartingLocation().getX();
+                
+                int startY = level.getStartingLocation().getY();
+                float totalX = ((startX + ((PathXMiniGame)miniGame).getFileManager().getIntersectionMap().get(startLocation.get(0).Intersection2ID).getX())/2) + LEVEL1X;
+                
+                float totalY = ((startY + ((PathXMiniGame)miniGame).getFileManager().getIntersectionMap().get(startLocation.get(0).Intersection2ID).getY())/2) + LEVEL1Y;
+                
+                if(dragX ==0 )
+                {
+                    
+                    dragX = (int)tile.getX();
+                    dragY = (int)tile.getY();
+                    
+                    if(dragX == totalX && dragY == totalY)
+                    {
+                        dragX = level.getStartingLocation().getX()+LEVEL1X;
+                        dragY = level.getStartingLocation().getY() + LEVEL1Y;
+                        
+                    }
+                }
+                tile.setX(canvasX);
+                tile.setY(canvasY);
+                mode = mode.PLAYER_DRAGGED;
+                ((PathXMiniGame)miniGame).getCanvas().repaint();
+            }
+        }
+    }
+    
     /**
      * Updates the background image.
      */
     public void updateBackgroundImage(String newBgImage)
     {
-       
+        
         // UPDATE THE LEVEL TO FIT THE BACKGROUDN IMAGE SIZE
         level.backgroundImageFileName = newBgImage;
         backgroundImage = miniGame.loadImage(LEVELS_PATH + level.backgroundImageFileName);
         int levelWidth = backgroundImage.getWidth(null);
         int levelHeight = backgroundImage.getHeight(null);
         vPort.setLevelDimensions(levelWidth, levelHeight);
-       
+        
         vPort.setGameWorldSize(backgroundImage.getWidth(null), backgroundImage.getHeight(null));
         vPort.setNorthPanelHeight(100);
         vPort.setViewportSize(740, 620);
@@ -493,6 +651,7 @@ public class PathXDataModel extends MiniGameDataModel
         level.startingLocationImageFileName = newStartImage;
         startingLocationImage = miniGame.loadImage(LEVELS_PATH + level.startingLocationImageFileName);
         miniGame.getCanvas().repaint();
+        startIntersection = level.getStartingLocation();
     }
     
     /**
@@ -504,17 +663,69 @@ public class PathXDataModel extends MiniGameDataModel
         destinationImage = miniGame.loadImage(LEVELS_PATH + level.destinationImageFileName);
         miniGame.getCanvas().repaint();
     }
+    public void addSpecialAtCanvasLocation(int canvasX, int canvasY, PathXCarState type)
+    {
+        // FIRST MAKE SURE THE ENTIRE INTERSECTION IS INSIDE THE LEVEL
+        if ((canvasX - INTERSECTION_RADIUS) < 0) return;
+        if ((canvasY - INTERSECTION_RADIUS) < 0) return;
+        if ((canvasX + INTERSECTION_RADIUS) > vPort.levelWidth) return;
+        if ((canvasY + INTERSECTION_RADIUS) > vPort.levelHeight) return;
+        
+        // AND ONLY ADD THE INTERSECTION IF IT DOESN'T OVERLAP WITH
+        // AN EXISTING INTERSECTION
+        //   for(Intersection i : level.intersections)
+        {
+        //    double distance = calculateDistanceBetweenPoints(i.x-vPort.x, i.y-viewport.y, canvasX, canvasY);
+        //    if (distance < INTERSECTION_RADIUS)
+        //        return;
+    }
+        
+        // LET'S ADD A NEW INTERSECTION
+        int intX = canvasX + vPort.getViewportX();
+        int intY = canvasY + vPort.getViewportY();
+        PathXSpecial newSpec = new PathXSpecial(intX, intY, type);
+        newSpec.startTimer();
+        level.addSpecial(newSpec);
+        miniGame.getCanvas().repaint();
+        
+        // System.out.println("timer" + newSpec.getTimeLong());
+        
+    }
     
+    private void updateTime()
+    {
+        Iterator  spec = level.getSpecial();
+        while(spec.hasNext())
+        {
+            PathXSpecial s = (PathXSpecial)spec.next();
+            s.endTimer();
+            
+            if((s.getTimeLong()/MILLIS_IN_A_SECOND) >10)
+                level.removeSpecial(s.getId());
+            
+        }
+        
+        // KEEP THE GAME TIMER GOING IF THE GAME STILL IS
+        endTime = new GregorianCalendar();
+    }
+    
+    public boolean isAddingSpecial()
+    {
+        return addingSpecial;
+    }
+    
+    public void setAddingSpecial( boolean mode) { addingSpecial = mode;}
     public void moveViewport2(int incX, int incY)
     {
         // MOVE THE VIEWPORT
         viewport.scroll(incX, incY);
         
+        
         // AND NOW FORCE A REDRAW
         miniGame.getCanvas().repaint();
     }
     
-        
+    
     public void moveViewport(int incX, int incY)
     {
         // MOVE THE VIEWPORT
@@ -522,6 +733,75 @@ public class PathXDataModel extends MiniGameDataModel
         
         // AND NOW FORCE A REDRAW
         miniGame.getCanvas().repaint();
+    }
+    public void initLevelStorage()
+    {
+        
+        PathXGameLevel GameLevel;
+        GameLevel = new PathXGameLevel();
+        
+        GameLevel.setMoney(TOTALMONEYLEVEL1);
+        GameLevel.setBankBalance(0);
+        GameLevel.setLevelName(NAMELEVEL1);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL2);
+        GameLevel.setMoney(TOTALMONEYLEVEL2);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL3);
+        GameLevel.setMoney(TOTALMONEYLEVEL3);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL4);
+        GameLevel.setMoney(TOTALMONEYLEVEL4);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL5);
+        GameLevel.setMoney(TOTALMONEYLEVEL5);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL6);
+        GameLevel.setMoney(TOTALMONEYLEVEL6);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL7);
+        GameLevel.setMoney(TOTALMONEYLEVEL7);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL8);
+        GameLevel.setMoney(TOTALMONEYLEVEL8);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL9);
+        GameLevel.setMoney(TOTALMONEYLEVEL9);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL10);
+        GameLevel.setMoney(TOTALMONEYLEVEL10);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL11);
+        GameLevel.setMoney(TOTALMONEYLEVEL11);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL12);
+        GameLevel.setMoney(TOTALMONEYLEVEL12);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL13);
+        GameLevel.setMoney(TOTALMONEYLEVEL13);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL14);
+        GameLevel.setMoney(TOTALMONEYLEVEL14);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL15);
+        GameLevel.setMoney(TOTALMONEYLEVEL15);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL16);
+        GameLevel.setMoney(TOTALMONEYLEVEL16);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL17);
+        GameLevel.setMoney(TOTALMONEYLEVEL17);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL18);
+        GameLevel.setMoney(TOTALMONEYLEVEL18);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL19);
+        GameLevel.setMoney(TOTALMONEYLEVEL19);
+        levelLocation.add(GameLevel);
+        GameLevel.setLevelName(NAMELEVEL20);
+        GameLevel.setMoney(TOTALMONEYLEVEL20);
+        levelLocation.add(GameLevel);
+        
     }
     
     
@@ -532,9 +812,19 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public void initTiles()
     {
-        PropertiesManager props = PropertiesManager.getPropertiesManager();
-        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
-        SpriteType sT;
+        
+        stackCars = ((PathXMiniGame)miniGame).getFileManager().tileToRender();
+        carsToRender = stackCars;
+        ArrayList<Integer> zombiePath = this.zombiePath();
+        ArrayList<Integer> policePath = this.policePath();
+        ArrayList<Integer> banditPath = this.banditPath();
+        
+        for(PathXCar c: stackCars)
+        {
+            c.initCarData(this);
+        }
+        
+        
     }
     
     // HELPER METHOD FOR INITIALIZING OUR WIZARD AND WITCHES TRADING CARD TILES
@@ -744,11 +1034,144 @@ public class PathXDataModel extends MiniGameDataModel
     /**
      * This method sets up and starts the animation shown after a game is won.
      */
-    public void playWinAnimation()
+    public void moveAnimation()
     {
+        
+        ArrayList<Integer> movePath = new ArrayList<Integer>();
+        ArrayList<Intersection> intersection = ((PathXMiniGame)miniGame).getFileManager().getPlayerPath();
+        
+        int j =0;
+        for(Intersection intsec : intersection )
+        {
+            if(j==1)
+            {
+                targetX =intsec.getX();
+                targetY = intsec.getY();
+            }
+            if(j>1)
+            {
+                
+                movePath.add(intsec.getX());
+                movePath.add(intsec.getY());
+            }
+            j++;
+        }
+        
+        moveAllTilesToStack();
+        
+        for (int i = 0; i < stackCars.size(); i++)
+        {
+            // GET EACH TILE
+            PathXCar tile = stackCars.get(i);
+            
+            if(tile.getCarType()==PLAYER)
+                // MAKE SURE IT'S MOVED EACH FRAME
+            {
+           
+                    tile.setTarget(targetX, targetY);
+                    movingCars.add(tile);
+                    tile.initRoadPath(movePath);
+                
+                
+            }
+        }
         
     }
     
+    public boolean isPlayerMoving()
+    {
+        for (int i = 0; i < stackCars.size(); i++)
+        {
+            // GET EACH TILE
+            PathXCar tile = stackCars.get(i);
+            
+            if(tile.getCarType()==PLAYER)
+             return tile.isMovingToTarget();
+        }
+        return false;
+    }
+    public void switchCarOrder()
+    {
+        
+        Deque<Integer> zombieStack = new ArrayDeque<Integer>();
+        for(int i =0; i< zombiePath.size(); i++)
+        {
+            zombieStack.push(zombiePath.get(i));
+        }
+        zombiePath = new ArrayList<Integer>();
+        while(!zombieStack.isEmpty())
+        {
+            zombiePath.add(zombieStack.pop());
+        }
+        
+        
+        Deque<Integer> policeStack = new ArrayDeque<Integer>();
+        for(int i =0; i< policePath.size(); i++)
+        {
+            policeStack.push(policePath.get(i));
+        }
+        policePath = new ArrayList<Integer>();
+        while(!policeStack.isEmpty())
+        {
+            policePath.add(policeStack.pop());
+        }
+        
+        Deque<Integer> banditStack = new ArrayDeque<Integer>();
+        for(int i =0; i< banditPath.size(); i++)
+        {
+            banditStack.push(banditPath.get(i));
+        }
+        banditPath = new ArrayList<Integer>();
+        while(!banditStack.isEmpty())
+        {
+            banditPath.add(zombieStack.pop());
+        }
+        //carsMovingAround();
+    }
+    public void carsMovingAround()
+    {
+        
+        ArrayList<Integer> zombiePath = this.zombiePath();
+        ArrayList<Integer> policePath = this.policePath();
+        ArrayList<Integer> banditPath = this.banditPath();
+        
+        policeTargetX = policePath.get(2);
+        policeTargetY = policePath.get(3);
+        banditTargetX = banditPath.get(2);
+        banditTargetY = banditPath.get(2);
+        zombieTargetX = zombiePath.get(2);
+        zombieTargetY = zombiePath.get(3);
+        
+        moveAllTilesToStack();
+        
+        for (int i = 0; i < stackCars.size(); i++)
+        {
+            // GET EACH TILE
+            PathXCar tile = stackCars.get(i);
+            if(tile.getCarType()==ZOMBIE)
+                // MAKE SURE IT'S MOVED EACH FRAME
+            {
+                tile.setTarget(zombieTargetX, zombieTargetY);
+                movingCars.add(tile);
+                tile.initRoadPath(zombiePath);
+            }
+            if(tile.getCarType()==POLICE)
+                // MAKE SURE IT'S MOVED EACH FRAME
+            {
+                tile.setTarget(policeTargetX, policeTargetY);
+                movingCars.add(tile);
+                tile.initRoadPath(policePath);
+            }
+            if(tile.getCarType()==BANDIT)
+                // MAKE SURE IT'S MOVED EACH FRAME
+            {
+                tile.setTarget(banditTargetX, banditTargetY);
+                movingCars.add(tile);
+                tile.initRoadPath(banditPath);
+            }
+        }
+        
+    }
     /**
      * Gets the next swap operation using the list generated by the proper
      * algorithm.
@@ -792,8 +1215,8 @@ public class PathXDataModel extends MiniGameDataModel
      * @param y The y-axis pixel location of the mouse click.
      */
     //public int getMousePressX() { return mousePressX;}
-   // public int getMousePressY() { return mousePressY;}
-            
+    // public int getMousePressY() { return mousePressY;}
+    
     @Override
     public void checkMousePressOnSprites(MiniGame game, int x, int y)
     {
@@ -804,31 +1227,28 @@ public class PathXDataModel extends MiniGameDataModel
         mousePressX = x;
         mousePressY = y;
         
-      
-         // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
-      
-         mode = PathXCarState.PLAYER_SELECTED;
-     
+        
+        // IF WE ARE CURRENTLY DRAGGING AN INTERSECTION
+        
+        // mode = PathXCarState.PLAYER_SELECTED;
+        
         
         System.out.println("testing mouse press on for X:" + x+ "\t and for col "+col);
         
-       System.out.println("testing mouse press on for Y:" + y+ "\t and for row "+row);
-
+        System.out.println("testing mouse press on for Y:" + y+ "\t and for row "+row);
+        
         // DISABLE THE STATS DIALOG IF IT IS OPEN
         //  if (game.getGUIDialogs().get(STATS_DIALOG_TYPE).getState().equals(PathXCarState.VISIBLE_STATE.toString()))
-        {
+        
         //       game.getGUIDialogs().get(STATS_DIALOG_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         //       return;
     }
-        
-        
-    }
-     /**
+    /**
      * Responds to when the user presses the mouse button on the canvas,
-     * it may respond in a few different ways depending on what the 
+     * it may respond in a few different ways depending on what the
      * current edit mode is.
      */
-   
+    
     
     
     
@@ -859,6 +1279,19 @@ public class PathXDataModel extends MiniGameDataModel
     @Override
     public void reset(MiniGame game)
     {
+        // PUT ALL THE TILES IN ONE PLACE AND MAKE THEM VISIBLE
+        moveAllTilesToStack();
+        
+        // RESET THE BAD SPELLS COUNTER
+        
+        
+        // RANDOMLY ORDER THEM
+        moveAllTilesToStack();
+        
+        
+        
+        // SEND THE TILES OFF TO THE GRID TO BE SORTED
+        
         
         // START THE CLOCK
         startTime = new GregorianCalendar();
@@ -866,8 +1299,16 @@ public class PathXDataModel extends MiniGameDataModel
         // AND START ALL UPDATES
         beginGame();
         
+        
     }
     
+    public void resetPathXCar()
+    {
+        zombiePath = new ArrayList<Integer>();
+        policePath = new ArrayList<Integer>();
+        banditPath = new ArrayList<Integer>();
+        
+    }
     /**
      * Called each frame, this method updates all the game objects.
      *
@@ -876,16 +1317,14 @@ public class PathXDataModel extends MiniGameDataModel
     @Override
     public void updateAll(MiniGame game)
     {
-      
+        
         try
         {
             // MAKE SURE THIS THREAD HAS EXCLUSIVE ACCESS TO THE DATA
             game.beginUsingData();
             
             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
-           
-            
-           for (int i = 0; i < movingCars.size(); i++)
+            for (int i = 0; i < movingCars.size(); i++)
             {
                 // GET THE NEXT TILE
                 PathXCar tile = movingCars.get(i);
@@ -895,17 +1334,24 @@ public class PathXDataModel extends MiniGameDataModel
                 
                 // IF IT'S REACHED ITS DESTINATION, REMOVE IT
                 // FROM THE LIST OF MOVING TILES
-                if (!tile.isMovingToTarget())
+                if (!tile.isMovingToTarget() && tile.getCarType() !=ZOMBIE && tile.getCarType() != BANDIT)
                 {
                     movingCars.remove(tile);
                 }
+                
+                // if (!tile.isMovingToTarget() && tile.getCarType() ==ZOMBIE || tile.getCarType() == BANDIT)
+                if(tile.getLoop())
+                {
+                    movingCars.remove(tile);
+                    switchCarOrder();
+                }
+                
             }
             
             // IF THE GAME IS STILL ON, THE TIMER SHOULD CONTINUE
             if (inProgress())
             {
-                // KEEP THE GAME TIMER GOING IF THE GAME STILL IS
-                endTime = new GregorianCalendar();
+                updateTime();
             }
         } finally
         {
@@ -921,13 +1367,13 @@ public class PathXDataModel extends MiniGameDataModel
      * the GUI.
      *
      * @param game The Sorting Hat game about which to display info.
-*/
+     */
     /**
      * Responds to when the user presses the mouse button on the canvas,
-     * it may respond in a few different ways depending on what the 
+     * it may respond in a few different ways depending on what the
      * current edit mode is.
      */
-         
+    
     @Override
     public void updateDebugText(MiniGame game)
     {

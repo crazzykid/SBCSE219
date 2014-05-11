@@ -6,8 +6,11 @@
 
 package pathx_data;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
 import static pathx.PathXConstants.*;
 import pathx_file.Intersection;
+import pathx_file.PathXSpecial;
 import pathx_file.Road;
 /**
  *
@@ -23,7 +26,7 @@ public class PathXGameLevel
     private boolean stageUnlock;
     int playerX;
     int playerY;
-            
+       private TreeMap<String, PathXSpecial> specials;      
     private boolean load;
     // EVERY LEVEL HAS A NAME
     String levelName;
@@ -51,17 +54,13 @@ public class PathXGameLevel
     int numBandits;
     int numZombies;
 
-    
-   
-    
-    
     private int levelArray[];
     public PathXGameLevel()
     {
         completeLevel = false;
         levelState = WHITE_STATE;
         stageUnlock = true;
-        
+        specials= new TreeMap<String,PathXSpecial>();
         playerX = LEVEL1X;
         playerY =LEVEL1Y;
         levelName = "";
@@ -210,5 +209,23 @@ public class PathXGameLevel
         levelTotal = money;
     }
     
+    public void addSpecial(PathXSpecial add)
+    {
+        specials.put(add.getId(), add);
+    }
    
+    public void removeSpecial (int i)
+    {
+        specials.remove(i);
+    }
+    
+    public Iterator getSpecial()
+    {
+        return specials.values().iterator();
+    }
+    
+    public void removeSpecial(String id)
+    {
+        specials.remove(id);
+    }
 }

@@ -45,11 +45,11 @@ public class PathXConstants
     public static final String EXIT_GAME_BUTTON_TYPE = "EXIT_GAME_BUTTON_TYPE";
     public static final String GAME_HOME_BUTTON_TYPE = "GAME_HOME_BUTTON_TYPE";
     public static final String GAME_HOME_BUTTON_SETTING_TYPE = "GAME_HOME_SETTING_BUTTON_TYPE";
-     public static final String GAME_BUTTON_ZOMBIE_TYPE = "GAME_BUTTON_ZOMBIE_TYPE";
-      public static final String GAME_BUTTON_PLAYER_TYPE = "GAME_BUTTON_PLAYER_TYPE";
-       public static final String GAME_BUTTON_POLICE_TYPE = "GAME_BUTTON_POLICE_TYPE";
-        public static final String GAME_BUTTON_BANDIT_TYPE = "GAME_BUTTON_BANDIT_TYPE";
-        
+    public static final String GAME_BUTTON_ZOMBIE_TYPE = "GAME_BUTTON_ZOMBIE_TYPE";
+    public static final String GAME_BUTTON_PLAYER_TYPE = "GAME_BUTTON_PLAYER_TYPE";
+    public static final String GAME_BUTTON_POLICE_TYPE = "GAME_BUTTON_POLICE_TYPE";
+    public static final String GAME_BUTTON_BANDIT_TYPE = "GAME_BUTTON_BANDIT_TYPE";
+    
     public static final String GAME_X_BUTTON_TYPE = "GAME_X_BUTTON_TYPE";
     public static final String GAME_SETTINGS_X_BUTTON_TYPE = "GAME_SETTINGS_X_BUTTON_TYPE";
     public static final String GAME_START_BUTTON_TYPE = "GAME_START_BUTTON_TYPE";
@@ -57,11 +57,11 @@ public class PathXConstants
     public static final String GAME_SCROLL_RIGHT_BUTTON_TYPE = "GAME_SCROLL_RIGHT_BUTTON_TYPE";
     public static final String GAME_SCROLL_UP_BUTTON_TYPE = "GAME_SCROLL_UP_BUTTON_TYPE";
     public static final String GAME_SCROLL_DOWN_BUTTON_TYPE = "GAME_SCROLL_DOWN_BUTTON_TYPE";
-      public static final String GAME_SCROLL_PAUSE_BUTTON_TYPE = "GAME_SCROLL_PAUSE_BUTTON_TYPE";
+    public static final String GAME_SCROLL_PAUSE_BUTTON_TYPE = "GAME_SCROLL_PAUSE_BUTTON_TYPE";
     public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
     
     public static final String HELP_QUIT_TYPE = "HELP_QUIT_TYPE";
-       public static final String HELP_QUIT_TYPE2 = "HELP_QUIT_TYPE2";
+    public static final String HELP_QUIT_TYPE2 = "HELP_QUIT_TYPE2";
     public static final String GAME_PLAY_LEVEL_RED_TYPE1 = "GAME_PLAY_LEVEL_RED_TYPE1";
     public static final String GAME_PLAY_LEVEL_WHITE_TYPE1 = "GAME_PLAY_LEVEL_WHITE_TYPE1";
     public static final String GAME_PLAY_LEVEL_GREEN_TYPE1 = "GAME_PLAY_LEVEL_GREEN_TYPE1";
@@ -128,8 +128,8 @@ public class PathXConstants
     
     public static final String GAME_HELP_SCREEN_STATE = "GAME_HELP_SCREEN_STATE";
     
-        public static final String GAME_DIALOG_STATE = "GAME_DIALOG_STATE";
-
+    public static final String GAME_DIALOG_STATE = "GAME_DIALOG_STATE";
+    
     
     // public static final String BACK_BUTTON_TYPE = "BACK_BUTTON_TYPE";
     public static final String PLAY_GAME_BUTTON_TYPE = "PLAY_GAME_BUTTON_TYPE";
@@ -163,39 +163,80 @@ public class PathXConstants
     public static final String SCROLL_DOWN = "SCROLL_DOWN";
     
     public static final String LEVEL1 = "LEVEL1";
-      public static final String LEVEL = "LEVEL";
-        public static final String LEVEL2 = "LEVEL2";
-          public static final String LEVEL3 = "LEVEL3";
-            public static final String LEVEL4 = "LEVEL4";
-              public static final String LEVEL5 = "LEVEL5";
-                public static final String LEVEL6 = "LEVEL6";
-                  public static final String LEVEL7 = "LEVEL7";
-                   public static final String LEVEL8 = "LEVEL8";
-                    public static final String LEVEL9 = "LEVEL9";
-                     public static final String LEVEL10 = "LEVEL10";
-                      public static final String LEVEL11 = "LEVEL11";
-                       public static final String LEVEL12 = "LEVEL12";
-                        public static final String LEVEL13 = "LEVEL13";
-                         public static final String LEVEL14 = "LEVEL14";
-                          public static final String LEVEL15 = "LEVEL15";
-                           public static final String LEVEL16 = "LEVEL16";
-                            public static final String LEVEL17 = "LEVEL17";
-                             public static final String LEVEL18 = "LEVEL18";
-                              public static final String LEVEL19 = "LEVEL19";
-                               public static final String LEVEL20 = "LEVEL20"; 
-                       
-                               public static final String POLICE = "POLICE";
-                               
-                                public static final String BANDIT = "BANDIT";
-                                public static final String ZOMBIE = "ZOMBIE";
-                               
-                                      public static final String PLAYER = "PLAYER";
-                               
-                               
-                  
+    public static final String LEVEL = "LEVEL";
+    public static final String LEVEL2 = "LEVEL2";
+    public static final String LEVEL3 = "LEVEL3";
+    public static final String LEVEL4 = "LEVEL4";
+    public static final String LEVEL5 = "LEVEL5";
+    public static final String LEVEL6 = "LEVEL6";
+    public static final String LEVEL7 = "LEVEL7";
+    public static final String LEVEL8 = "LEVEL8";
+    public static final String LEVEL9 = "LEVEL9";
+    public static final String LEVEL10 = "LEVEL10";
+    public static final String LEVEL11 = "LEVEL11";
+    public static final String LEVEL12 = "LEVEL12";
+    public static final String LEVEL13 = "LEVEL13";
+    public static final String LEVEL14 = "LEVEL14";
+    public static final String LEVEL15 = "LEVEL15";
+    public static final String LEVEL16 = "LEVEL16";
+    public static final String LEVEL17 = "LEVEL17";
+    public static final String LEVEL18 = "LEVEL18";
+    public static final String LEVEL19 = "LEVEL19";
+    public static final String LEVEL20 = "LEVEL20";
+    
+    public static final String POLICE = "POLICE";
+    
+    public static final String BANDIT = "BANDIT";
+    public static final String ZOMBIE = "ZOMBIE";
+    
+    public static final String PLAYER = "PLAYER";
+    
+    
+    public static final String NAMELEVEL1 = "\tStage 1 \nThe California Lemonade Stand Circuit";
+    public static final String NAMELEVEL2 = "\tStage 2 \nThe California Lemonade Stand Circuit";
+    public static final String NAMELEVEL3 = "\tStage 3 \nThe California Lemonade Stand Circuit";
+    public static final String NAMELEVEL4 = "\tStage 4 \nThe Silicon Valley Tech Circuit";
+    public static final String NAMELEVEL5 = "\tStage 5 \nThe Silicon Valley Tech Circuit";
+    public static final String NAMELEVEL6 = "\tStage 6 \nThe Silicon Valley Tech Circuit";
+    public static final String NAMELEVEL7 = "\tStage 7 \nThe Nevada Casino Circuit";
+    public static final String NAMELEVEL8 = "\tStage 8 \nThe Nevada Casino Circuit";
+    public static final String NAMELEVEL9 = "\tStage 9 \nThe Nevada Casino Circuit";
+    public static final String NAMELEVEL10 = "\tStage 10 \nThe Old West Bank Circuit";
+    public static final String NAMELEVEL11 = "\tStage 11 \nThe Old West Bank Circuit";
+    public static final String NAMELEVEL12 = "\tStage 12 \nThe Old West Bank Circuit";
+    public static final String NAMELEVEL13 = "\tStage 13 \nThe Florida Retirees Circuit";
+    public static final String NAMELEVEL14 = "\tStage 14 \nThe Florida Retirees Circuit";
+    public static final String NAMELEVEL15 = "\tStage 15 \nThe Florida Retirees Circuit";
+    public static final String NAMELEVEL16 = "\tStage 16 \nThe I-95 Corridor Circuit";
+    public static final String NAMELEVEL17 = "\tStage 17 \nThe I-95 Corridor Circuit";
+    public static final String NAMELEVEL18 = "\tStage 18 \nThe I-95 Corridor Circuit";
+    public static final String NAMELEVEL19 = "\tStage 19 \nThe Wall Street Circuit";
+    public static final String NAMELEVEL20 = "\tStage 20 \nThe Wall Street Circuit";
+    
     
     //    public static final int SCROLL_SPEED = 6;
     // ANIMATION SPEED
+    public static final int TOTALMONEYLEVEL = 0;
+    public static final int TOTALMONEYLEVEL1 = 80;
+    public static final int TOTALMONEYLEVEL2 = 120;
+    public static final int TOTALMONEYLEVEL3 = 180;
+    public static final int TOTALMONEYLEVEL4 = 280;
+    public static final int TOTALMONEYLEVEL5 = 350;
+    public static final int TOTALMONEYLEVEL6 = 400;
+    public static final int TOTALMONEYLEVEL7 = 520;
+    public static final int TOTALMONEYLEVEL8 = 610;
+    public static final int TOTALMONEYLEVEL9 = 699;
+    public static final int TOTALMONEYLEVEL10 = 785;
+    public static final int TOTALMONEYLEVEL11 = 800;
+    public static final int TOTALMONEYLEVEL12 = 830;
+    public static final int TOTALMONEYLEVEL13 = 840;
+    public static final int TOTALMONEYLEVEL14 = 890;
+    public static final int TOTALMONEYLEVEL15 = 910;
+    public static final int TOTALMONEYLEVEL16 = 930;
+    public static final int TOTALMONEYLEVEL17 = 955;
+    public static final int TOTALMONEYLEVEL18 = 970;
+    public static final int TOTALMONEYLEVEL19 = 985;
+    public static final int TOTALMONEYLEVEL20 = 1000;
     
     public static final int LEVEL_OFFSET_LOCATION_X = 50;
     public static final int LEVEL_OFFSET_LOCATION_Y = 320;
@@ -254,9 +295,9 @@ public class PathXConstants
     public static final int VIEWPORT_OFFSET_X = 350;
     public static final int VIEWPORT_OFFSET_Y = 350;
     
-     public static final int LEVEL1X  = VIEWPORT_OFFSET_X-190;
+    public static final int LEVEL1X  = VIEWPORT_OFFSET_X-160;
     public static final int LEVEL1Y  = VIEWPORT_OFFSET_X-220;
-         
+    
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
     
@@ -280,12 +321,12 @@ public class PathXConstants
     public static final int COLOR_INC = 10;
     
     
-     public static final int ZOMBIEID = 10;
-      public static final int BANDITID = 100;
-       public static final int POLICEID = 200;
-      
+    public static final int ZOMBIEID = 10;
+    public static final int BANDITID = 100;
+    public static final int POLICEID = 200;
+    
     // FOR MOVING TILES AROUND
-    public static final int MAX_TILE_VELOCITY = 50;
+    public static final int MAX_TILE_VELOCITY = 20;
     
     // UI CONTROLS POSITIONS IN THE GAME SCREEN
     public static final int NORTH_PANEL_HEIGHT = 130;
@@ -301,7 +342,7 @@ public class PathXConstants
     public static final int HOME_BUTTON_SETTING_Y = 5;
     
     
-     public static final int PLAYERLEVEL1X = 50;
+    public static final int PLAYERLEVEL1X = 50;
     public static final int PLAYERLEVEL1Y = 51;
     
     
@@ -383,9 +424,9 @@ public class PathXConstants
     public static final long MILLIS_IN_AN_HOUR  = 1000 * 60 * 60;
     
     // USED FOR DOING OUR VICTORY ANIMATION
-      public static final int MOVE_PATH_NODES = 5;
+    public static final int MOVE_PATH_NODES = 5;
     public static final int MOVE_PATH_TOLERANCE = 100;
-     public static final int MOVE_PATH_COORD = 100;
+    public static final int MOVE_PATH_COORD = 100;
     
     // COLORS USED FOR RENDERING VARIOUS THINGS, INCLUDING THE
     // COLOR KEY, WHICH REFERS TO THE COLOR TO IGNORE WHEN
@@ -395,24 +436,25 @@ public class PathXConstants
     public static final Color COLOR_IMGAE = Color.GRAY;
     public static final Color COLOR_TEXT_DISPLAY = new Color (10, 160, 10);
     public static final Color COLOR_STATS = new Color(0, 60, 0);
-    public static final Color COLOR_ALGORITHM_HEADER = Color.WHITE;
+    public static final Color COLOR_HEADER = Color.BLACK;
     
     // FONTS USED DURING FOR TEXTUAL GAME DISPLAYS
     public static final Font FONT_TEXT_DISPLAY = new Font(Font.SANS_SERIF, Font.BOLD, 48);
     public static final Font FONT_DEBUG_TEXT = new Font(Font.MONOSPACED, Font.BOLD, 14);
     public static final Font FONT_STATS = new Font(Font.MONOSPACED, Font.BOLD, 20);
-    public static final Font FONT_SORT_NAME = new Font(Font.MONOSPACED, Font.BOLD, 20);
+    public static final Font FONT_NAME = new Font(Font.SANS_SERIF, Font.BOLD, 38);
+    public static final String BALANCE = "BALANCE  : $";
+    public static final String BANK =    "BANK        : $";
+
+
     
     
-    
-    
-    
-     // LEVEL EDITOR PATHS
+    // LEVEL EDITOR PATHS
     public static final String  DATA_PATH               = "data/";
     public static final String  BUTTONS_PATH            = DATA_PATH + "buttons/";
     public static final String  CURSORS_PATH            = DATA_PATH + "cursors/";
     public static final String  LEVELS_PATH             = DATA_PATH + "levels/";
-
+    
     // BUTTON IMAGES
     public static final String  NEW_BUTTON_FILE     = BUTTONS_PATH + "New.png";
     public static final String  OPEN_BUTTON_FILE    = BUTTONS_PATH + "Open.png";
@@ -426,7 +468,7 @@ public class PathXConstants
     public static final String  POLICE_LABEL_FILE   = BUTTONS_PATH + "Police.png";
     public static final String  BANDITS_LABEL_FILE  = BUTTONS_PATH + "Bandits.png";
     public static final String  ZOMBIES_LABEL_FILE  = BUTTONS_PATH + "Zombies.png";
-        
+    
     // BUTTON MOUSE OVER TEXT/ACTION COMMANDS
     public static final String NEW_COMMAND          = "New Level";
     public static final String OPEN_COMMAND         = "Open Level";
@@ -435,7 +477,7 @@ public class PathXConstants
     public static final String EXIT_COMMAND         = "Exit";
     public static final String BG_IMAGE_COMMAND     = "Select Background Image";
     public static final String START_IMAGE_COMMAND  = "Select Start Image";
-    public static final String DEST_IMAGE_COMMAND   = "Selecct Destination Image"; 
+    public static final String DEST_IMAGE_COMMAND   = "Selecct Destination Image";
     public static final String MONEY_COMMAND        = "Update $ Value of Level";
     public static final String POLICE_COMMAND       = "Inc/Dec Number of Police";
     public static final String BANDITS_COMMAND      = "Inc/Dec Number of Bandits";
@@ -446,11 +488,30 @@ public class PathXConstants
     public static final String ADD_INT_CURSOR_IMG   = "AddIntersectionCursor.png";
     public static final String ADD_ROAD_CURSOR_IMG  = "AddRoadCursor.png";
     
+    
+    
+    public static final String MAKE_LIGHT_GREEN = "IMGAE_BUTTON_GREEN_LIGHT.png";
+    public static final String MAKE_LIGHT_RED = "IMGAE_BUTTON_RED_LIGHT.png";
+    public static final String DECREASE_SPEED_LIMIT = "IMGAE_BUTTON_DECREASE_SPEED.png";
+    public static final String INCREASE_SPEED_LIMIT = "IMGAE_BUTTON_INCREASE_SPEED.png";
+    public static final String INCREASE_PLAYER_SPEED = "IMGAE_BUTTON_INCREASE_PLAYER_SPEED.png";
+    public static final String FLAT_TIRE            = "IMGAE_BUTTON_FLAT_TIRE.png";
+    public static final String EMPTY_GAS_TANK       = "IMGAE_BUTTON_EMPTY_GAS.png";
+    public static final String CLOSE_ROAD           = "IMGAE_BUTTON_ROAD_CLOSE.png";
+    public static final String STEAL                = "IMGAE_BUTTON_STEAL.png";
+    public static final String MIND_CONTROL         = "IMGAE_BUTTON_MIND_CONTROL.png";
+    public static final String INTANGIBILITY       = "IMGAE_BUTTON_INTANGIBILITY.png";
+    public static final String MINDLESS_TERROR = "IMGAE_BUTTON_MIND_TERROR.png";
+    public static final String FLYING           = "IMGAE_BUTTON_FLY.png";
+    public static final String INVINCIBILITY =     "IMGAE_BUTTON_INVINCIBILITY.png";
+    
+    
+    
     // DEFAULT IMAGE FILES
     public static final String DEFAULT_BG_IMG       = "DeathValleyBackground.png";
     public static final String DEFAULT_START_IMG    = "DefaultStartLocation.png";
     public static final String DEFAULT_DEST_IMG     = "DefaultDestination.png";
-        
+    
     /***** DIALOG MESSAGES AND TITLES *****/
     // DIALOG BOX MESSAGES TO GIVE FEEDBACK BACK TO THE USER
     public static final String LEVEL_NAME_REQUEST_TEXT              = "What do you want to name your level?";
@@ -467,7 +528,7 @@ public class PathXConstants
     public static final String LEVEL_SAVED_TEXT                     = "Level File has been Saved";
     public static final String LEVEL_SAVED_TITLE_TEXT               = "Level File Saved";
     public static final String LEVEL_SAVING_ERROR_TEXT              = "An Error Occured While Saving the Level";
-    public static final String LEVEL_SAVING_ERROR_TITLE_TEXT        = "Level Saving Error";    
+    public static final String LEVEL_SAVING_ERROR_TITLE_TEXT        = "Level Saving Error";
     public static final String PROMPT_TO_SAVE_TEXT                  = "Would you like to save your Level?";
     public static final String PROMPT_TO_SAVE_TITLE_TEXT            = "Save your Level?";
     
@@ -478,11 +539,11 @@ public class PathXConstants
     public static final String APP_NAME                     = "PathX Level Editor";
     public static final String APP_NAME_FILE_NAME_SEPARATOR = " - ";
     public static final String PNG_FORMAT_NAME              = "png";
-    public static final String PNG_FILE_EXTENSION           = "." + PNG_FORMAT_NAME;   
+    public static final String PNG_FILE_EXTENSION           = "." + PNG_FORMAT_NAME;
     
     // LEVEL EDITOR UI DIMENSIONS
-  //  public static final int WINDOW_WIDTH = 1000;
-  //  public static final int WINDOW_HEIGHT = 650;
+    //  public static final int WINDOW_WIDTH = 1000;
+    //  public static final int WINDOW_HEIGHT = 650;
     public static final int BUTTON_INSETS = 2;
     public static final int BUTTON_WIDTH = 32;
     public static final int BUTTON_HEIGHT = 32;
@@ -495,7 +556,7 @@ public class PathXConstants
     public static final int INT_STROKE = 3;
     public static final int ONE_WAY_TRIANGLE_HEIGHT = 40;
     public static final int ONE_WAY_TRIANGLE_WIDTH = 60;
-
+    
     // INITIAL START/DEST LOCATIONS
     public static final int DEFAULT_START_X = 32;
     public static final int DEFAULT_START_Y = 100;
@@ -520,7 +581,7 @@ public class PathXConstants
     // OTHER UI SETTINGS
     public static final Border  TOOLBAR_BORDER                  = BorderFactory.createEtchedBorder();
     public static final Border  LABELED_SPINNER_PANEL_BORDER    = BorderFactory.createEtchedBorder();
-
+    
     // DEFAULT COLORS
     public static final Color   INT_OUTLINE_COLOR   = Color.BLACK;
     public static final Color   HIGHLIGHTED_COLOR = Color.YELLOW;
@@ -533,15 +594,15 @@ public class PathXConstants
     public static final String MOUSE_SCREEN_POSITION_TITLE = "Screen Mouse Position: ";
     public static final String MOUSE_LEVEL_POSITION_TITLE = "Level Mouse Position: ";
     public static final String VIEWPORT_POSITION_TITLE = "Viewport Position: ";
-
+    
     // FOR POSITIONING THE STATS
     public static final int STATS_X = 20;
     public static final int STATS_Y_DIFF = 20;
     public static final int MOUSE_SCREEN_POSITION_Y = 20;
     public static final int MOUSE_LEVEL_POSITION_Y = MOUSE_SCREEN_POSITION_Y + STATS_Y_DIFF;
     public static final int VIEWPORT_POSITION_Y = MOUSE_LEVEL_POSITION_Y + STATS_Y_DIFF;
-
-    // FOR LOADING STUFF FROM OUR LEVEL XML FILES    
+    
+    // FOR LOADING STUFF FROM OUR LEVEL XML FILES
     // THIS IS THE NAME OF THE SCHEMA
     public static final String  LEVEL_SCHEMA = "PathXLevelSchema.xsd";
     
@@ -558,7 +619,7 @@ public class PathXConstants
     public static final String POLICE_NODE = "police";
     public static final String BANDITS_NODE = "bandits";
     public static final String ZOMBIES_NODE = "zombies";
-
+    
     // AND THE ATTRIBUTES FOR THOSE NODES
     public static final String NAME_ATT = "name";
     public static final String IMAGE_ATT = "image";
@@ -572,28 +633,14 @@ public class PathXConstants
     public static final String ONE_WAY_ATT = "one_way";
     public static final String AMOUNT_ATT = "amount";
     public static final String NUM_ATT = "num";
-
+    
     // FOR NICELY FORMATTED XML OUTPUT
     public static final String XML_INDENT_PROPERTY = "{http://xml.apache.org/xslt}indent-amount";
     public static final String XML_INDENT_VALUE = "5";
     public static final String YES_VALUE = "Yes";
- 
-    // HTML FOR THE HELP DIALOG
-    public static final String HELP_DISPLAY = 
-                "<html>"
-            +   " <body>"
-            +   "  <h2>Help for the PathX Level Editor</h2>"
-            +   "  <p>Key Commands</p>"
-            +   "  <table border=\"0\">"
-            +   "   <tr><td><strong>A</strong></td><td>Add a New Intersection (i.e. node)</td></tr>"
-            +   "   <tr><td><strong>Delete</strong></td><td>Delete Selected Road or Intersection</td></tr>"
-            +   "   <tr><td><strong>Escape</strong></td><td>Exit Current Edit Operation</td></tr>"
-            +   "   <tr><td><strong>H</strong></td><td>Open Help Dialog</td></tr>"
-            +   "   <tr><td><strong>R</strong></td><td>Add a New Road</td></tr>"
-            +   "   <tr><td><strong>S</strong></td><td>Decrease Speed Limit for Selected Road</td></tr>"
-            +   "   <tr><td><strong>W</strong></td><td>Increase Speed Limit for Selected Road</td></tr>"
-            +   "   <tr><td><strong>Z</strong></td><td>Make Selected Road One Way</td></tr>"
-            +   "  </table>"
-            +   " </body>"
-            +   "</html>";
+    
+       public static final int TEMP_TILE_Y = 0;
+         public static final int TEMP_TILE_X = STATS_X + 280 + CONTROLS_MARGIN;
+    public static final int BALANCE_X = 280;
+    public static final int  BALANCE_Y = 45;
 }

@@ -27,10 +27,12 @@ import static pathx.PathXConstants.*;
 import pathx.PathX.PathXPropertyType;
 import pathx_data.PathXRecord;
 import pathX_ui.PathXCarState;
+import static pathX_ui.PathXCarState.MOUSE_OVER_STATE;
 import static pathX_ui.PathXCarState.PLAYER_SELECTED;
 import pathx_data.PathXGameLevel;
 import static pathx_data.PathXGameLevel.*;
 import pathx_file.Intersection;
+import pathx_file.PathXSpecial;
 import pathx_file.Road;
 
 /**
@@ -194,12 +196,20 @@ public class PathXPanel extends JPanel
                    
                 if(((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE))
                 {
+                    int i =0;
                     renderLevelBackground(g2);
                     renderRoads(g2);
                     renderIntersections(g2);
                     //renderPlayer(g2);
-                   renderPlayerTiles(g); 
-                   renderTile(g);
+                  // renderPlayerTiles(g); 
+                   renderTiles(g);
+                   
+                 //  if(i ==0)
+              //  data.carsMovingAround();
+                //data.switchCarOrder();
+                   
+                   renderSpecials(g);
+                    renderStats(g);
                 }
             }
             
@@ -319,6 +329,7 @@ public class PathXPanel extends JPanel
        
     public static double playerX = 0;
     public static double playerY = 0;
+    
     private void renderPlayer(Graphics2D g2)
     {
          Viewport viewport = data.getVport();
@@ -545,6 +556,23 @@ public class PathXPanel extends JPanel
         
     }
     
+    public void  renderSpecials(Graphics g)
+    {
+         Viewport viewport = data.getVport();
+        
+       Iterator it = data.getLevel().getSpecial();
+       
+       PathXSpecial spec;
+       while(it.hasNext())
+       {
+        
+           spec = (PathXSpecial)it.next();
+            Image img = game.loadImage(CURSORS_PATH + spec.getImageLocation());
+           
+             g.drawImage(img, spec.getX()-viewport.getViewportX(),spec.getY()-viewport.getViewportY(), img.getWidth(null), img.getHeight(null), null);
+       }
+        
+    }
     public void renderMap(Graphics g)
     {
         
@@ -594,10 +622,17 @@ public class PathXPanel extends JPanel
         
         for (Sprite st : levelSprites)
         {
-            if (st.getState().equals(PathXCarState.RED_STATE.toString()) )
+             
+            if (st.getState().equals(PathXCarState.RED_STATE.toString()) 
+                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
             {
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE1 )
+               
+             
+                    
+                if (st.getSpriteType().getSpriteTypeID().equals(GAME_PLAY_LEVEL_RED_TYPE1) )
                 {
+                   
+                    
                     if(levelLocation.getLevelState().equals(RED_STATE)
                             && !levelLocation.getCompletedLevel()
                             && levelLocation.getStageUnlock() )
@@ -618,6 +653,8 @@ public class PathXPanel extends JPanel
                         }
                         
                     }
+                    if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString())  )
+                        g.drawString(NAMELEVEL1, 300, 300);
                     
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE2 )
@@ -1020,7 +1057,8 @@ public class PathXPanel extends JPanel
                     
                 }
             }
-            if (st.getState().equals(PathXCarState.GREEN_STATE.toString()) )
+            if (st.getState().equals(PathXCarState.GREEN_STATE.toString()) 
+                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
             {
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE1 )
                 {
@@ -1035,12 +1073,15 @@ public class PathXPanel extends JPanel
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
                             
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                          //  g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
                             
                             st.setX(x);
                             st.setY(y);
                         }
                     }
+                   if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
+                           
+                        g.drawString(NAMELEVEL1, 300, 300);
                     
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE2 )
@@ -1443,9 +1484,11 @@ public class PathXPanel extends JPanel
                     
                 }
             }
-            if (st.getState().equals(PathXCarState.WHITE_STATE.toString()) )
+            if (st.getState().equals(PathXCarState.WHITE_STATE.toString()) 
+                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
             {
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE1 )
+                     
                 {
                     if(levelLocation.getLevelState().equals(WHITE_STATE)
                             && !levelLocation.getCompletedLevel()
@@ -1458,13 +1501,14 @@ public class PathXPanel extends JPanel
                             SpriteType r = st.getSpriteType();
                             Image img1 = r.getStateImage(st.getState());
                             
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
+                       //     g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                      //      
                             st.setX(x);
                             st.setY(y);
                         }
                     }
-                    
+                     if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
+                        g.drawString(NAMELEVEL1, 300, 300);
                 }
                 if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE2 )
                 {
@@ -1876,7 +1920,7 @@ public class PathXPanel extends JPanel
     
     public void renderHeader(Graphics g)
     {
-        g.setColor(COLOR_ALGORITHM_HEADER);
+       // g.setColor(COLOR_ALGORITHM_HEADER);
         
     }
     
@@ -1912,8 +1956,18 @@ public class PathXPanel extends JPanel
      */
     public void renderStats(Graphics g)
     {
+        Viewport viewport = data.getVport();
+       
+        String totalBalance = BALANCE+ data.getTotalBalance();
+                String Bank = BANK+data.getLevel().getMoney();
+            int xa = BALANCE_X;
+            int ya = BALANCE_Y;
+           
+            g.setFont(FONT_NAME);
+            g.setColor(COLOR_HEADER);
+            g.drawString(totalBalance, xa, ya);
+             g.drawString(Bank, xa, ya+35);
         
-        g.drawString("LEVEL CURRENTLY UNAVAILABLE",    300, 300);
       
     }
     
@@ -1923,11 +1977,29 @@ public class PathXPanel extends JPanel
      *
      * @param g the Graphics context of this panel.
      */
+   
     public void renderTiles(Graphics g)
     {
+        Iterator<PathXCar> tilesTorender = data.getAllTiles();
+         while (tilesTorender.hasNext())
+        {
+            PathXCar tile = tilesTorender.next();
+            renderTile(g, tile);
+        }
         
+        // THEN DRAW ALL THE MOVING TILES
+        Iterator<PathXCar> movingTiles = data.getMovingTiles();
+        while (movingTiles.hasNext())
+        {
+            PathXCar tile = movingTiles.next();
+            renderTile(g, tile);
+        }
+        
+        // AND THE SELECTED TILE, IF THERE IS ONE
+       // PathXCar selectedTile = data.getSelectedTile();
+      //  if (selectedTile != null)
+          //  renderTile(g, selectedTile);
     }
-    
     /**
      * Helper method for rendering the tiles that are currently moving.
      *
@@ -1935,19 +2007,19 @@ public class PathXPanel extends JPanel
      *
      * @param tileToRender Tile to render to this panel.
      */
-    public void renderTile(Graphics g)
+   public void renderTile(Graphics g, PathXCar tileToRender)
     {
-         ArrayList<PathXCar> tile = ((PathXMiniGame)game).getFileManager().tileToRender();
-         for(int i =0; i<tile.size();i++)
-         { PathXCar tileToRender = tile.get(i);
+        
+         if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) 
+                 && !tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
          
         // ONLY RENDER VISIBLE TILES
-        if (!tileToRender.getCarType().equals(PLAYER))
+       // if (!tileToRender.getCarType().equals(PLAYER))
         {
-            Viewport viewport = data.getViewport();
-            int correctedTileX = (int)(tileToRender.getX());
-            int correctedTileY = (int)(tileToRender.getY());
-            
+            Viewport viewport = data.getVport();
+            int correctedTileX = (int)(tileToRender.getX()  - viewport.getViewportX());
+            int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY());
+          
             // THEN THE TILE IMAGE
             SpriteType bgST = tileToRender.getSpriteType();
             Image img = bgST.getStateImage(tileToRender.getState());
@@ -1955,22 +2027,44 @@ public class PathXPanel extends JPanel
                     correctedTileY,
                     bgST.getWidth(), bgST.getHeight(), null);
         }
-         }
+          if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) 
+                 && tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
+         
+        // ONLY RENDER VISIBLE TILES
+       // if (!tileToRender.getCarType().equals(PLAYER))
+        {
+            Viewport viewport = data.getVport();
+            int correctedTileX = (int)(tileToRender.getX()  - viewport.getViewportX());
+            int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY());
+          
+            // THEN THE TILE IMAGE
+            SpriteType bgST = tileToRender.getSpriteType();
+            Image img = bgST.getStateImage(tileToRender.getState());
+            g.drawImage(img,    correctedTileX,
+                    correctedTileY,
+                    bgST.getWidth(), bgST.getHeight(), null);
+        }
+         
+         
+         
+         
     }
+    
     
     public void renderPlayerTiles( Graphics g)
     {
-     
+      Viewport viewport = data.getVport();
+       
        PathXCar renderPlayer = ((PathXMiniGame)game).getFileManager().playerToRender();
-        Viewport viewport = data.getViewport();
+       
             int correctedTileX = (int)(renderPlayer.getX());
-            int correctedTileY = (int)(renderPlayer.getY());
+            int correctedTileY = (int)(renderPlayer.getY() );
         // THEN DRAW ALL THE MOVING TILES
       
         
         SpriteType bgST = renderPlayer.getSpriteType();
             Image img = bgST.getStateImage(renderPlayer.getState());
-            g.drawImage(img,    correctedTileX,
+            g.drawImage(img,  correctedTileX,
                     correctedTileY,
                     bgST.getWidth(), bgST.getHeight(), null);
       
@@ -2002,6 +2096,8 @@ public class PathXPanel extends JPanel
      */
     public void renderSprite(Graphics g, Sprite s)
     {
+
+        
         // ONLY RENDER THE VISIBLE ONES
         if (!s.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) &&
                 !s.getState().equals(PathXCarState.RED_STATE.toString()) &&

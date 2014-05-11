@@ -42,8 +42,7 @@ public class Intersection
         randNum = (int)(Math.random()*100);
         id =""+x+y+randNum;
         
-       
-         roadIDs = new ArrayList();
+        roadIDs = new ArrayList();
     }
 
     // ACCESSOR METHODS

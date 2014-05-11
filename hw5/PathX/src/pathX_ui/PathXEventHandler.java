@@ -443,12 +443,130 @@ public class PathXEventHandler
             }
             
         }
+        else if(keyCode == KeyEvent.VK_A)
+               data.carsMovingAround();
+        
+         // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_G)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.MAKE_LIGHT_GREEN);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_R)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.MAKE_LIGHT_RED);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_T)
+        {
+            // CHANGE THE APP MODE
+            data.setAddingSpecial(true);
+            data.switchState(PathXCarState.FLAT_TIRE);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_E)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.EMPTY_GAS_TANK);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_H)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.CLOSE_ROAD);
+        }
+          // CLOSE INTERSECTION
+        else if (keyCode == KeyEvent.VK_C)
+        {
+            // CHANGE THE APP MODE
+           
+        }
+          // OPEN INTERSECTION
+        else if (keyCode == KeyEvent.VK_O)
+        {
+            // CHANGE THE APP MODE
+          
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_Q)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.STEAL);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_M)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.MIND_CONTROL);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_B)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.INTANGIBILITY);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_L)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.MINDLESS_TERROR);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_Y)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.FLYING);
+        }
+          // MAKE GREEN LIGHT
+        else if (keyCode == KeyEvent.VK_V)
+        {
+            // CHANGE THE APP MODE
+             data.setAddingSpecial(true);
+            data.switchState(PathXCarState.INVINCIBILITY);
+        }
+        
+        else if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+            // CHANGE THE APP MODE
+            data.unselectEverything();
+            data.switchState(PathXCarState.NOTHING_SELECTED);
+        }
+        
+        // INCREASE THE SPEED LIMIT ON THE SELECTED ROAD
+        else if (keyCode == KeyEvent.VK_X)
+        {
+      //      data.increaseSelectedRoadSpeedLimit();
+        }
+        // DECREASE THE SPEED LIMIT ON THE SELECTED ROAD
+        else if (keyCode == KeyEvent.VK_Z)
+        {
+     //       model.decreaseSelectedRoadSpeedLimit();
+        }
+        
+        else if (keyCode == KeyEvent.VK_P)
+        {
+     //       model.decreaseSelectedRoadSpeedLimit();
+        }
+        
         else     if (keyCode == KeyEvent.VK_M)
         {
            data.setMove(true);
            
             PathXFileManager fileManager = game.getFileManager();
-            ArrayList<Connection> pathParser = fileManager.findShortestPath(fileManager.getInter(0), fileManager.getInter(1));
+            ArrayList<Integer> pathParser = fileManager.findPath(fileManager.getInter(0), fileManager.getInter(12));
+            System.out.println("Printing the arraylist of integers :  " + pathParser.toString());
+            
             TreeMap<String, Road> roadMapCopy = fileManager.getRoadMap();
             TreeMap<String, Intersection> intersectionMapCopy = fileManager.getIntersectionMap();
             data.setMove(false);

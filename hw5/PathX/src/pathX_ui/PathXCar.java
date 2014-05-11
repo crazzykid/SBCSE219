@@ -1,13 +1,17 @@
 package pathX_ui;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import mini_game.MiniGame;
 import mini_game.Sprite;
 import mini_game.SpriteType;
 import static pathx.PathXConstants.*;
+import pathx_data.PathXDataModel;
+import pathx_data.PathXGameLevel;
 import pathx_file.Connection;
 import pathx_file.Intersection;
+import pathx_file.PathXSpecial;
 
 /**
  * This class represents a single tile in the game world.
@@ -24,6 +28,9 @@ public class PathXCar extends Sprite
     // IT IS LOCATED TO MAKE THE UNDO OPERATION EASY LATER ON
     private int gridColumn;
     private int gridRow;
+     private GregorianCalendar startTime;
+    private GregorianCalendar endTime;
+    private boolean stop;
     
     // THIS IS true WHEN THIS TILE IS MOVING, WHICH HELPS US FIGURE
     // OUT WHEN IT HAS REACHED A DESTINATION NODE
@@ -41,7 +48,8 @@ public class PathXCar extends Sprite
     // THIS INDEX KEEPS TRACK OF WHICH NODE ON THE WIN ANIMATION PATH
     // THIS TILE IS CURRENTLY TARGETING
     private int movePathIndex;
-    
+    private PathXDataModel data;
+    private boolean loop;
     private String imageFileName;
     /**
      * This constructor initializes this tile for use, including all the
@@ -50,17 +58,18 @@ public class PathXCar extends Sprite
     public PathXCar(    SpriteType initSpriteType,
             float initX, 	float initY,
             float initVx, 	float initVy,
-            String initState,
-            int initTileId)
+            String initState
+    )
     {
         // SEND ALL THE Sprite DATA TO A Sprite CONSTRUCTOR
         super(initSpriteType, initX, initY, initVx, initVy, initState);
         
-        tileId = initTileId;
+        // tileId = initTileId;
         carType ="";
         imageFileName ="";
-        
-          playerPath = new  ArrayList<Integer>();
+        loop = false;
+        playerPath = new  ArrayList<Integer>();
+       
     }
     
     // ACCESSOR METHODS
@@ -81,7 +90,66 @@ public class PathXCar extends Sprite
     {
         return tileId;
     }
+    public void setStop(boolean mode)
+    {
+        stop = mode;
+    }
+    public boolean getStop()
+    {
+        return stop;
+    }
+    public void initCarData(PathXDataModel model)
+    {
+        data = model;
+    }
+     public String timeToText(long timeInMillis)
+    {
+        // FIRST CALCULATE THE NUMBER OF HOURS,
+        // SECONDS, AND MINUTES
+        long hours = timeInMillis / MILLIS_IN_AN_HOUR;
+        timeInMillis -= hours * MILLIS_IN_AN_HOUR;
+        long minutes = timeInMillis / MILLIS_IN_A_MINUTE;
+        timeInMillis -= minutes * MILLIS_IN_A_MINUTE;
+        long seconds = timeInMillis / MILLIS_IN_A_SECOND;
+
+        // THEN ADD THE TIME OF GAME SUMMARIZED IN PARENTHESES
+        String minutesText = "" + minutes;
+        if (minutes < 10)
+        {
+            minutesText = "0" + minutesText;
+        }
+        String secondsText = "" + seconds;
+        if (seconds < 10)
+        {
+            secondsText = "0" + secondsText;
+        }
+        // TTT= hours + ":" + minutesText + ":" + secondsText;
+        return hours + ":" + minutesText + ":" + secondsText;
+    }
+
+      public String gameTimeToText()
+    {
+        // CALCULATE GAME TIME USING HOURS : MINUTES : SECONDS
+        if ((startTime == null) || (endTime == null))
+        {
+            return "";
+        }
+        long timeInMillis = endTime.getTimeInMillis() - startTime.getTimeInMillis();
+        return timeToText(timeInMillis);
+    }
     
+      
+      
+      public void startTimer()
+      {
+          startTime = new GregorianCalendar();
+               
+      }
+      public void stopTimer()
+      {
+          startTime = null;
+      }
+      
     public void setImageFileName(String ImageFileName)
     {   this.imageFileName = ImageFileName;
     
@@ -174,8 +242,8 @@ public class PathXCar extends Sprite
      */
     public void setTarget(float initTargetX, float initTargetY)
     {
-        targetX = initTargetX;
-        targetY = initTargetY;
+        targetX = initTargetX + LEVEL1X;
+        targetY = initTargetY + LEVEL1Y;
     }
     
     // PATHFINDING METHODS
@@ -203,6 +271,23 @@ public class PathXCar extends Sprite
         float distance = (float)Math.sqrt((diffX * diffX) + (diffY * diffY));
         
         // AND RETURN THE DISTANCE
+        
+        return distance;
+    }
+    
+      public float calculateDistanceToSpecial(int specX, int specY)
+    {
+        // GET THE X-AXIS DISTANCE TO GO
+        float diffX = specX - x;
+        
+        // AND THE Y-AXIS DISTANCE TO GO
+        float diffY = specY - y;
+        
+        // AND EMPLOY THE PYTHAGOREAN THEOREM TO CALCULATE THE DISTANCE
+        float distance = (float)Math.sqrt((diffX * diffX) + (diffY * diffY));
+        
+        // AND RETURN THE DISTANCE
+        
         return distance;
     }
     
@@ -219,15 +304,15 @@ public class PathXCar extends Sprite
         for (int i = 0; i < intersectionNodes.size(); i+=2)
         {
             // AND FILL IT WITH FUZZY PATH NODES
-            int toleranceX = (int)(MOVE_PATH_TOLERANCE * Math.random()) - (MOVE_PATH_TOLERANCE/2);
-            int toleranceY = (int)(MOVE_PATH_TOLERANCE * Math.random()) - (MOVE_PATH_TOLERANCE/2);
+            int toleranceX = 0;//(int)(MOVE_PATH_TOLERANCE ) - (MOVE_PATH_TOLERANCE/2);
+            int toleranceY = 0;//'//(int)(MOVE_PATH_TOLERANCE ) - (MOVE_PATH_TOLERANCE/2);
             int x = intersectionNodes.get(i) + toleranceX;
             int y = intersectionNodes.get(i+1) + toleranceY;
             movePath.add(x);
             movePath.add(y);
         }
-        movePath = intersectionNodes;
-        
+        // movePath = intersectionNodes;
+         
     }
     
     public void updatePlayerMove(ArrayList<Intersection> init)
@@ -242,7 +327,7 @@ public class PathXCar extends Sprite
             playerPath.add(temp.getY());
             
         }
-        movePath = playerPath;
+        //  movePath = playerPath;
         
     }
     /**
@@ -253,7 +338,7 @@ public class PathXCar extends Sprite
      * we'll then compute the x and y axis components for taking into
      * account the trajectory angle.
      */
-    public void startMovingToTarget(int maxVelocity)
+    public void startMovingToTarget(float maxVelocity)
     {
         // LET ITS POSITIONG GET UPDATED
         movingToTarget = true;
@@ -279,6 +364,11 @@ public class PathXCar extends Sprite
         if ((diffY > 0) && (vY < 0)) vY *= -1;
     }
     
+    public boolean getLoop()
+    {
+        
+        return loop;
+    }
     /**
      * After a win, while the tiles are animating, this method is called
      * each frame to make sure that when the tile reaches the next node
@@ -286,24 +376,117 @@ public class PathXCar extends Sprite
      *
      * @param game The Sorting Hat game we are updating.
      */
+    public boolean checkSpecialCollison()
+    {
+        if(this.carType ==BANDIT || this.carType == POLICE || this.carType == ZOMBIE || this.carType==PLAYER )
+        {
+           PathXGameLevel level = data.getLevel();
+           Iterator it = level.getSpecial();
+           while(it.hasNext())
+           {
+               PathXSpecial s = (PathXSpecial) it.next();
+               int x = s.getX();
+               int y = s.getY();
+                if(calculateDistanceToSpecial(x,y) < MAX_TILE_VELOCITY)
+                    return false;     
+           }
+             
+        }
+        return true;  
+    }
+     public int checkCollison()
+    {
+        if(this.carType==PLAYER )
+        {
+           PathXCar cars; 
+           Iterator it = data.getAllTiles();
+           while(it.hasNext())
+           {
+               cars  = (PathXCar) it.next();
+               if(cars.getCarType() !=PLAYER)
+               {
+               int x = (int)cars.getX();
+               int y = (int)cars.getY();
+                if(calculateDistanceToSpecial(x,y) < MAX_TILE_VELOCITY-10)
+                  {
+                      if(cars.getCarType()== BANDIT)
+                      return 1;
+                      else
+                          if(cars.getCarType()== POLICE)
+                                return 2;
+                      else
+                          if(cars.getCarType()== ZOMBIE)
+                                return 3;
+                  } 
+                  }
+               }
+           }
+        return 0;
+    }
+    
+    
     public void updateMovePath(MiniGame game)
     {
+        if(checkCollison()>0)
+        {
+            if(checkCollison()==1)
+            {
+                int money = data.getLevel().getMoney();
+                money = (money - ((money/100)*10));
+                data.getLevel().setMoney(money);  
+            }
+            
+            else 
+                if (checkCollison()==2)
+                {
+                  int money = data.getLevel().getMoney();
+                  money = 0;
+                  data.getLevel().setMoney(money);  
+                
+                  int bank = data.getTotalBalance();
+                  bank = bank - ((bank/100)*10);
+                  data.setTotalBalance(bank);
+
+                }
+        }
+        if(checkCollison()==3)
+        {
+            
+              startMovingToTarget(1/10);
+            
+            
+        }
+        if(checkSpecialCollison() && checkCollison() !=3)
+        {
+
+             startMovingToTarget(1);
+          
         // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
         if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
         {
+               
             // PUT IT RIGHT ON THE NODE
             x = targetX;
             y = targetY;
             
-            // AND TARGET THE NEXT NODE IN THE PATH
-            targetX = movePath.get(movePathIndex);
-            targetY = movePath.get(movePathIndex+1);
             
+            if(movePath.size() > 1) 
+            { 
+                // AND TARGET THE NEXT NODE IN THE PATH
+                targetX = movePath.get(0) + LEVEL1X;
+                targetY = movePath.get(1) + LEVEL1Y;
+                
+                movePath.remove(1); 
+                movePath.remove(0);
+            } 
+            
+             
             // START THE TILE MOVING AGAIN AND RANDOMIZE IT'S SPEED
-            startMovingToTarget(MAX_TILE_VELOCITY);
+           
             
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
             movePathIndex += 2;
+            
             // winPathIndex %= (WIN_PATH_NODES * 2);
         }
         // JUST A NORMAL PATHING UPDATE
@@ -312,6 +495,17 @@ public class PathXCar extends Sprite
             // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
             super.update(game);
         }
+        
+        }
+        else
+        {
+            
+                vX = 0;
+                vY = 0;
+            // THIS WILL SIMPLY UPDATE THIS TILE'S POSITION USING ITS CURRENT VELOCITY
+            super.update(game);
+        }
+        
     }
     
     // METHODS OVERRIDDEN FROM Sprite
@@ -328,37 +522,38 @@ public class PathXCar extends Sprite
     {
         // IF WE ARE IN A POST-WIN STATE WE ARE PLAYING THE WIN
         // ANIMATION, SO MAKE SURE THIS TILE FOLLOWS THE PATH
+       
         if (movePath!=null)
         {
-            Iterator move = movePath.iterator();
-            while(move.hasNext())
+            
+            updateMovePath(game);
+          
+        }
+        
+        
+        else
+            // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
+            // JUST GO TO THE TARGET AND THEN STOP MOVING
+           
+        
+            if (calculateDistanceToTarget() < MAX_TILE_VELOCITY && this.carType !=BANDIT && this.carType != POLICE && this.carType != ZOMBIE )
             {
-                int xx =(int)move.next();
-                int yyy =(int)move.next();
-                
-                targetX =62;
-                 targetY =369;
-               updateMovePath(game);
+                vX = 0;
+                vY = 0;
+                x = targetX;
+                y = targetY;
+                movingToTarget = false;
                 
                 
             }
-            
-        }
-        // IF NOT, IF THIS TILE IS ALMOST AT ITS TARGET DESTINATION,
-        // JUST GO TO THE TARGET AND THEN STOP MOVING
-        if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
-        {
-            vX = 0;
-            vY = 0;
-            x = targetX;
-            y = targetY;
-            movingToTarget = false;
-        }
-        // OTHERWISE, JUST DO A NORMAL UPDATE, WHICH WILL CHANGE ITS POSITION
-        // USING ITS CURRENT VELOCITY.
-        else
-        {
-            super.update(game);
-        }
+            else if (calculateDistanceToTarget() < MAX_TILE_VELOCITY && this.carType ==BANDIT || this.carType == POLICE || this.carType == ZOMBIE )
+                loop = true;
+            // OTHERWISE, JUST DO A NORMAL UPDATE, WHICH WILL CHANGE ITS POSITION
+            // USING ITS CURRENT VELOCITY.
+            else
+            {
+                super.update(game);
+                loop = false;
+            }
     }
 }

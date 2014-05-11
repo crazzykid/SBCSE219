@@ -12,9 +12,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.AbstractList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -98,48 +101,48 @@ public class PathXFileManager
         gamePathsNodes = new TreeMap<String, ArrayList<Connection>>();
         // WE'LL USE THE SCHEMA FILE TO VALIDATE THE XML FILES
         // levelSchema = initLevelSchema;
-        
-        
-        
+
+       
     }
+    
+    public void restPathXCar()          { gameCars = new ArrayList();}
+    public ArrayList<Intersection> getPlayerPath() { return playerPath;}
     public PathXGameLevel       getLevel()                  {   return level;}
     public Intersection getInter(int i){     return intersectionToLoad.get(i); }
     
     public void addPlayer()
     {
-           float x, y;
-                    SpriteType sT;
-                    Sprite s;
-                    BufferedImage img;
-                    PropertiesManager props = PropertiesManager.getPropertiesManager();
-                    String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
-                    String policeButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_PLAYER);
-                    sT = new SpriteType(GAME_BUTTON_PLAYER_TYPE);
-                    
-                    
-                    img= ((PathXMiniGame)miniGame).loadImage(imgPath + policeButton);
-                    data.addSpriteType(sT);
-                    
-                    sT.addState(PathXCarState.INVISIBLE_STATE.toString(), img); // DOESN'T MATTER
-                    sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-                   
-                    int startX = data.getLevel().getStartingLocation().getX();
-                    
-                    int startY = data.getLevel().getStartingLocation().getY();
-                    
-                    ArrayList<Connection> startLocation = this.getAllNeighbors(data.getLevel().getStartingLocation().getId());
-                    
-                    int totalX = (startX + intersectionMap.get(startLocation.get(1).Intersection2ID).getX())/2 + LEVEL1X;
-                    
-                     int totalY = (startX + intersectionMap.get(startLocation.get(1).Intersection2ID).getY())/2 + LEVEL1Y;
-                    
-                     System.out.println("level run " + totalX +"         " + totalY);
-                    
-                    PathXCar player = new PathXCar(sT, totalX, totalY, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), 1);
-                    
-                    player.setCarType(PLAYER);
-                  
-                    gameCars.add(player);
+        float x, y;
+        SpriteType sT;
+        Sprite s;
+        BufferedImage img;
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
+        String playerButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_PLAYER);
+        sT = new SpriteType(GAME_BUTTON_PLAYER_TYPE);
+        
+        
+        img= ((PathXMiniGame)miniGame).loadImage(imgPath + playerButton);
+        data.addSpriteType(sT);
+        
+        sT.addState(PathXCarState.INVISIBLE_STATE.toString(), img); // DOESN'T MATTER
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        
+        int startX = data.getLevel().getStartingLocation().getX();
+        
+        int startY = data.getLevel().getStartingLocation().getY();
+        
+        ArrayList<Connection> startLocation = this.getAllNeighbors(data.getLevel().getStartingLocation().getId());
+       
+        float totalX = ((startX + intersectionMap.get(startLocation.get(0).Intersection2ID).getX())/2) + LEVEL1X;
+        
+        float totalY = ((startY + intersectionMap.get(startLocation.get(0).Intersection2ID).getY()) /2) + LEVEL1Y;
+       
+        PathXCar player = new PathXCar(sT, totalX, totalY, 10, 10, PathXCarState.INVISIBLE_STATE.toString());
+        
+        player.setCarType(PLAYER);
+        
+        gameCars.add(player);
     }
     
     public boolean loadLevel(String levelFile, int pos)
@@ -147,18 +150,15 @@ public class PathXFileManager
         // gameCars = new ArrayList<PathXCar>();
         data = (PathXDataModel)miniGame.getDataModel();
         
-       // levelList = ((PathXDataModel)data).getLevelLocation();
+        // levelList = ((PathXDataModel)data).getLevelLocation();
         
-       // level = levelList.get(pos);
+        // level = levelList.get(pos);
         
         
-        if(!level.getLoad() && level.getStageUnlock())
+       // if(!level.getLoad() && level.getStageUnlock())
             try
             {
-                
-                
                 File fileToOpen = new File(LEVELS_PATH+ levelFile +".xml");
-                
                 levelSchema = new File(PATH_DATA + "PathXLevelSchema.xsd");
                 
                 // WE'LL FILL IN SOME OF THE LEVEL OURSELVES
@@ -228,8 +228,7 @@ public class PathXFileManager
                     String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
                     String policeButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_POLICE);
                     sT = new SpriteType(GAME_BUTTON_POLICE_TYPE);
-                    
-                    
+                
                     img= ((PathXMiniGame)miniGame).loadImage(imgPath + policeButton);
                     data.addSpriteType(sT);
                     
@@ -239,32 +238,20 @@ public class PathXFileManager
                     int Vy =0;
                     for(int j=0; j<intersections.size(); j++)
                     {
-                        int randomNum= (int)(Math.random()*(intersections.size()-1));
+                       int randomNum = (int)(Math.random()*(intersections.size()));
+                        System.out.println("random mun a a" + randomNum);
                         Intersection random = intersections.get(randomNum);
                         
                         if (random.getId() != levelToLoad.getStartingLocation().getId() && random.getId() != levelToLoad.getDestination().getId() && Vx==0)
-                        { 
-                            Vx = random.getX();
-                             Vy = random.getY();
-                           
+                        {
+                            Vx = random.getX() + LEVEL1X ;
+                            Vy = random.getY() +LEVEL1Y ;  
                         }
                     }
-                    
-                    PathXCar police = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), i + POLICEID);
-                    
+                    PathXCar police = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
                     police.setCarType(POLICE);
                     gameCars.add(police);
                 }
-                
-                
-                {
-                    
-                    
-                    // WE'LL MAKE A NEW SPRITE TYPE FOR EACH GROUP OF SIMILAR LOOKING TILES
-                    
-                    
-                }
-                
                 // LOAD THE NUMBER OF BANDITS
                 Node banditsNode = doc.getElementsByTagName(BANDITS_NODE).item(0);
                 attributes = banditsNode.getAttributes();
@@ -281,8 +268,7 @@ public class PathXFileManager
                     String imgPath = props.getProperty(PathXPropertyType.PATH_IMG);
                     String banditsButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_BANDIT);
                     sT = new SpriteType(GAME_BUTTON_BANDIT_TYPE);
-                    
-                    
+        
                     img= ((PathXMiniGame)miniGame).loadImage(imgPath + banditsButton);
                     data.addSpriteType(sT);
                     
@@ -293,18 +279,19 @@ public class PathXFileManager
                     int Vy =0;
                     for(int j=0; j<intersections.size(); j++)
                     {
-                        int randomNum= (int)Math.random()*(intersections.size()-1);
+                        int randomNum = (int)(Math.random()*(intersections.size()));
+                        System.out.println("random mun a a" + randomNum);
                         Intersection random = intersections.get(randomNum);
                         
                         if (random.getId() != levelToLoad.getStartingLocation().getId() && random.getId() != levelToLoad.getDestination().getId() && Vx==0)
-                        { 
-                            Vx = random.getX();
-                             Vy = random.getY();
+                        {
+                            Vx = random.getX() + LEVEL1X;
+                            Vy = random.getY() + LEVEL1Y;
                             
                         }
                     }
                     
-                    PathXCar bandit = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), i + BANDITID);
+                    PathXCar bandit = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
                     
                     bandit.setCarType(BANDIT);
                     gameCars.add(bandit);
@@ -338,22 +325,22 @@ public class PathXFileManager
                     int Vy =0;
                     for(int j=0; j<intersections.size(); j++)
                     {
-                        int randomNum= (int)Math.random()*(intersections.size()-1);
+                        int randomNum = (int)(Math.random()*(intersections.size()));
+                        System.out.println("random mun a a" + randomNum);
                         Intersection random = intersections.get(randomNum);
                         
                         if (random.getId() != levelToLoad.getStartingLocation().getId() && random.getId() != levelToLoad.getDestination().getId() && Vx==0)
-                        { 
-                            Vx = random.getX() ;
-                             Vy = random.getY() ;
-                             
+                        {
+                            Vx = random.getX() + LEVEL1X;
+                            Vy = random.getY() + LEVEL1Y;
+                            
                         }
                     }
-                    PathXCar zombie = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString(), i + ZOMBIEID);
+                    PathXCar zombie = new PathXCar(sT, Vx, Vy, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
                     
                     zombie.setCarType(ZOMBIE);
                     gameCars.add(zombie);
                 }
-                
                 
                 // EVERYTHING WENT AS PLANNED SO LET'S MAKE IT PERMANENT
                 // PathXDataModel dataModel = (PathXDataModel)miniGame.getDataModel();
@@ -364,12 +351,13 @@ public class PathXFileManager
                 data.setCurrentLevel(levelFile);
                 data.initLevel(levelFile, intersections);
                 
-               // if(levelFile.equals(LEVEL1))
-                   // levelToLoad.setStageUnlock(true);
-               // data.setLevel(levelToLoad, count);
+                // if(levelFile.equals(LEVEL1))
+                // levelToLoad.setStageUnlock(true);
+                // data.setLevel(levelToLoad, count);
                 
                 this.initIDs();
                 this.addPlayer();
+                data.initTiles();
                 return true;
             }
             catch(Exception e)
@@ -379,13 +367,8 @@ public class PathXFileManager
                 return false;
             }
         // LEVEL LOADED PROPERLY
-        
-        
-        
-        
-        return false;
-    }
-    
+       
+    } 
     // PRIVATE HELPER METHOD FOR LOADING INTERSECTIONS INTO OUR LEVEL
     private void loadIntersectionsList( Document doc, PathXGameLevel levelToLoad)
     {
@@ -678,13 +661,12 @@ public class PathXFileManager
     public ArrayList<PathXCar> tileToRender()
     {
         
-                return gameCars;
-     
+        return gameCars;
+        
     }
     
     public void initIDs()
-    {
-        
+    { 
         Iterator<Intersection> loadIntersection =intersectionToLoad.iterator();
         while(loadIntersection.hasNext())
         {
@@ -699,7 +681,7 @@ public class PathXFileManager
                 Intersection int2 = start.getNode2();
                 
                 if(id.equals(int1.getId()) || id.equals(int2.getId()))
-                    theInt.addRoadID(start.getRoadId());
+                theInt.addRoadID(start.getRoadId());
             }
         }
         Iterator<Road> loadRoads =roadToLoad.iterator();
@@ -722,8 +704,7 @@ public class PathXFileManager
                 if( rdID2.equals(IntId))
                     theRd.addIntersectionID(IntId);
             }
-        }
-        
+        }   
         Iterator<Road> theRoads =roadToLoad.iterator();
         while(theRoads.hasNext())
         {
@@ -785,12 +766,9 @@ public class PathXFileManager
             {
                 
                 System.out.println("Printing all the Values of the hashtable : " + intersectionMap.get(c.Intersection1ID) + "\t"+ intersectionMap.get(c.Intersection2ID));
-            }
-            
-        }
-        
+            }    
+        }   
     }
-    
     private ArrayList<Connection> generatePath(ArrayList<String> intersectionIDs,
             ArrayList<String> roadIDs)
     {
@@ -805,20 +783,23 @@ public class PathXFileManager
         return path;
     }
     
-    public ArrayList<Connection> findPath(Intersection intersection)
+    
+    
+    public ArrayList<Integer> findPath(Intersection intersection, Intersection end)
     {
         ArrayList<String> intersectionIDsInPath = new ArrayList();
         
-        ArrayList<String> path = new ArrayList();
+        ArrayList<Intersection> pathList = new ArrayList<Intersection>();
+        ArrayList<Integer> path = new ArrayList();
         ArrayList<String> roadIDsInPath = new ArrayList();
         TreeMap<String, String> closedIntersectionIDs;
         closedIntersectionIDs = new TreeMap();
         TreeMap<String, String> closedRoadIDs;
         closedRoadIDs = new TreeMap();
-        
+      
         intersectionIDsInPath.add(intersection.getId());
         closedIntersectionIDs.put(intersection.getId(), intersection.getId());
-        path.add(intersection.getId());
+       
         // WHILE THE PATH IS NOT EMPTY
         // WHICH MEANS THERE MIGHT STILL
         // BE A PATH
@@ -837,16 +818,41 @@ public class PathXFileManager
             while (it.hasNext())
             {
                 Connection c = it.next();
-                if (!intersectionIDsInPath.contains(c.getIntersection1ID()))
+                if (c.hasIntersection(end.getId()))
                 {
                     Road roadForPath = roadMap.get(c.getRoadID());
                     roadIDsInPath.add(c.getRoadID());
-                    intersectionIDsInPath.add(c.getIntersection1ID());
-                    path.add(c.getIntersection1ID());
+                    intersectionIDsInPath.add(end.getId());
                     ArrayList<Connection> thePath = generatePath(intersectionIDsInPath, roadIDsInPath);
+                   Intersection check = null;
+                Iterator<Connection> i = thePath.iterator();
+                    while(i.hasNext())
+                                {
+                                    Connection temp = i.next();
+                                  
+                                    if(intersectionMap.get(temp.Intersection1ID).equals(check) )
+                                        pathList.add(intersectionMap.get(temp.Intersection2ID));
+                                    else
+                                    {
+                                        pathList.add(intersectionMap.get(temp.Intersection1ID));
+                                        pathList.add(intersectionMap.get(temp.Intersection2ID));
+                                        
+                                    }
+                                    check = intersectionMap.get(temp.Intersection2ID);
+                                }
+                     Iterator<Intersection> in = pathList.iterator();
+                 while(in.hasNext())
+                 {
+                     Intersection insec = in.next();
+                     
+                     path.add(insec.getX());
+                     path.add(insec.getY());
+                     
+                 }
+                  
                     
-                    gamePathsNodes.put(c.getRoadID(), thePath);
-                    //return path;
+                    
+                    return path;
                 }
             }
             
@@ -867,7 +873,6 @@ public class PathXFileManager
                     i--;
                 }
             }
-            
             // IF NO MORE NEIGHBORS, THEN WE HAVE
             // A DEAD END, WHICH MEANS WE HAVE TO GO
             // ANOTHER WAY. THAT MEANS WE HAVE TO
@@ -883,58 +888,91 @@ public class PathXFileManager
                 intersectionIDsInPath.add(c.getIntersection2ID());
                 closedIntersectionIDs.put(c.getIntersection2ID(), c.getIntersection2ID());
                 roadIDsInPath.add(c.getRoadID());
-                closedRoadIDs.put(c.getRoadID(), c.getRoadID());
-                
+                closedRoadIDs.put(c.getRoadID(), c.getRoadID()); 
             }
         }
         return new ArrayList();
     }
     
+//    public ArrayList<Connection> getPath (Intersection startIn)
+//    {
+//        
+//        TreeMap<Intersection, Integer> tableA = new TreeMap<Intersection, Integer>();
+//       TreeMap<Intersection, Integer> tableB = new  TreeMap<Intersection, Integer> ();
+//        
+//        Iterator it = intersectionMap.values().iterator();
+//        
+//       
+//        while(it.hasNext())
+//        {
+//            
+//            Intersection start = (Intersection)it.next();
+//            if(start.equals(startIn))
+//                tableA.put(startIn, 0);
+//            else
+//            tableA.put(start, Integer.MAX_VALUE);
+//            
+//        }
+//        
+//    while(!tableA.isEmpty())
+//    {
+//        
+//        
+//        
+//    }
+//        
+//        
+//    }
+//    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void pathFinding()
     {
-        
-        
         ArrayList<String> list = new ArrayList<String> ();
         Iterator itList = intersectionMap.values().iterator();
         while(itList.hasNext())
         {
-            
             Intersection startList = (Intersection)itList.next();
-            
             list.add(startList.getId());
-            
-            ArrayList<Connection> neighbors = getAllNeighbors(startList.getId());
-            
+            ArrayList<Connection> neighbors = getAllNeighbors(startList.getId());  
         }
         
         ArrayList<String> roadlist = new ArrayList<String> ();
         Iterator roadList = roadMap.values().iterator();
         while(roadList.hasNext())
-        {
-            
+        { 
             Road startList = (Road)itList.next();
-            
             roadlist.add(startList.getRoadId());
         }
+    }
+    
+    public void clearPath()
+    {
+        gamePathsNodes = new TreeMap<String , ArrayList<Connection>>();
         
-        
-        
-        
-        
-        
-        
-        
-        // gamePathsNodes;
-        
-        
+        playerPath = new ArrayList<Intersection>();
     }
     
     public ArrayList<Connection> findShortestPath(Intersection startLocation, Intersection endLocation)
     {
         // WE'LL MAINTAIN A SHORTEST PATH FROM THE
         // STARTING ACTOR TO EACH ACTOR WE ENCOUNTER
-        
-        
         
         
         // Iterator it = intersectionMap.values().iterator();
@@ -952,10 +990,6 @@ public class PathXFileManager
             TreeMap<String, ArrayList<Connection>> shortestPaths;
             shortestPaths = new TreeMap();
             
-            boolean sameLocation = false;
-            
-            if(startLocation.x == endLocation.x && startLocation.y == endLocation.y)
-                sameLocation = true;
             
             // THIS WILL STORE THE PATH WE ARE CURRENTLY
             // BUILDING UPON
@@ -979,19 +1013,14 @@ public class PathXFileManager
             Iterator it = intersectionMap.values().iterator();
             while(it.hasNext())
             {
-                
-                
-                Intersection stopLocation = (Intersection)it.next();
-                
-                
+
+                Intersection stopLocation = (Intersection)it.next();    
             }
             
             // INDEX OF Intersections AND Roads TO CHECK
             int roadIndex = 0;
             int intersectionIndex = 0;
-            
-            
-            
+    
             // THE SHORTEST PATH FROM THE START ACTOR
             // TO THE START ACTOR IS NOTHING, SO WE'll
             // START OUT WITH AN EMPTY ArrayList
@@ -1025,8 +1054,7 @@ public class PathXFileManager
                     if (!roadsVisitedFast.containsKey(Id) )
                     {
                         roadsVisited.add(Rd);
-                        roadsVisitedFast.put(Rd.getRoadId(), Rd);
-                        
+                        roadsVisitedFast.put(Rd.getRoadId(), Rd);  
                     }
                 }
                 
@@ -1065,6 +1093,7 @@ public class PathXFileManager
                             Connection c = new Connection(currentRoad.getRoadId(),
                                     currentIntersection.getId(), intersectionToTest.getId());
                             
+                            // if(!shortestPaths.containsKey(intersecID))
                             intersecionPath.add(c);
                             
                             gamePathsNodes.put(currentRoad.getRoadId(), intersecionPath);
@@ -1072,20 +1101,28 @@ public class PathXFileManager
                             shortestPaths.put(intersecID, intersecionPath);
                             
                             if (intersecID.equals(endLocation.getId()))
-                        {
-                              Iterator<Connection> path =intersecionPath.iterator();
-                    
-                                 while (path.hasNext())
-                                 {
-                                     Connection temp = path.next();
-                                     
-                                      playerPath.add(intersectionMap.get(temp.Intersection1ID));
-                                      playerPath.add(intersectionMap.get(temp.Intersection2ID));
-                                 }
-                           
-                           gameCars.get(5).updatePlayerMove(playerPath);
-                            return intersecionPath;
-                        }
+                            {
+                                Iterator<Connection> path =intersecionPath.iterator();
+                                Intersection check = null;
+                                while (path.hasNext())
+                                {
+                                    Connection temp = path.next();
+                                    
+                                    shortestPaths.put(intersecID, intersecionPath);
+                                    if(intersectionMap.get(temp.Intersection1ID).equals(check) )
+                                        playerPath.add(intersectionMap.get(temp.Intersection2ID));
+                                    else
+                                    {
+                                        playerPath.add(intersectionMap.get(temp.Intersection1ID));
+                                        playerPath.add(intersectionMap.get(temp.Intersection2ID));
+                                        
+                                    }
+                                    check = intersectionMap.get(temp.Intersection2ID);
+                                }
+                                
+//                                gameCars.get(5).updatePlayerMove(playerPath);
+                                return intersecionPath;
+                            }
                             // IF THIS IS KEVIN BACON WE'RE DONE
                             
                         }

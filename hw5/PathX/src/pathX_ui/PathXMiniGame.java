@@ -16,6 +16,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
@@ -51,7 +52,7 @@ import pathx_data.PathXGameLevel;
  *
  * @author Richard McKenna
  */
-public class PathXMiniGame extends MiniGame
+public class PathXMiniGame extends MiniGame  
 {
     // THE PLAYER RECORD FOR EACH LEVEL, WHICH LIVES BEYOND ONE SESSION
     private PathXRecord record;
@@ -65,6 +66,7 @@ public class PathXMiniGame extends MiniGame
     // MANAGES LOADING OF LEVELS AND THE PLAYER RECORDS FILES
     private PathXFileManager fileManager;
     
+
     // THE SCREEN CURRENTLY BEING PLAYED
     private String currentScreenState;
     private Insets marginlessInsets;
@@ -93,7 +95,7 @@ public class PathXMiniGame extends MiniGame
      *
      * @return The player's complete record.
      */
-    public PathXRecord getPlayerRecord()
+    public PathXRecord getPlayerRecord() 
     {
         return record;
     }
@@ -121,6 +123,11 @@ public class PathXMiniGame extends MiniGame
     public PathXFileManager getFileManager()
     {
         return fileManager;
+    }
+    
+    public MouseController getMouseController()
+    {
+        return levelHandler;
     }
     
     /**
@@ -171,7 +178,9 @@ public class PathXMiniGame extends MiniGame
     
     public void switchToLevelSelect()
     {
+        fileManager.restPathXCar();
         
+       ((PathXDataModel)data).resetPathXCar();
         
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -350,7 +359,7 @@ public class PathXMiniGame extends MiniGame
     {
         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
-        
+              ((PathXDataModel)data).enableTiles(true);
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         
@@ -456,6 +465,9 @@ public class PathXMiniGame extends MiniGame
         // PLAY THE GAMEPLAY SCREEN SONG
         audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
         audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
+        
+        
+  
     }
     
     /**
@@ -654,14 +666,10 @@ public class PathXMiniGame extends MiniGame
         // INIT OUR DATA MANAGER
         data = new PathXDataModel(this);
         
-       // levelHandler = new MouseController((PathXDataModel)data);
-         
-        
-      //  ArrayList<PathXGameLevel> level = ((PathXDataModel)data).getLevelLocation();
-      //  level.get(0).setStageUnlock(true);
-      //  level.get(0).setLevelState(RED_STATE);
-      //  level.get(0).setLevelName(LEVEL1);
+        levelHandler = new MouseController((PathXDataModel)data , this, window);
+
     }
+    
     
      @Override
     public void initHandler()
@@ -704,10 +712,7 @@ public class PathXMiniGame extends MiniGame
         canvas = new PathXPanel(this, (PathXDataModel)data);
         
         Viewport viewport = ((PathXDataModel)data).getVport2();
-        
-        
       
-                  
         
         // LOAD THE BACKGROUNDS, WHICH ARE GUI DECOR
         currentScreenState = MENU_SCREEN_STATE;
@@ -982,6 +987,9 @@ public class PathXMiniGame extends MiniGame
         img = loadImage(imgPath + levelGreenButton);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.GREEN_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE1, s);  
+         sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE1, s);
         
         //The PUT THE GREEN LEVEL ICONS BUTTON
@@ -991,6 +999,9 @@ public class PathXMiniGame extends MiniGame
         sT.addState(PathXCarState.RED_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE1, s);
+         sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE1, s);
         
         //The PUT THE GREEN LEVEL ICONS BUTTON
         String levelWhiteButton = props.getProperty(PathXPropertyType.WHITE_LOCATION);
@@ -999,12 +1010,16 @@ public class PathXMiniGame extends MiniGame
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE1, s);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X1, LEVEL_OFFSET_LOCATION_Y1, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE1, s);
         
         //The PUT THE GREEN LEVEL ICONS BUTTON
         String levelGreenButton2 = props.getProperty(PathXPropertyType.GREEN_LOCATION);
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE2);
         img = loadImage(imgPath + levelGreenButton2);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE2, s);
         
@@ -1013,6 +1028,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE2);
         img = loadImage(imgPath + levelRedButton2);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE2, s);
         
@@ -1021,6 +1037,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE2);
         img = loadImage(imgPath + levelWhiteButton2);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X2, LEVEL_OFFSET_LOCATION_Y2, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE2, s);
         
@@ -1029,6 +1046,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE3);
         img = loadImage(imgPath + levelGreenButton3);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE3, s);
         
@@ -1037,6 +1055,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE3);
         img = loadImage(imgPath + levelRedButton3);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE3, s);
         
@@ -1045,6 +1064,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE3);
         img = loadImage(imgPath + levelWhiteButton3);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X3, LEVEL_OFFSET_LOCATION_Y3, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE3, s);
         
@@ -1053,6 +1073,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE4);
         img = loadImage(imgPath + levelGreenButton4);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE4, s);
         
@@ -1061,6 +1082,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE4);
         img = loadImage(imgPath + levelRedButton4);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE4, s);
         
@@ -1069,6 +1091,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE4);
         img = loadImage(imgPath + levelWhiteButton4);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X4, LEVEL_OFFSET_LOCATION_Y4, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE4, s);
         
@@ -1077,6 +1100,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE5);
         img = loadImage(imgPath + levelGreenButton5);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE5, s);
         
@@ -1085,6 +1109,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE5);
         img = loadImage(imgPath + levelRedButton5);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE5, s);
         
@@ -1093,6 +1118,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE5);
         img = loadImage(imgPath + levelWhiteButton5);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X5, LEVEL_OFFSET_LOCATION_Y5, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE5, s);
         
@@ -1101,6 +1127,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE6);
         img = loadImage(imgPath + levelGreenButton6);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE6, s);
         
@@ -1109,6 +1136,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE6);
         img = loadImage(imgPath + levelRedButton6);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE6, s);
         
@@ -1117,6 +1145,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE6);
         img = loadImage(imgPath + levelWhiteButton6);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X6, LEVEL_OFFSET_LOCATION_Y6, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE6, s);
         
@@ -1125,6 +1154,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE7);
         img = loadImage(imgPath + levelGreenButton7);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE7, s);
         
@@ -1133,6 +1163,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE7);
         img = loadImage(imgPath + levelRedButton7);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE7, s);
         
@@ -1141,6 +1172,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE7);
         img = loadImage(imgPath + levelWhiteButton7);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X7, LEVEL_OFFSET_LOCATION_Y7, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE7, s);
         
@@ -1149,6 +1181,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE8);
         img = loadImage(imgPath + levelGreenButton8);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE8, s);
         
@@ -1157,6 +1190,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE8);
         img = loadImage(imgPath + levelRedButton8);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE8, s);
         
@@ -1165,6 +1199,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE8);
         img = loadImage(imgPath + levelWhiteButton8);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X8, LEVEL_OFFSET_LOCATION_Y8, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE8, s);
         
@@ -1173,6 +1208,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE9);
         img = loadImage(imgPath + levelGreenButton9);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE9, s);
         
@@ -1181,6 +1217,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE9);
         img = loadImage(imgPath + levelRedButton9);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE9, s);
         
@@ -1189,6 +1226,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE9);
         img = loadImage(imgPath + levelWhiteButton9);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X9, LEVEL_OFFSET_LOCATION_Y9, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE9, s);
         
@@ -1197,6 +1235,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE10);
         img = loadImage(imgPath + levelGreenButton10);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE10, s);
         
@@ -1205,6 +1244,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE10);
         img = loadImage(imgPath + levelRedButton10);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE10, s);
         
@@ -1213,6 +1253,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE10);
         img = loadImage(imgPath + levelWhiteButton10);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X10, LEVEL_OFFSET_LOCATION_Y10, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE10, s);
         
@@ -1221,6 +1262,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE11);
         img = loadImage(imgPath + levelGreenButton11);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE11, s);
         
@@ -1229,6 +1271,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE11);
         img = loadImage(imgPath + levelRedButton11);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE11, s);
         
@@ -1237,6 +1280,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE11);
         img = loadImage(imgPath + levelWhiteButton11);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X11, LEVEL_OFFSET_LOCATION_Y11, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE11, s);
         
@@ -1245,6 +1289,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE12);
         img = loadImage(imgPath + levelGreenButton12);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE12, s);
         
@@ -1253,6 +1298,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE12);
         img = loadImage(imgPath + levelRedButton12);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE12, s);
         
@@ -1261,6 +1307,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE12);
         img = loadImage(imgPath + levelWhiteButton12);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X12, LEVEL_OFFSET_LOCATION_Y12, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE12, s);
         
@@ -1269,6 +1316,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE13);
         img = loadImage(imgPath + levelGreenButton13);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE13, s);
         
@@ -1277,6 +1325,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE13);
         img = loadImage(imgPath + levelRedButton13);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE13, s);
         
@@ -1285,6 +1334,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE13);
         img = loadImage(imgPath + levelWhiteButton13);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X13, LEVEL_OFFSET_LOCATION_Y13, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE13, s);
         
@@ -1293,6 +1343,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE14);
         img = loadImage(imgPath + levelGreenButton14);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE14, s);
         
@@ -1301,6 +1352,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE14);
         img = loadImage(imgPath + levelRedButton14);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE14, s);
         
@@ -1309,6 +1361,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE14);
         img = loadImage(imgPath + levelWhiteButton14);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X14, LEVEL_OFFSET_LOCATION_Y14, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE14, s);
         
@@ -1317,6 +1370,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE15);
         img = loadImage(imgPath + levelGreenButton15);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X15, LEVEL_OFFSET_LOCATION_Y15, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE15, s);
         
@@ -1333,6 +1387,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE15);
         img = loadImage(imgPath + levelWhiteButton15);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X15, LEVEL_OFFSET_LOCATION_Y15, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE15, s);
         
@@ -1341,6 +1396,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE16);
         img = loadImage(imgPath + levelGreenButton16);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE16, s);
         
@@ -1349,6 +1405,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE16);
         img = loadImage(imgPath + levelRedButton16);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE16, s);
         
@@ -1357,6 +1414,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE16);
         img = loadImage(imgPath + levelWhiteButton16);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X16, LEVEL_OFFSET_LOCATION_Y16, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE16, s);
         
@@ -1365,6 +1423,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE17);
         img = loadImage(imgPath + levelGreenButton17);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE17, s);
         
@@ -1373,6 +1432,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE17);
         img = loadImage(imgPath + levelRedButton17);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE17, s);
         
@@ -1381,6 +1441,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE17);
         img = loadImage(imgPath + levelWhiteButton17);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X17, LEVEL_OFFSET_LOCATION_Y17, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE17, s);
         
@@ -1389,6 +1450,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE18);
         img = loadImage(imgPath + levelGreenButton18);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE18, s);
         
@@ -1397,6 +1459,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE18);
         img = loadImage(imgPath + levelRedButton18);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE18, s);
         
@@ -1405,6 +1468,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE18);
         img = loadImage(imgPath + levelWhiteButton18);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X18, LEVEL_OFFSET_LOCATION_Y18, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE18, s);
         
@@ -1413,6 +1477,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE19);
         img = loadImage(imgPath + levelGreenButton19);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE19, s);
         
@@ -1421,6 +1486,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE19);
         img = loadImage(imgPath + levelRedButton19);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE19, s);
         
@@ -1429,6 +1495,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE19);
         img = loadImage(imgPath + levelWhiteButton19);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X19, LEVEL_OFFSET_LOCATION_Y19, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE19, s);
         
@@ -1437,6 +1504,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_GREEN_TYPE20);
         img = loadImage(imgPath + levelGreenButton20);
         sT.addState(PathXCarState.GREEN_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.GREEN_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_GREEN_TYPE20, s);
         
@@ -1445,6 +1513,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_RED_TYPE20);
         img = loadImage(imgPath + levelRedButton20);
         sT.addState(PathXCarState.RED_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.RED_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_RED_TYPE20, s);
         
@@ -1453,6 +1522,7 @@ public class PathXMiniGame extends MiniGame
         sT = new SpriteType(GAME_PLAY_LEVEL_WHITE_TYPE20);
         img = loadImage(imgPath + levelWhiteButton20);
         sT.addState(PathXCarState.WHITE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
         s = new Sprite(sT, LEVEL_OFFSET_LOCATION_X20, LEVEL_OFFSET_LOCATION_Y20, 0, 0, PathXCarState.WHITE_STATE.toString());
         guiButtons.put(GAME_PLAY_LEVEL_WHITE_TYPE20, s);
         
@@ -1479,7 +1549,7 @@ public class PathXMiniGame extends MiniGame
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
             x = (viewport.getScreenWidth()/2) - (img.getWidth(null)/2);
             y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2);
-            s = new Sprite(sT, x, y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+            s = new Sprite(sT, x+400, y+300, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
             guiDialogs.put(GAME_HELP_SCREEN_STATE, s);
             
             //The PUT THE QUIT BUTTON
