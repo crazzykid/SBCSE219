@@ -48,7 +48,7 @@ public class PathXGameLevel
 
     // THE AMOUNT OF MONEY TO BE EARNED BY THE LEVEL
     int money;
-
+     private String name;
     // THE NUMBER OF POLICE, BANDITS, AND ZOMBIES
     int numPolice;
     int numBandits;
@@ -61,12 +61,13 @@ public class PathXGameLevel
         levelState = WHITE_STATE;
         stageUnlock = true;
         specials= new TreeMap<String,PathXSpecial>();
-        playerX = LEVEL1X;
+        playerX = LEVEL1X ;
         playerY =LEVEL1Y;
         levelName = "";
         bankBalance = 0;
         levelTotal = 0;
         levelArray = new int[2];
+        name ="";
         
         // INIT THE GRAPH DATA STRUCTURES
         intersections = new ArrayList();
@@ -106,6 +107,8 @@ public class PathXGameLevel
     public void setload (){ load = true;}
     public boolean getLoad () { return load; }
     public String                   getLevelName()                      {   return levelName;                       }
+    public String                   getName()                      {   return name;                       }
+    
     public String                   getStartingLocationImageFileName()  {   return startingLocationImageFileName;   }
     public String                   getBackgroundImageFileName()        {   return backgroundImageFileName;         }
     public String                   getDestinationImageFileName()       {   return destinationImageFileName;        }
@@ -123,6 +126,10 @@ public class PathXGameLevel
     // MUTATOR METHODS
     public void setLevelName(String levelName)    
     {   this.levelName = levelName;                                             }
+    
+      public void setName(String levelName)    
+    {   this.name = levelName;                                             }
+    
     public void setNumBandits(int numBandits)
     {   this.numBandits = numBandits;                                           }
     public void setBackgroundImageFileName(String backgroundImageFileName)    

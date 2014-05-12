@@ -178,10 +178,16 @@ public class PathXMiniGame extends MiniGame
     
     public void switchToLevelSelect()
     {
+         guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(false);
+           
+             guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(false);
+           
         fileManager.restPathXCar();
         
        ((PathXDataModel)data).resetPathXCar();
-        
+         ((PathXDataModel)data).setStartGame(false);
         PropertiesManager props = PropertiesManager.getPropertiesManager();
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiDecor.get(BACKGROUND_TYPE).setState(GAME_LEVEL_STATE);
@@ -251,8 +257,6 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(GAME_START_BUTTON_TYPE).setEnabled(false);
         
         
-       
-        
         guiDecor.get(GAME_TOOLBAR_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         currentScreenState = GAME_LEVEL_STATE;
         
@@ -289,6 +293,17 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
         
+           if(!PathXEventHandler.checkMusicButton)
+        {
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+          audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
+        }
+        else
+            {
+          audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        }
+        
     }
     
     
@@ -316,6 +331,29 @@ public class PathXMiniGame extends MiniGame
         
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
         guiButtons.get(GAME_SETTINGS_X_BUTTON_TYPE).setEnabled(true);
+        
+        if(!PathXEventHandler.checkButton)
+        {
+           guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(true);
+        }
+        else
+             {
+              guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+              guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(true);
+            }
+            
+        if(!PathXEventHandler.checkMusicButton)
+        {
+           guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(true);
+        }
+        else
+             {
+              guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+              guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(true);
+            }
+          
         
         // DEACTIVATE THE SPECIAL BUTTONS
         ArrayList<String> specialButtons = props.getPropertyOptionsList(PathXPropertyType.SPECIAL_IMAGE_OPTIONS1);
@@ -353,11 +391,18 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
         
         currentScreenState = GAME_SETTINGS_STATE;
+   
+          audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+ 
         
     }
     public void switchToGameScreen()
     {
-        guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(false);
+           
+        guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.VISIBLE_STATE.toString());
         
               ((PathXDataModel)data).enableTiles(true);
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -456,16 +501,24 @@ public class PathXMiniGame extends MiniGame
         guiButtons.get(GAME_HOME_BUTTON_SETTING_TYPE).setEnabled(false);
         guiButtons.get(HELP_QUIT_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
         guiButtons.get(HELP_QUIT_TYPE).setEnabled(false);
-        guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.INVISIBLE_STATE.toString());
-        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(false);
+        guiButtons.get(HELP_QUIT_TYPE2).setState(PathXCarState.VISIBLE_STATE.toString());
+        guiButtons.get(HELP_QUIT_TYPE2).setEnabled(true);
         
         // AND CHANGE THE SCREEN STATE
         currentScreenState = GAME_SCREEN_STATE;
         
         // PLAY THE GAMEPLAY SCREEN SONG
-        audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
-        audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
-        
+        if(!PathXEventHandler.checkMusicButton)
+        {
+          audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+          audio.play(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString(), true);
+        }
+        else
+            {
+          audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        }
+            
         
   
     }
@@ -476,7 +529,12 @@ public class PathXMiniGame extends MiniGame
      */
     public void switchToSplashScreen()
     {
-        
+         guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(false);
+           
+        guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+           guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(false);
+           
         guiDialogs.get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
         
         guiDialogs.get(GAME_HELP_SCREEN_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
@@ -587,8 +645,18 @@ public class PathXMiniGame extends MiniGame
         data.setGameState(MiniGameState.NOT_STARTED);
         
         // PLAY THE WELCOME SCREEN SONG
-        audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
-        audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        
+        // PLAY THE GAMEPLAY SCREEN SONG
+        if(!PathXEventHandler.checkMusicButton)
+        {
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+          audio.play(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString(), true);
+        }
+        else
+            {
+          audio.stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+          audio.stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        }
     }
     
     // METHODS OVERRIDDEN FROM MiniGame
@@ -1565,17 +1633,69 @@ public class PathXMiniGame extends MiniGame
             s = new Sprite(sT, QUIT_BUTTON_X, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
             guiButtons.put(HELP_QUIT_TYPE2, s);
             
+            //The PUT THE LEAVE TOWN BUTTON
+            String leaveButton = props.getProperty(PathXPropertyType.IMAGE_LEAVE_TOWN);
+            sT = new SpriteType(LEAVE_TOWN_TYPE);
+            img = loadImage(imgPath + leaveButton);
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+            s = new Sprite(sT, QUIT_BUTTON_X+130, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.put(LEAVE_TOWN_TYPE, s);
+            String leaveButtonMouseOver = props.getProperty(PathXPropertyType.IMAGE_LEAVE_TOWN_MOUSE_OVER);
+            img = loadImage(imgPath + leaveButtonMouseOver);
+            sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+            s = new Sprite(sT, QUIT_BUTTON_X+130, QUIT_BUTTON_Y, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+            guiButtons.put(LEAVE_TOWN_TYPE, s);
+            
+            //The PUT THE QUIT BUTTON
+            String tryAgainButton = props.getProperty(PathXPropertyType.IMAGE_TRY_AGAIN);
+            sT = new SpriteType(TRY_AGAIN_TYPE);
+            img = loadImage(imgPath + tryAgainButton);
+            sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+            s = new Sprite(sT, QUIT_BUTTON_X-250+80, QUIT_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+            guiButtons.put(TRY_AGAIN_TYPE, s);
+            String tryAgainButtonMouseOver = props.getProperty(PathXPropertyType.IMAGE_TRY_AGAIN_MOUSE_OVER);
+            img = loadImage(imgPath + tryAgainButtonMouseOver);
+            sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+            s = new Sprite(sT, QUIT_BUTTON_X-250+130, QUIT_BUTTON_Y, 0, 0, PathXCarState.VISIBLE_STATE.toString());
+            guiButtons.put(TRY_AGAIN_TYPE, s);
             
             String emptyDialog = props.getProperty(PathXPropertyType.IMAGE_EMPTY_DIALOG);
             sT = new SpriteType(GAME_DIALOG_STATE);
             img = loadImageWithColorKey(imgPath + emptyDialog, COLOR_KEY);
             sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
-            x = (viewport.getScreenWidth()/2) - (img.getWidth(null)/2);
-            y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2);
+            x = (viewport.getScreenWidth()/2) - (img.getWidth(null)/2) + 370;
+            y = (viewport.getScreenHeight()/2) - (img.getHeight(null)/2) +300;
             s = new Sprite(sT, x, y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
             guiDialogs.put(GAME_DIALOG_STATE, s);
             
-            
+             
+        //The PUT THE SETTINGS Check BUTTON
+        String settingsCheckButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_UNCHECK);
+        sT = new SpriteType(GAME_SETTINGS_CHECK_BUTTON_TYPE);
+        img = loadImage(imgPath + settingsCheckButton);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        String settingUncButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_CHECK);
+        img = loadImage(imgPath + settingUncButton);
+         sT.addState(PathXCarState.SELECTED_STATE.toString(), img);
+        s = new Sprite(sT, HOME_SETTINGS_CHECK_BUTTON_X, HOME_SETTINGS_CHECK_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SETTINGS_CHECK_BUTTON_TYPE, s);
+        
+               
+        //The PUT THE SETTINGS Check BUTTON
+        String settingsMusicCheckButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_UNCHECK);
+        sT = new SpriteType(GAME_SETTINGS_MUSIC_BUTTON_TYPE);
+        img = loadImage(imgPath + settingsMusicCheckButton);
+        sT.addState(PathXCarState.VISIBLE_STATE.toString(), img);
+        sT.addState(PathXCarState.MOUSE_OVER_STATE.toString(), img);
+        String settingsMusicUncheckButton = props.getProperty(PathXPropertyType.GAME_SCREEN_IMAGE_BUTTON_CHECK);
+        img = loadImage(imgPath + settingsMusicUncheckButton);
+         sT.addState(PathXCarState.SELECTED_STATE.toString(), img);
+        s = new Sprite(sT, HOME_SETTINGS_MUSIC_BUTTON_X, HOME_SETTINGS_MUSIC_BUTTON_Y, 0, 0, PathXCarState.INVISIBLE_STATE.toString());
+        guiButtons.put(GAME_SETTINGS_MUSIC_BUTTON_TYPE, s);
+        
+        
+        
         }
         
     }
@@ -1650,10 +1770,10 @@ public class PathXMiniGame extends MiniGame
         });
         
         //START GAME EVENT HANDLER
-        guiButtons.get(GAME_START_BUTTON_TYPE).setActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae)
-            {   eventHandler.respondToStartRequest();     }
-        });
+//        guiButtons.get(GAME_START_BUTTON_TYPE).setActionListener(new ActionListener(){
+//            public void actionPerformed(ActionEvent ae)
+//            {   eventHandler.respondToStartRequest();     }
+//        });
         guiButtons.get(GAME_SCROLL_LEFT_BUTTON_TYPE).setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {   eventHandler.respondToScrollRequest(SCROLL_LEFT);     }
@@ -2133,6 +2253,7 @@ public class PathXMiniGame extends MiniGame
             }
         });
            
+        
               guiButtons.get(GAME_PLAY_LEVEL_GREEN_TYPE20).setActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae)
             {   eventHandler.respondToSelectLevelRequest(LEVEL20, 19);
@@ -2140,8 +2261,49 @@ public class PathXMiniGame extends MiniGame
             
             }
         });
-        
-        
+         guiButtons.get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToSettingsCheck();
+            
+            }
+        });
+          guiButtons.get(GAME_START_BUTTON_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToStartGame();
+            
+            }
+        });
+           guiButtons.get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToSettingsCheckMusic();
+            
+            }
+        });
+             guiButtons.get(LEAVE_TOWN_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToLeaveTownRequest();
+            
+            }
+        });
+            guiButtons.get(TRY_AGAIN_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToTryAgain();
+            
+            }
+        });
+            guiButtons.get(GAME_SCROLL_PAUSE_BUTTON_TYPE).setActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae)
+            {  
+                eventHandler.respondToPause();
+            
+            }
+        });
+         
         
         // KEY LISTENER - LET'S US PROVIDE CUSTOM RESPONSES
         this.setKeyListener(new KeyAdapter(){
@@ -2191,6 +2353,13 @@ public class PathXMiniGame extends MiniGame
                 if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY()))
                 {
                     button.setState(PathXCarState.VISIBLE_STATE.toString());
+                }
+            }
+            else if (button.getState().equals(PathXCarState.SELECTED_STATE.toString()))
+            {
+                if (!button.containsPoint(data.getLastMouseX(), data.getLastMouseY()))
+                {
+                    button.setState(PathXCarState.SELECTED_STATE.toString());
                 }
             }
             

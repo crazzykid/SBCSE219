@@ -33,8 +33,12 @@ import pathx_file.Intersection;
 import pathx_file.Road;
 import properties_manager.PropertiesManager;
 import pathX_ui.PathXPanel.*;
+import static pathx.PathXConstants.GAME_SETTINGS_CHECK_BUTTON_TYPE;
+import static pathx.PathXConstants.GAME_SETTINGS_MUSIC_BUTTON_TYPE;
+import static pathx.PathXConstants.LEAVE_TOWN_TYPE;
 import static pathx.PathXConstants.LEVEL1;
 import static pathx.PathXConstants.SCROLL_SPEED;
+import static pathx.PathXConstants.TRY_AGAIN_TYPE;
 import pathx_data.PathXGameLevel;
 import pathx_file.Connection;
 //import sorting_hat.data.SortingHatDataModel;
@@ -52,6 +56,8 @@ public class PathXEventHandler
     private int viewPortY;
     private int  vPortX;
          PathXDataModel model;
+         public static boolean checkButton;
+          public static boolean checkMusicButton;
     /**
      * Constructor, it just keeps the game for when the events happen.
      */
@@ -61,7 +67,8 @@ public class PathXEventHandler
         viewPortX =0;
         viewPortY = 0;
          vPortX = 0;
-        
+         checkButton = false;
+         checkMusicButton = false;
          model = (PathXDataModel)game.getDataModel();
     }
 
@@ -86,6 +93,7 @@ public class PathXEventHandler
      */
     public void respondToHomeRequest()
     {
+        
         PathXDataModel data = (PathXDataModel)game.getDataModel();
         Viewport viewport = data.getViewport();
         
@@ -114,11 +122,7 @@ public class PathXEventHandler
         
     }
     
-    public void respondToStartRequest()
-    {
-        
-    }
-    
+ 
     
     public void respondToBackRequest()
     {
@@ -139,10 +143,65 @@ public class PathXEventHandler
         // RESET THE GAME AND ITS DATA
         // game.reset();
     }
-   // public void respondToStageRequest(String stage)
-   // {
+    public void respondToLeaveTownRequest()
+    {
+        
+        PathXDataModel data = (PathXDataModel)game.getDataModel();
+          data.reset(game);
+
+            game.getGUIDialogs().get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+             game.getGUIButtons().get(TRY_AGAIN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+              game.getGUIButtons().get(TRY_AGAIN_TYPE).setEnabled(false);
+              game.getGUIButtons().get(LEAVE_TOWN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+               game.getGUIButtons().get(LEAVE_TOWN_TYPE).setEnabled(false);
+            // GO TO THE GAME
+            data.getVport().reset();
+            data.getVport2().reset();
+            game.switchToLevelSelect();
+    
+    
+    }
+     public void respondToSettingsCheckMusic()
+     {
+         
+         if( !checkMusicButton)
+       {
+         game.getGUIButtons().get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+         game.getGUIButtons().get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(true);
+               checkMusicButton = true;
+       }
+         else
+         {
+               game.getGUIButtons().get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+              game.getGUIButtons().get(GAME_SETTINGS_MUSIC_BUTTON_TYPE).setEnabled(true);
+               checkMusicButton = false;
+         }
+         
+     }
+    
+     public void respondToSettingsCheck()
+     {
+         
+         if( !checkButton)
+       {
+         game.getGUIButtons().get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.SELECTED_STATE.toString());
+         game.getGUIButtons().get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(true);
+               checkButton = true;
+       }
+         else
+         {
+               game.getGUIButtons().get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+              game.getGUIButtons().get(GAME_SETTINGS_CHECK_BUTTON_TYPE).setEnabled(true);
+               checkButton = false;
+         }
+         
+     }
+            
+        
+        
          public void respondToSelectLevelRequest(String levelFile, int pos)
     {
+             
         // WE ONLY LET THIS HAPPEN IF THE MENU SCREEN IS VISIBLE
       //  if (game.isCurrentScreenState(MENU_SCREEN_STATE))
         
@@ -236,7 +295,7 @@ public class PathXEventHandler
                  data.moveViewport2(SCROLL_SPEED, 0);
                   
                       if( game.isCurrentScreenState(GAME_SCREEN_STATE) )
-                          if(vPortX <= 310)
+                          if(vPortX <= 380)
                         data.moveViewport(SCROLL_SPEED, 0);
                     else
                      vPortX+= -SCROLL_SPEED;
@@ -280,6 +339,49 @@ public class PathXEventHandler
         }
         }
         
+        
+    }
+    public void respondToPause()
+    {
+         PathXDataModel data = (PathXDataModel)game.getDataModel();
+        if(!data.isPaused())
+            data.pause();
+        else
+            data.unpause();
+        
+    }
+    public void respondToTryAgain()
+    {
+          
+        PathXDataModel data = (PathXDataModel)game.getDataModel();
+        
+          
+         
+        game.getGUIDialogs().get(GAME_DIALOG_STATE).setState(PathXCarState.INVISIBLE_STATE.toString());
+            game.getGUIButtons().get(TRY_AGAIN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+              game.getGUIButtons().get(TRY_AGAIN_TYPE).setEnabled(false);
+              game.getGUIButtons().get(LEAVE_TOWN_TYPE).setState(PathXCarState.INVISIBLE_STATE.toString());
+               game.getGUIButtons().get(LEAVE_TOWN_TYPE).setEnabled(false);
+        System.out.println("respond to start game : " );
+          
+          data.resetPathXCar();
+           ((PathXMiniGame)game).getFileManager().restPathXCar();
+           
+            ((PathXMiniGame)game).getFileManager().reloadPathXCar();
+              data.setStartGame(false);
+           data.reset(game);
+         
+    }
+    
+    public void respondToStartGame()
+    {
+         
+        PathXDataModel data = (PathXDataModel)game.getDataModel();
+        
+          data.carsMovingAround();
+          
+          data.setStartGame(true);
+          
         
     }
     
@@ -401,7 +503,7 @@ public class PathXEventHandler
                  data.moveViewport2(SCROLL_SPEED, 0);
                   
                       if( game.isCurrentScreenState(GAME_SCREEN_STATE) )
-                          if(vPortX <= 310)
+                          if(vPortX <= 380)
                         data.moveViewport(SCROLL_SPEED, 0);
                     else
                      vPortX+= -SCROLL_SPEED;
@@ -443,8 +545,12 @@ public class PathXEventHandler
             }
             
         }
-        else if(keyCode == KeyEvent.VK_A)
-               data.carsMovingAround();
+        else if (data.getStartGame())
+    {
+       if(keyCode == KeyEvent.VK_A)
+        {
+             data.endGameAsWin();
+        }
         
          // MAKE GREEN LIGHT
         else if (keyCode == KeyEvent.VK_G)
@@ -607,5 +713,5 @@ public class PathXEventHandler
      * it may respond in a few different ways depending on what the 
      * current edit mode is.
      */
-     
+    }
 }

@@ -71,6 +71,8 @@ public class MouseController implements MouseListener, MouseMotionListener
     @Override
     public void mousePressed(MouseEvent me)
     {
+        if(model.getStartGame())
+        {
         // MAKE SURE THE CANVAS HAS FOCUS SO THAT IT
         // WILL PROCESS THE PROPER KEY PRESSES
         ((JPanel)me.getSource()).requestFocusInWindow();
@@ -78,7 +80,8 @@ public class MouseController implements MouseListener, MouseMotionListener
         // THESE ARE CANVAS COORDINATES
         int canvasX = me.getX();
         int canvasY = me.getY();
-        
+        System.out.println("canvasX : " + canvasX);
+               System.out.println("canvasX : " + canvasY);
              if (model.isAddingSpecial())
         {
             // TRY ADDING AN INTERSECTION
@@ -125,7 +128,7 @@ public class MouseController implements MouseListener, MouseMotionListener
         model.unselectEverything();
     }
         // PERHAPS THE USER IS WANTING TO ADD THE FIRST INTERSECTION OF A ROAD
-        
+        }
     }
     
     /**
@@ -154,6 +157,8 @@ public class MouseController implements MouseListener, MouseMotionListener
     @Override
     public void mouseClicked(MouseEvent me)
     {
+        if(model.getStartGame())
+        {
         System.out.println("testing mouseclick function");
         // RIGHT MOUSE BUTTON IS TO TOGGLE OPEN/CLOSE INTERSECTION
         if (me.getButton() == MouseEvent.BUTTON3)
@@ -167,7 +172,7 @@ public class MouseController implements MouseListener, MouseMotionListener
                 model.switchState(PathXCarState.NOTHING_SELECTED);
             }
         }
-       
+        }
     }
     
     /**

@@ -102,7 +102,7 @@ public class PathXPanel extends JPanel
         recyclableLine = new Line2D.Double(0,0,0,0);
         recyclableStrokes = new HashMap();
         playerCircle = new Ellipse2D.Double(0, 0, INTERSECTION_RADIUS * 2, INTERSECTION_RADIUS * 2);
-       
+        
         for (int i = 1; i <= 10; i++)
         {
             recyclableStrokes.put(i, new BasicStroke(i*2));
@@ -184,7 +184,7 @@ public class PathXPanel extends JPanel
                 
                 
                 // AND THE DIALOGS, IF THERE ARE ANY
-                renderDialogs(g);
+               // renderDialogs(g);
                 
                 // RENDERING THE GRID WHERE ALL THE TILES GO CAN BE HELPFUL
                 // DURING DEBUGGIN TO BETTER UNDERSTAND HOW THEY RE LAID OUT
@@ -192,41 +192,55 @@ public class PathXPanel extends JPanel
                 
                 // RENDER THE HEADER
                 //  renderHeader(g);
-                  
-                   
+                
+                
                 if(((PathXMiniGame)game).isCurrentScreenState(GAME_SCREEN_STATE))
                 {
+                    
                     int i =0;
                     renderLevelBackground(g2);
                     renderRoads(g2);
                     renderIntersections(g2);
                     //renderPlayer(g2);
-                  // renderPlayerTiles(g); 
-                   renderTiles(g);
-                   
-                 //  if(i ==0)
-              //  data.carsMovingAround();
-                //data.switchCarOrder();
-                   
-                   renderSpecials(g);
+                    // renderPlayerTiles(g);
+                    renderAllTiles(g);
+                    renderTiles(g);
+                    
+                    //  if(i ==0)
+                    //  data.carsMovingAround();
+                    //data.switchCarOrder();
+                    
+                    renderSpecials(g);
                     renderStats(g);
+                      
                 }
             }
             
-             if(!((PathXMiniGame)game).isCurrentScreenState(GAME_LEVEL_STATE))
-             renderBackground(g);
-         
+            if(!((PathXMiniGame)game).isCurrentScreenState(GAME_LEVEL_STATE))
+                renderBackground(g);
             
             
-          if(((PathXMiniGame)game).isCurrentScreenState(GAME_LEVEL_STATE))
-            renderMap(g);
+            
+            if(((PathXMiniGame)game).isCurrentScreenState(GAME_LEVEL_STATE))
+                renderMap(g);
             // AND THE BUTTONS AND DECOR
-           
-            renderGUIControls(g);
             
+           renderGUIControls(g);
             
-            // AND FINALLY, TEXT FOR DEBUGGING
-            renderDebuggingText(g);
+            if(data.won())
+          {
+              game.getGUIDialogs().get(GAME_DIALOG_STATE).setState(PathXCarState.VISIBLE_STATE.toString());
+              game.getGUIButtons().get(TRY_AGAIN_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+              game.getGUIButtons().get(TRY_AGAIN_TYPE).setEnabled(true);
+              game.getGUIButtons().get(LEAVE_TOWN_TYPE).setState(PathXCarState.VISIBLE_STATE.toString());
+               game.getGUIButtons().get(LEAVE_TOWN_TYPE).setEnabled(true);
+                renderGUIControlsDialog(g);
+                renderDialogStats(g);
+            
+          }
+            
+                    renderDebuggingText(g);
+          
         }
         finally
         {
@@ -254,27 +268,26 @@ public class PathXPanel extends JPanel
     {
         // THERE IS ONLY ONE CURRENTLY SET
         Sprite bg = game.getGUIDecor().get(BACKGROUND_TYPE);
-         if (bg.getSpriteType().getSpriteTypeID() != LEVEL_SELECT_BACKGROUND_TYPE )
-
-        renderSprite(g, bg);
+        if (bg.getSpriteType().getSpriteTypeID() != LEVEL_SELECT_BACKGROUND_TYPE )
+            
+            renderSprite(g, bg);
     }
     private void renderLevelBackground(Graphics2D g2)
     {
         Viewport viewport = data.getVport();
+        
+        BufferedImage backgroundImage = (BufferedImage)data.getBackgroundImage();
+         viewport.setViewportSize(0, 0);
+        int viewPortX = viewport.getViewportHeight() -viewport.getViewportX();
+        int viewPortY = viewport.getViewportWidth() -viewport.getViewportY();
+        int moveX = LEVEL1X + viewPortX;
+        int moveY = LEVEL1Y+ viewPortY;
+        
        
-        Image backgroundImage = data.getBackgroundImage();
+      
+      // g2.drawImage(backgroundImage, 165, 0, viewport.getViewportWidth() , viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), viewport.getViewportX() + viewport.getViewportWidth(), viewport.getViewportY() + viewport.getViewportHeight(), null);
+        g2.drawImage(backgroundImage, viewPortX, viewPortY, backgroundImage.getWidth(null), backgroundImage.getHeight(null), null);
         
-        int viewPortX = viewport.getViewportX();
-        int viewPortY = viewport.getViewportY();
-        int moveX = VIEWPORT_OFFSET_Y + viewPortX;
-        int moveY = VIEWPORT_OFFSET_X + viewPortY;
-        
-        viewport.setViewportSize(740, 840);
-      //  System.out.println("ViewPort Width :"+ viewport.getViewportWidth() + "\nViewPort Height :"+ viewport.getViewportHeight());
-       // g2.drawImage(backgroundImage, 165, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
-         g2.drawImage(backgroundImage, 165, 0, viewport.getViewportWidth() , viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), viewport.getViewportX() + viewport.getViewportWidth(), viewport.getViewportY() + viewport.getViewportHeight(), null);
-         
-         
     }
     // HELPER METHOD FOR RENDERING THE LEVEL ROADS
     private void renderRoads(Graphics2D g2)
@@ -310,14 +323,14 @@ public class PathXPanel extends JPanel
         g2.setStroke(recyclableStrokes.get(strokeId));
         
         // LOAD ALL THE DATA INTO THE RECYCLABLE LINE
-        recyclableLine.x1 = road.getNode1().x-viewport.getViewportX()+ VIEWPORT_OFFSET_X-160;
-        recyclableLine.y1 = road.getNode1().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220;
-        recyclableLine.x2 = road.getNode2().x-viewport.getViewportX()+ VIEWPORT_OFFSET_X-160;
-        recyclableLine.y2 = road.getNode2().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220;
+        recyclableLine.x1 = road.getNode1().x-viewport.getViewportX()+ LEVEL1X;
+        recyclableLine.y1 = road.getNode1().y-viewport.getViewportY()+ LEVEL1Y;
+        recyclableLine.x2 = road.getNode2().x-viewport.getViewportX()+ LEVEL1X;
+        recyclableLine.y2 = road.getNode2().y-viewport.getViewportY()+ LEVEL1Y;
         
         // AND DRAW IT
-         if( road.getNode1().y-viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
-        g2.draw(recyclableLine);
+        if( road.getNode1().y-viewport.getViewportY()+ LEVEL1Y >100)
+            g2.draw(recyclableLine);
         
         // AND IF IT'S A ONE WAY ROAD DRAW THE MARKER
         if (road.isOneWay())
@@ -326,53 +339,53 @@ public class PathXPanel extends JPanel
         }
     }
     int count = 0;
-       
+    
     public static double playerX = 0;
     public static double playerY = 0;
     
     private void renderPlayer(Graphics2D g2)
     {
-         Viewport viewport = data.getVport();
-       
-                  g2.setColor(Color.BLUE);
-       // if (count == 0) {
-            playerCircle.x = playerLevel.getStartingLocation().x - viewport.getViewportX() + playerLevel.getPlayerX()  - INTERSECTION_RADIUS + playerX;
-            playerCircle.y = playerLevel.getStartingLocation().y - viewport.getViewportY() + playerLevel.getPlayerY() - INTERSECTION_RADIUS  + playerY;
-            //count++;
-      //  }
-               
-                    
-                    if(data.isPlayerSelected() )
-                {
-                     g2.setColor(Color.PINK);
-                } else
-                {
-                    g2.setColor(Color.BLUE);
-                }
-                Stroke s = recyclableStrokes.get(INT_STROKE);
-                g2.setStroke(s);
-                // if( intersection.y -viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
-               // g2.draw(recyclableCircle);
-                
-                 g2.fill(playerCircle);
-                    g2.draw(playerCircle);
-                    
-                    
+        Viewport viewport = data.getVport();
+        
+        g2.setColor(Color.BLUE);
+        // if (count == 0) {
+        playerCircle.x = playerLevel.getStartingLocation().x - viewport.getViewportX() + playerLevel.getPlayerX()  - INTERSECTION_RADIUS + playerX;
+        playerCircle.y = playerLevel.getStartingLocation().y - viewport.getViewportY() + playerLevel.getPlayerY() - INTERSECTION_RADIUS  + playerY;
+        //count++;
+        //  }
+        
+        
+        if(data.isPlayerSelected() )
+        {
+            g2.setColor(Color.PINK);
+        } else
+        {
+            g2.setColor(Color.BLUE);
+        }
+        Stroke s = recyclableStrokes.get(INT_STROKE);
+        g2.setStroke(s);
+        // if( intersection.y -viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
+        // g2.draw(recyclableCircle);
+        
+        g2.fill(playerCircle);
+        g2.draw(playerCircle);
+        
+        
     }
- 
+    
     
     public void renderPlayerMove()
     {
-           
+        
 //        first.setColor(Color.BLUE);
-//           
+//
 //            playerCircle.x = viewport.getViewportX()+ VIEWPORT_OFFSET_X + playerX;
 //              playerCircle.y = ((PathXDataModel)data).getMousePressY() + playerY;
-//                
-//             
+//
+//
 //                first.fill(playerCircle);
 //                    first.draw(playerCircle);
-//        
+//
     }
     // HELPER METHOD FOR RENDERING AN INTERSECTION
     private void renderIntersections(Graphics2D g2)
@@ -398,16 +411,16 @@ public class PathXPanel extends JPanel
                 {
                     g2.setColor(CLOSED_INT_COLOR);
                 }
-                recyclableCircle.x = intersection.x - viewport.getViewportX()+ VIEWPORT_OFFSET_X-160 - INTERSECTION_RADIUS;
-                recyclableCircle.y = intersection.y - viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 - INTERSECTION_RADIUS;
+                recyclableCircle.x = intersection.x - viewport.getViewportX()+ LEVEL1X - INTERSECTION_RADIUS;
+                recyclableCircle.y = intersection.y - viewport.getViewportY()+ LEVEL1Y - INTERSECTION_RADIUS;
                 g2.fill(recyclableCircle);
                 
                 // AND NOW THE OUTLINE
                 
-                 
                 
-            
-            
+                
+                
+                
                 if (data.isSelectedIntersection(intersection))
                 {
                     g2.setColor(HIGHLIGHTED_COLOR);
@@ -417,8 +430,8 @@ public class PathXPanel extends JPanel
                 }
                 Stroke s = recyclableStrokes.get(INT_STROKE);
                 g2.setStroke(s);
-                 if( intersection.y -viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220 >100)
-                g2.draw(recyclableCircle);
+                if( intersection.y -viewport.getViewportY()+ LEVEL1Y >100)
+                    g2.draw(recyclableCircle);
             }
         }
         
@@ -446,7 +459,7 @@ public class PathXPanel extends JPanel
         // ONLY RENDER IF INSIDE THE VIEWPORT
         if (viewport.isRectInsideViewport(x1, y1, x2, y2));
         {
-            g2.drawImage(img, x1 - viewport.getViewportX()+ VIEWPORT_OFFSET_X-160, y1 - viewport.getViewportY()+ VIEWPORT_OFFSET_Y-220, null);
+            g2.drawImage(img, x1 - viewport.getViewportX()+ LEVEL1X, y1 - viewport.getViewportY()+ LEVEL1Y, null);
         }
     }
     
@@ -522,17 +535,19 @@ public class PathXPanel extends JPanel
                 if (s.getSpriteType().getSpriteTypeID() != LEVEL_SELECT_BACKGROUND_TYPE )
                     renderSprite(g, s);
             
-          //  if (s.getSpriteType().getSpriteTypeID() == LEVEL_SELECT_BACKGROUND_TYPE)
-                
+           
+            
         }
         
         // AND NOW RENDER THE BUTTONS
         Collection<Sprite> buttonSprites = game.getGUIButtons().values();
         for (Sprite s : buttonSprites)
         {
+            if (s.getSpriteType().getSpriteTypeID() != LEAVE_TOWN_TYPE
+                    && s.getSpriteType().getSpriteTypeID() != TRY_AGAIN_TYPE)
             renderSprite(g, s);
         }
-        
+       
         Collection<Sprite> dialogsSprites = game.getGUIDialogs().values();
         for (Sprite s : dialogsSprites)
         {
@@ -550,34 +565,52 @@ public class PathXPanel extends JPanel
                     || s.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
             {
                 if (s.getSpriteType().getSpriteTypeID() == HELP_QUIT_TYPE2 )
-                    renderStats(g);
+                    renderDialogStats(g); 
+                
             }
+        }
+        
+    }
+    public void renderGUIControlsDialog(Graphics g)
+    {
+        
+        Collection<Sprite> dialogsSprites = game.getGUIDialogs().values();
+        for (Sprite s : dialogsSprites)
+        {
+            renderSprite(g, s);
+        }
+        Collection<Sprite> buttonSprites2 = game.getGUIButtons().values();
+        for (Sprite s : buttonSprites2)
+        {
+            if (s.getSpriteType().getSpriteTypeID() == LEAVE_TOWN_TYPE
+                    || s.getSpriteType().getSpriteTypeID() == TRY_AGAIN_TYPE)
+            renderSprite(g, s);
         }
         
     }
     
     public void  renderSpecials(Graphics g)
     {
-         Viewport viewport = data.getVport();
+        Viewport viewport = data.getVport();
         
-       Iterator it = data.getLevel().getSpecial();
-       
-       PathXSpecial spec;
-       while(it.hasNext())
-       {
+        Iterator it = data.getLevel().getSpecial();
         
-           spec = (PathXSpecial)it.next();
+        PathXSpecial spec;
+        while(it.hasNext())
+        {
+            
+            spec = (PathXSpecial)it.next();
             Image img = game.loadImage(CURSORS_PATH + spec.getImageLocation());
-           
-             g.drawImage(img, spec.getX()-viewport.getViewportX(),spec.getY()-viewport.getViewportY(), img.getWidth(null), img.getHeight(null), null);
-       }
+            
+            g.drawImage(img, spec.getX()-viewport.getViewportX(),spec.getY()-viewport.getViewportY(), img.getWidth(null), img.getHeight(null), null);
+        }
         
     }
     public void renderMap(Graphics g)
     {
         
         
-         Collection<Sprite> decorSprites = game.getGUIDecor().values();
+        Collection<Sprite> decorSprites = game.getGUIDecor().values();
         for (Sprite s : decorSprites)
         {
             //if (s.getSpriteType().getSpriteTypeID() != BACKGROUND_TYPE )
@@ -585,1342 +618,1342 @@ public class PathXPanel extends JPanel
             //        renderSprite(g, s);
             
             if (s.getSpriteType().getSpriteTypeID() == LEVEL_SELECT_BACKGROUND_TYPE)
-            {  
-       
-        Viewport viewport = data.getVport2();
-        
-        //ArrayList<PathXGameLevel>  levelLocation = data.getLevelLocation();
-        
-        PathXGameLevel levelLocation = data.getLevel();
-        int viewPortX = viewport.getViewportX();
-        int viewPortY = viewport.getViewportY();
-        int moveX = VIEWPORT_OFFSET_Y + viewPortX;
-        int moveY = VIEWPORT_OFFSET_X + viewPortY;
-        SpriteType bgST = s.getSpriteType();
-        Image img = bgST.getStateImage(s.getState());
-        
-   
-        viewport.setGameWorldSize(img.getWidth(null), img.getHeight(null));
-        viewport.setNorthPanelHeight(100);
-        viewport.setViewportSize(740, 620);
-       
-        
-        viewport.setLevelDimensions(img.getWidth(null), img.getHeight(null));
-        g.drawImage(img, 10, 120, viewport.getViewportWidth(), viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), (viewport.getViewportX() + viewport.getViewportWidth()), (viewport.getViewportY() + viewport.getViewportHeight()), null);
-
-     
-
-              //  System.out.println(" Move X "+ (viewport.getViewportX() + viewport.getViewportWidth()) + " Move Y " + (viewport.getViewportY() + viewport.getViewportHeight()) );
-        
-     //   System.out.println(viewport.getViewportWidth()+"       "+ viewport.getViewportHeight());
-      //  System.out.println("X & Y :  "+viewport.getViewportY() +"     "+viewport.getViewportX() );
-       // g.drawImage(img, 10, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
-        
-        // RENDER THE LEVELS
-        Collection<Sprite> levelSprites = game.getGUIButtons().values();
-        
-        
-        for (Sprite st : levelSprites)
-        {
-             
-            if (st.getState().equals(PathXCarState.RED_STATE.toString()) 
-                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
             {
-               
-             
-                    
-                if (st.getSpriteType().getSpriteTypeID().equals(GAME_PLAY_LEVEL_RED_TYPE1) )
+                
+                Viewport viewport = data.getVport2();
+                
+                //ArrayList<PathXGameLevel>  levelLocation = data.getLevelLocation();
+                
+                PathXGameLevel levelLocation = data.getLevel();
+                int viewPortX = viewport.getViewportX();
+                int viewPortY = viewport.getViewportY();
+                int moveX = VIEWPORT_OFFSET_Y + viewPortX;
+                int moveY = VIEWPORT_OFFSET_X + viewPortY;
+                SpriteType bgST = s.getSpriteType();
+                Image img = bgST.getStateImage(s.getState());
+                
+                
+                viewport.setGameWorldSize(img.getWidth(null), img.getHeight(null));
+                viewport.setNorthPanelHeight(100);
+                viewport.setViewportSize(740, 620);
+                
+                
+                viewport.setLevelDimensions(img.getWidth(null), img.getHeight(null));
+                g.drawImage(img, 10, 120, viewport.getViewportWidth(), viewport.getViewportHeight(), viewport.getViewportX(), viewport.getViewportY(), (viewport.getViewportX() + viewport.getViewportWidth()), (viewport.getViewportY() + viewport.getViewportHeight()), null);
+                
+                
+                
+                //  System.out.println(" Move X "+ (viewport.getViewportX() + viewport.getViewportWidth()) + " Move Y " + (viewport.getViewportY() + viewport.getViewportHeight()) );
+                
+                //   System.out.println(viewport.getViewportWidth()+"       "+ viewport.getViewportHeight());
+                //  System.out.println("X & Y :  "+viewport.getViewportY() +"     "+viewport.getViewportX() );
+                // g.drawImage(img, 10, 210, 740, 620, viewPortX, viewPortY, moveX, moveY , null);
+                
+                // RENDER THE LEVELS
+                Collection<Sprite> levelSprites = game.getGUIButtons().values();
+                
+                
+                for (Sprite st : levelSprites)
                 {
-                   
                     
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
+                    if (st.getState().equals(PathXCarState.RED_STATE.toString())
+                            || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
                     {
-                     
                         
-                        int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
                         
-                    }
-                    if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString())  )
-                        g.drawString(NAMELEVEL1, 300, 300);
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE2 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
-                    {
-                       int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
+                        
+                        if (st.getSpriteType().getSpriteTypeID().equals(GAME_PLAY_LEVEL_RED_TYPE1) )
                         {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
                             
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
                             
-                            st.setX(x);
-                            st.setY(y);
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                
+                                
+                                int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                                
+                            }
+                            if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString())  )
+                                g.drawString(NAMELEVEL1, 300, 300);
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE2 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE3 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE4 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE5 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE6 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE7 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE8 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE9 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE10 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE11 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE12 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE13 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE14 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE15 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE16 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE17 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE18 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE19 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE20 )
+                        {
+                            if(levelLocation.getLevelState().equals(RED_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
                         }
                     }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE3 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
+                    if (st.getState().equals(PathXCarState.GREEN_STATE.toString())
+                            || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
                     {
-                       int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE1 )
                         {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    //  g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
+                                
+                                g.drawString(NAMELEVEL1, 300, 300);
                             
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE2 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
                             
-                            st.setX(x);
-                            st.setY(y);
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE3 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE4 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE5 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE6 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE7 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE8 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE9 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE10 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE11 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE12 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE13 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y13-((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE14 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE15 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE16 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE17 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE18 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE19 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE20 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && levelLocation.getCompletedLevel()
+                                    && levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
                         }
                     }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE4 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
+                    if (st.getState().equals(PathXCarState.WHITE_STATE.toString())
+                            || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
                     {
-                        int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE1 )
+                            
                         {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    //     g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    //
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
+                                g.drawString(NAMELEVEL1, 300, 300);
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE2 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
                             
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE3 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock() )
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
                             
-                            st.setX(x);
-                            st.setY(y);
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE4 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE5 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE6 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE7 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE8 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE9 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE10 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE11 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE12 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE13 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE14 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE15 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE16 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE17 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE18 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE19 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
+                                if( y>100 && x>=8)
+                                {
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
+                        }
+                        if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE20 )
+                        {
+                            if(levelLocation.getLevelState().equals(WHITE_STATE)
+                                    && !levelLocation.getCompletedLevel()
+                                    && !levelLocation.getStageUnlock())
+                            {
+                                int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
+                                int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
+                                if( y<590 &&  x<=722)
+                                {
+                                    
+                                    // System.out.println(x);
+                                    SpriteType r = st.getSpriteType();
+                                    Image img1 = r.getStateImage(st.getState());
+                                    
+                                    g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
+                                    
+                                    st.setX(x);
+                                    st.setY(y);
+                                }
+                            }
+                            
                         }
                     }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE5 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE6 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE7 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE8 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE9 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE10 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE11 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE12 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE13 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                       int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE14 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE15 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE16 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE17 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE18 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                       int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE19 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_RED_TYPE20 )
-                {
-                    if(levelLocation.getLevelState().equals(RED_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
                 }
             }
-            if (st.getState().equals(PathXCarState.GREEN_STATE.toString()) 
-                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
-            {
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE1 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                          //  g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                   if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
-                           
-                        g.drawString(NAMELEVEL1, 300, 300);
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE2 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE3 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE4 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE5 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE6 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE7 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE8 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                       int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE9 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE10 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE11 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE12 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE13 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y13-((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE14 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE15 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE16 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE17 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE18 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE19 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_GREEN_TYPE20 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && levelLocation.getCompletedLevel()
-                            && levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-            }
-            if (st.getState().equals(PathXCarState.WHITE_STATE.toString()) 
-                    || st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()))
-            {
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE1 )
-                     
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X1 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y1 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                       //     g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                      //      
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                     if( st.getState().equals(PathXCarState.MOUSE_OVER_STATE.toString()) )
-                        g.drawString(NAMELEVEL1, 300, 300);
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE2 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X2 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y2 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE3 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock() )
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X3 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y3 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE4 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X4 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y4 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE5 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X5 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y5 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE6 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X6 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y6 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE7 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X7 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y7 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE8 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X8 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y8 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE9 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X9 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y9 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE10 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X10 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y10 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE11 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X11 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y11 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE12 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X12 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y12 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE13 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X13 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y13 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE14 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X14 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y14 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE15 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X15 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y15 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE16 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X16 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y16 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE17 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X17 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y17 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE18 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X18 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y18 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE19 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X19 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y19 -((5*viewPortY)/6));
-                        if( y>100 && x>=8)
-                        {
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-                if (st.getSpriteType().getSpriteTypeID() == GAME_PLAY_LEVEL_WHITE_TYPE20 )
-                {
-                    if(levelLocation.getLevelState().equals(WHITE_STATE)
-                            && !levelLocation.getCompletedLevel()
-                            && !levelLocation.getStageUnlock())
-                    {
-                        int x = (LEVEL_OFFSET_LOCATION_X20 -viewPortX);
-                        int y = (LEVEL_OFFSET_LOCATION_Y20 -((5*viewPortY)/6));
-                        if( y<590 &&  x<=722)
-                        {
-                            
-                           // System.out.println(x);
-                            SpriteType r = st.getSpriteType();
-                            Image img1 = r.getStateImage(st.getState());
-                            
-                            g.drawImage(img1, x , y , r.getWidth()-15, r.getHeight()-15, null);
-                            
-                            st.setX(x);
-                            st.setY(y);
-                        }
-                    }
-                    
-                }
-            }
-        }
-    }
-
+            
         }
     }
     
     public void renderHeader(Graphics g)
     {
-       // g.setColor(COLOR_ALGORITHM_HEADER);
+        // g.setColor(COLOR_ALGORITHM_HEADER);
         
     }
     
@@ -1957,18 +1990,48 @@ public class PathXPanel extends JPanel
     public void renderStats(Graphics g)
     {
         Viewport viewport = data.getVport();
-       
-        String totalBalance = BALANCE+ data.getTotalBalance();
-                String Bank = BANK+data.getLevel().getMoney();
-            int xa = BALANCE_X;
-            int ya = BALANCE_Y;
-           
-            g.setFont(FONT_NAME);
-            g.setColor(COLOR_HEADER);
-            g.drawString(totalBalance, xa, ya);
-             g.drawString(Bank, xa, ya+35);
         
-      
+        String totalBalance = BALANCE+ data.getTotalBalance();
+        String Bank = BANK+data.getLevel().getMoney();
+        int xa = BALANCE_X;
+        int ya = BALANCE_Y;
+        
+        g.setFont(FONT_NAME);
+        g.setColor(COLOR_HEADER);
+        g.drawString(totalBalance, xa, ya);
+        g.drawString(Bank, xa, ya+35);
+        
+        
+    }
+     public void renderDialogStats(Graphics g)
+    {
+        Viewport viewport = data.getVport();
+        String levelName = "";
+        String currentLevel = data.getLevel().getLevelName();
+        ArrayList<PathXGameLevel> level = data.getLevelLocation();
+       for(int i =0; i< level.size(); i++)
+       {
+           if(level.get(i).getName().equals(currentLevel))
+               levelName = level.get(i).getLevelName();
+        
+       }
+        
+        String totalBalance = BALANCE+ data.getTotalBalance();
+        String Bank = BANK+data.getLevel().getMoney();
+        String levelInfo = INFO;
+        String levelInfo2 = levelName;
+        String levelInfo3 = INFO2 + data.getLevel().getMoney();
+        int xa = INFOX;
+        int ya = INFOY;
+        
+        g.setFont(FONT_NAME_DIALOG);
+        g.setColor(COLOR_HEADER);
+        g.drawString(levelInfo, xa, ya);
+        g.drawString(levelInfo2, xa, ya+60);
+        g.drawString(levelInfo3, xa, ya+120);
+        //g.drawString(Bank, xa, ya+35);
+        
+        
     }
     
     /**
@@ -1977,18 +2040,60 @@ public class PathXPanel extends JPanel
      *
      * @param g the Graphics context of this panel.
      */
-   
-    public void renderTiles(Graphics g)
+    public void renderAllTiles(Graphics g)
     {
-        Iterator<PathXCar> tilesTorender = data.getAllTiles();
-         while (tilesTorender.hasNext())
+        Iterator<PathXCar> tilesTorender = data.getBanditStack();
+        while (tilesTorender.hasNext())
         {
             PathXCar tile = tilesTorender.next();
             renderTile(g, tile);
         }
         
+        Iterator<PathXCar> movingTiles = data.getMovingBandit();
+        while (movingTiles.hasNext())
+        {
+            PathXCar tile = movingTiles.next();
+            renderTile(g, tile);
+        }
+        
+        Iterator<PathXCar> policeTorender = data.getPoliceStack();
+        while (policeTorender.hasNext())
+        {
+            PathXCar police = policeTorender.next();
+            renderTile(g, police);
+        }
+        
+        Iterator<PathXCar> movingPolice = data.getMovingPolice();
+        while (movingPolice.hasNext())
+        {
+            PathXCar tilePolice = movingPolice.next();
+            renderTile(g, tilePolice);
+        }
+        Iterator<PathXCar> zombieTorender = data.getZombieStack();
+        while (zombieTorender.hasNext())
+        {
+            PathXCar tile = zombieTorender.next();
+            renderTile(g, tile);
+        }
+        
+        Iterator<PathXCar> movingZombie = data.getMovingZombie();
+        while (movingZombie.hasNext())
+        {
+            PathXCar tile = movingZombie.next();
+            renderTile(g, tile);
+        }
+    }
+    public void renderTiles(Graphics g)
+    {
+          Iterator<PathXCar> playerTorender = data.getPlayerStack();
+        while (playerTorender.hasNext())
+        {
+            PathXCar tile = playerTorender.next();
+            renderTile(g, tile);
+        }
+        
         // THEN DRAW ALL THE MOVING TILES
-        Iterator<PathXCar> movingTiles = data.getMovingTiles();
+        Iterator<PathXCar> movingTiles = data.getMovingPlayer();
         while (movingTiles.hasNext())
         {
             PathXCar tile = movingTiles.next();
@@ -1996,9 +2101,9 @@ public class PathXPanel extends JPanel
         }
         
         // AND THE SELECTED TILE, IF THERE IS ONE
-       // PathXCar selectedTile = data.getSelectedTile();
-      //  if (selectedTile != null)
-          //  renderTile(g, selectedTile);
+        // PathXCar selectedTile = data.getSelectedTile();
+        //  if (selectedTile != null)
+        //  renderTile(g, selectedTile);
     }
     /**
      * Helper method for rendering the tiles that are currently moving.
@@ -2007,67 +2112,69 @@ public class PathXPanel extends JPanel
      *
      * @param tileToRender Tile to render to this panel.
      */
-   public void renderTile(Graphics g, PathXCar tileToRender)
+    public void renderTile(Graphics g, PathXCar tileToRender)
     {
+        if(tileToRender.getCarType() == BANDIT || tileToRender.getCarType() == PLAYER )
+        {
+            
+            if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString())
+                    && !tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
+                
+                // ONLY RENDER VISIBLE TILES
+                // if (!tileToRender.getCarType().equals(PLAYER))
+            {
+                Viewport viewport = data.getVport();
+                int correctedTileX = (int) (tileToRender.getX()  - viewport.getViewportX()) -20;
+                int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY()) -20;
+                
+                // THEN THE TILE IMAGE
+                SpriteType bgST = tileToRender.getSpriteType();
+                Image img = bgST.getStateImage(tileToRender.getState());
+                g.drawImage(img,    correctedTileX,
+                        correctedTileY,
+                        bgST.getWidth(), bgST.getHeight(), null);
+            }
+            if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString())
+                    && tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
+                
+                // ONLY RENDER VISIBLE TILES
+                // if (!tileToRender.getCarType().equals(PLAYER))
+            {
+                Viewport viewport = data.getVport();
+                int correctedTileX = (int)(tileToRender.getX()  - viewport.getViewportX()) -20;
+                int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY()) -20;
+                
+                // THEN THE TILE IMAGE
+                SpriteType bgST = tileToRender.getSpriteType();
+                Image img = bgST.getStateImage(tileToRender.getState());
+                g.drawImage(img,    correctedTileX,
+                        correctedTileY,
+                        bgST.getWidth(), bgST.getHeight(), null);
+            }
+            
+            
+        }
         
-         if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) 
-                 && !tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
-         
-        // ONLY RENDER VISIBLE TILES
-       // if (!tileToRender.getCarType().equals(PLAYER))
-        {
-            Viewport viewport = data.getVport();
-            int correctedTileX = (int)(tileToRender.getX()  - viewport.getViewportX());
-            int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY());
-          
-            // THEN THE TILE IMAGE
-            SpriteType bgST = tileToRender.getSpriteType();
-            Image img = bgST.getStateImage(tileToRender.getState());
-            g.drawImage(img,    correctedTileX,
-                    correctedTileY,
-                    bgST.getWidth(), bgST.getHeight(), null);
-        }
-          if (!tileToRender.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) 
-                 && tileToRender.getSpriteType().equals(GAME_BUTTON_PLAYER_TYPE))
-         
-        // ONLY RENDER VISIBLE TILES
-       // if (!tileToRender.getCarType().equals(PLAYER))
-        {
-            Viewport viewport = data.getVport();
-            int correctedTileX = (int)(tileToRender.getX()  - viewport.getViewportX());
-            int correctedTileY = (int)(tileToRender.getY() - viewport.getViewportY());
-          
-            // THEN THE TILE IMAGE
-            SpriteType bgST = tileToRender.getSpriteType();
-            Image img = bgST.getStateImage(tileToRender.getState());
-            g.drawImage(img,    correctedTileX,
-                    correctedTileY,
-                    bgST.getWidth(), bgST.getHeight(), null);
-        }
-         
-         
-         
-         
     }
     
     
     public void renderPlayerTiles( Graphics g)
     {
-      Viewport viewport = data.getVport();
-       
-       PathXCar renderPlayer = ((PathXMiniGame)game).getFileManager().playerToRender();
-       
-            int correctedTileX = (int)(renderPlayer.getX());
-            int correctedTileY = (int)(renderPlayer.getY() );
+        Viewport viewport = data.getVport();
+        
+        PathXCar renderPlayer = ((PathXMiniGame)game).getFileManager().playerToRender();
+        
+        int correctedTileX = (int)(renderPlayer.getX());
+        int correctedTileY = (int)(renderPlayer.getY() );
         // THEN DRAW ALL THE MOVING TILES
-      
+        
         
         SpriteType bgST = renderPlayer.getSpriteType();
-            Image img = bgST.getStateImage(renderPlayer.getState());
-            g.drawImage(img,  correctedTileX,
-                    correctedTileY,
-                    bgST.getWidth(), bgST.getHeight(), null);
-      
+        Image img = bgST.getStateImage(renderPlayer.getState());
+        g.drawImage(img,  correctedTileX,
+                correctedTileY,
+                bgST.getWidth(), bgST.getHeight(), null);
+        
         
     }
     /**
@@ -2096,7 +2203,7 @@ public class PathXPanel extends JPanel
      */
     public void renderSprite(Graphics g, Sprite s)
     {
-
+        
         
         // ONLY RENDER THE VISIBLE ONES
         if (!s.getState().equals(PathXCarState.INVISIBLE_STATE.toString()) &&

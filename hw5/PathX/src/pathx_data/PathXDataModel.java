@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Stack;
 import javax.swing.JPanel;
 import pathx.PathX.PathXPropertyType;
 import mini_game.MiniGame;
@@ -58,6 +59,13 @@ public class PathXDataModel extends MiniGameDataModel
     private boolean move;
     // THESE ARE THE TILES STACKED AT THE START OF THE GAME
     private ArrayList<PathXCar> stackCars;
+     private ArrayList<PathXCar> playerStackCars;
+      private ArrayList<PathXCar> banditStackCars;
+       private ArrayList<PathXCar> zombieStackCars;
+     private ArrayList<PathXCar> policeStackCars;
+    
+    
+    private boolean startGame;
     private int stackCarsX;
     private int stackCarsY;
     private int dragX;
@@ -81,9 +89,12 @@ public class PathXDataModel extends MiniGameDataModel
     private ArrayList<PathXGameLevel> levelLocation;
     
     // THESE ARE THE TILES THAT ARE MOVING AROUND, AND SO WE HAVE TO UPDATE
-    private ArrayList<PathXCar> movingCars;
-    
-    private ArrayList<PathXCar> carsToRender;
+   // private ArrayList<PathXCar> movingCars;
+    private ArrayList<PathXCar> movingPoliceCars;
+    private ArrayList<PathXCar> movingBanditCars;
+    private ArrayList<PathXCar> movingZombieCars;
+      private ArrayList<PathXCar> movingPlayerCars;
+    //private ArrayList<PathXCar> carsToRender;
     
     // THIS IS THE TILE THE USER IS DRAGGING
     private PathXCar selectedCar;
@@ -175,9 +186,19 @@ public class PathXDataModel extends MiniGameDataModel
         miniGame = initMiniGame;
         // INIT THESE FOR HOLDING MATCHED AND MOVING TILES
         stackCars = new ArrayList();
-        movingCars = new ArrayList();
+        playerStackCars = new ArrayList();
+        banditStackCars = new ArrayList();
+          policeStackCars = new ArrayList();
+            zombieStackCars = new ArrayList();
+                //movingCars = new ArrayList();
+                movingPoliceCars = new ArrayList();
+                movingBanditCars= new ArrayList();
+                movingZombieCars= new ArrayList();
+                 movingPlayerCars= new ArrayList();
+                
         specials = new ArrayList<PathXSpecial>();
         
+        startGame= false;
         dragX = 0;
         dragY = 0;
         total =0;
@@ -271,14 +292,46 @@ public class PathXDataModel extends MiniGameDataModel
     //     return stackCars;
 }
     
-    public Iterator<PathXCar> getMovingTiles()
+  //  public Iterator<PathXCar> getMovingTiles()
     {
-        return movingCars.iterator();
+    //    return movingCars.iterator();
+    }
+     public Iterator<PathXCar> getMovingPolice()
+    {
+        return movingPoliceCars.iterator();
+    }
+      public Iterator<PathXCar> getMovingBandit()
+    {
+        return movingBanditCars.iterator();
+    }
+       public Iterator<PathXCar> getMovingZombie()
+    {
+        return movingZombieCars.iterator();
+    }
+        public Iterator<PathXCar> getMovingPlayer()
+    {
+        return movingPlayerCars.iterator();
     }
     
-    public Iterator<PathXCar> getAllTiles()
+   // public Iterator<PathXCar> getAllTiles()
     {
-        return carsToRender.iterator();
+   //     return carsToRender.iterator();
+    }
+    public Iterator<PathXCar> getPlayerStack()
+    {
+        return playerStackCars.iterator();
+    }
+    public Iterator<PathXCar> getZombieStack()
+    {
+        return zombieStackCars.iterator();
+    }
+    public Iterator<PathXCar> getPoliceStack()
+    {
+        return policeStackCars.iterator();
+    }
+    public Iterator<PathXCar> getBanditStack()
+    {
+        return banditStackCars.iterator();
     }
     
     
@@ -325,23 +378,41 @@ public class PathXDataModel extends MiniGameDataModel
     
     public ArrayList<Integer> zombiePath()
     {
-        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
+      ArrayList<Integer> path =  ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
                 ((PathXMiniGame)miniGame).getFileManager().getInter(5));
+      ArrayList<Integer> pathx =  ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(5),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(2));
         
+      for(int i = pathx.size()-1; i>=0; i--)
+      {
+          path.add(pathx.remove(i));
+      }
+      return path;
     }
     
     public ArrayList<Integer> banditPath()
     {
-        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
-                ((PathXMiniGame)miniGame).getFileManager().getInter(10));
+      ///  return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
+       //         ((PathXMiniGame)miniGame).getFileManager().getInter(10));
         
+        
+        ArrayList<Integer> path =  ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(2),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(5));
+      ArrayList<Integer> pathx =  ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(5),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(2));
+        
+      for(int i = pathx.size()-1; i>=0; i--)
+      {
+          path.add(pathx.remove(i));
+      }
+      return path;
     }
     
     
     public ArrayList<Integer> policePath()
     {
-        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(0),
-                ((PathXMiniGame)miniGame).getFileManager().getInter(12));
+        return   ((PathXMiniGame)miniGame).getFileManager().findPath(((PathXMiniGame)miniGame).getFileManager().getInter(1),
+                ((PathXMiniGame)miniGame).getFileManager().getInter(0));
         
     }
     
@@ -425,7 +496,7 @@ public class PathXDataModel extends MiniGameDataModel
     public void setSelectedIntersection(Intersection i)
     {
         selectedIntersection = i;
-        if(!this.isPlayerMoving())
+       // if(!this.isPlayerMoving())
         {
              ((PathXMiniGame)miniGame).getFileManager().findShortestPath(startIntersection, i);
                 this.moveAnimation();
@@ -544,10 +615,10 @@ public class PathXDataModel extends MiniGameDataModel
     public void draggPlayer(int canvasX, int canvasY)
     {
         
-        for (int i = 0; i < stackCars.size(); i++)
+        for (int i = 0; i < playerStackCars.size(); i++)
         {
             // GET EACH TILE
-            PathXCar tile = stackCars.get(i);
+            PathXCar tile = playerStackCars.get(i);
             
             if(tile.getCarType()==PLAYER)
             {
@@ -562,8 +633,8 @@ public class PathXDataModel extends MiniGameDataModel
                         
                         if(in.getId()==c.getIntersection1ID() || in.getId()== c.getIntersection2ID())
                         {
-                            tile.setX(in.getX() + LEVEL1X);
-                            tile.setY(in.getY() + LEVEL1Y);
+                            tile.setX(in.getX() + LEVEL1X +10);
+                            tile.setY(in.getY() + LEVEL1Y +10);
                             
                             ((PathXMiniGame)miniGame).getCanvas().repaint();
                             dragX =0;
@@ -586,10 +657,10 @@ public class PathXDataModel extends MiniGameDataModel
     }
     public void moveSelectedPlayer(int canvasX, int canvasY)
     {
-        for (int i = 0; i < stackCars.size(); i++)
+        for (int i = 0; i < playerStackCars.size(); i++)
         {
             // GET EACH TILE
-            PathXCar tile = stackCars.get(i);
+            PathXCar tile = playerStackCars.get(i);
             
             if(tile.getCarType()==PLAYER &&  ((PathXMiniGame)miniGame).isCurrentScreenState(GAME_SCREEN_STATE))
             {
@@ -743,63 +814,121 @@ public class PathXDataModel extends MiniGameDataModel
         GameLevel.setMoney(TOTALMONEYLEVEL1);
         GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL1);
+        GameLevel.setName(LEVEL1);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL2);
         GameLevel.setMoney(TOTALMONEYLEVEL2);
+        GameLevel.setName(LEVEL2);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL3);
         GameLevel.setMoney(TOTALMONEYLEVEL3);
+        GameLevel.setName(LEVEL3);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL4);
         GameLevel.setMoney(TOTALMONEYLEVEL4);
+        GameLevel.setName(LEVEL4);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL5);
         GameLevel.setMoney(TOTALMONEYLEVEL5);
+        GameLevel.setName(LEVEL5);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL6);
         GameLevel.setMoney(TOTALMONEYLEVEL6);
+        GameLevel.setName(LEVEL6);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL7);
         GameLevel.setMoney(TOTALMONEYLEVEL7);
+        GameLevel.setName(LEVEL7);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL8);
         GameLevel.setMoney(TOTALMONEYLEVEL8);
+        GameLevel.setName(LEVEL8);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL9);
         GameLevel.setMoney(TOTALMONEYLEVEL9);
+        GameLevel.setName(LEVEL9);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL10);
         GameLevel.setMoney(TOTALMONEYLEVEL10);
+        GameLevel.setName(LEVEL10);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL11);
         GameLevel.setMoney(TOTALMONEYLEVEL11);
+        GameLevel.setName(LEVEL11);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL12);
         GameLevel.setMoney(TOTALMONEYLEVEL12);
+        GameLevel.setName(LEVEL12);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL13);
         GameLevel.setMoney(TOTALMONEYLEVEL13);
+        GameLevel.setName(LEVEL13);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL14);
         GameLevel.setMoney(TOTALMONEYLEVEL14);
+        GameLevel.setName(LEVEL14);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL15);
         GameLevel.setMoney(TOTALMONEYLEVEL15);
+        GameLevel.setName(LEVEL15);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL16);
         GameLevel.setMoney(TOTALMONEYLEVEL16);
+        GameLevel.setName(LEVEL16);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL17);
         GameLevel.setMoney(TOTALMONEYLEVEL17);
+        GameLevel.setName(LEVEL17);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL18);
         GameLevel.setMoney(TOTALMONEYLEVEL18);
+        GameLevel.setName(LEVEL18);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL19);
         GameLevel.setMoney(TOTALMONEYLEVEL19);
+        GameLevel.setName(LEVEL19);
         levelLocation.add(GameLevel);
+        GameLevel = new PathXGameLevel();
+        GameLevel.setBankBalance(0);
         GameLevel.setLevelName(NAMELEVEL20);
         GameLevel.setMoney(TOTALMONEYLEVEL20);
+        GameLevel.setName(LEVEL20);
         levelLocation.add(GameLevel);
         
     }
@@ -814,7 +943,11 @@ public class PathXDataModel extends MiniGameDataModel
     {
         
         stackCars = ((PathXMiniGame)miniGame).getFileManager().tileToRender();
-        carsToRender = stackCars;
+      //  carsToRender = stackCars;
+        
+        
+        
+        
         ArrayList<Integer> zombiePath = this.zombiePath();
         ArrayList<Integer> policePath = this.policePath();
         ArrayList<Integer> banditPath = this.banditPath();
@@ -822,6 +955,14 @@ public class PathXDataModel extends MiniGameDataModel
         for(PathXCar c: stackCars)
         {
             c.initCarData(this);
+           if(c.getCarType()==PLAYER)
+               playerStackCars.add(c);
+          else if(c.getCarType()==POLICE)
+               policeStackCars.add(c);
+          else if(c.getCarType()==BANDIT)
+               banditStackCars.add(c);
+          else if(c.getCarType()==ZOMBIE)
+               zombieStackCars.add(c);
         }
         
         
@@ -986,7 +1127,40 @@ public class PathXDataModel extends MiniGameDataModel
         moveAllTilesToStack();
         
         // GO THROUGH ALL OF THEM
-        for (PathXCar car : stackCars)
+        for (PathXCar car : playerStackCars)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+        for (PathXCar car : policeStackCars)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+        for (PathXCar car : banditStackCars)
+        {
+            // AND SET THEM PROPERLY
+            if (enable)
+            {
+                car.setState(PathXCarState.VISIBLE_STATE.toString());
+            } else
+            {
+                car.setState(PathXCarState.INVISIBLE_STATE.toString());
+            }
+        }
+        for (PathXCar car : zombieStackCars)
         {
             // AND SET THEM PROPERLY
             if (enable)
@@ -1004,7 +1178,10 @@ public class PathXDataModel extends MiniGameDataModel
      */
     public void moveAllTilesToStack()
     {
-        moveCars(movingCars, stackCars);
+        moveCars(movingPlayerCars, playerStackCars);
+        moveCars(movingBanditCars, banditStackCars);
+        moveCars(movingZombieCars, zombieStackCars);
+        moveCars(movingPoliceCars, policeStackCars);
         // moveTiles(tilesToSort, stackCars);
     }
     
@@ -1059,31 +1236,32 @@ public class PathXDataModel extends MiniGameDataModel
         
         moveAllTilesToStack();
         
-        for (int i = 0; i < stackCars.size(); i++)
+        for (int i = 0; i < playerStackCars.size(); i++)
         {
             // GET EACH TILE
-            PathXCar tile = stackCars.get(i);
+            PathXCar tile = playerStackCars.get(i);
             
             if(tile.getCarType()==PLAYER)
                 // MAKE SURE IT'S MOVED EACH FRAME
             {
            
                     tile.setTarget(targetX, targetY);
-                    movingCars.add(tile);
+                    movingPlayerCars.add(tile);
                     tile.initRoadPath(movePath);
                 
                 
             }
         }
         
+        
     }
     
     public boolean isPlayerMoving()
     {
-        for (int i = 0; i < stackCars.size(); i++)
+        for (int i = 0; i < playerStackCars.size(); i++)
         {
             // GET EACH TILE
-            PathXCar tile = stackCars.get(i);
+            PathXCar tile = playerStackCars.get(i);
             
             if(tile.getCarType()==PLAYER)
              return tile.isMovingToTarget();
@@ -1093,30 +1271,30 @@ public class PathXDataModel extends MiniGameDataModel
     public void switchCarOrder()
     {
         
-        Deque<Integer> zombieStack = new ArrayDeque<Integer>();
-        for(int i =0; i< zombiePath.size(); i++)
-        {
-            zombieStack.push(zombiePath.get(i));
-        }
-        zombiePath = new ArrayList<Integer>();
-        while(!zombieStack.isEmpty())
-        {
-            zombiePath.add(zombieStack.pop());
-        }
+//        Stack<Integer> zombieStack = new Stack<Integer>();
+//        for(int i =0; i< zombiePath.size(); i++)
+//        {
+//            zombieStack.push(zombiePath.get(i));
+//        }
+//        zombiePath = new ArrayList<Integer>();
+//        while(!zombieStack.isEmpty())
+//        {
+//            zombiePath.add(zombieStack.pop());
+//        }
+//        
+//        
+//        Stack<Integer> policeStack = new Stack<Integer>();
+//        for(int i =0; i< policePath.size(); i++)
+//        {
+//            policeStack.push(policePath.get(i));
+//        }
+//        policePath = new ArrayList<Integer>();
+//        while(!policeStack.isEmpty())
+//        {
+//            policePath.add(policeStack.pop());
+//        }
         
-        
-        Deque<Integer> policeStack = new ArrayDeque<Integer>();
-        for(int i =0; i< policePath.size(); i++)
-        {
-            policeStack.push(policePath.get(i));
-        }
-        policePath = new ArrayList<Integer>();
-        while(!policeStack.isEmpty())
-        {
-            policePath.add(policeStack.pop());
-        }
-        
-        Deque<Integer> banditStack = new ArrayDeque<Integer>();
+        Stack<Integer> banditStack = new Stack<Integer>();
         for(int i =0; i< banditPath.size(); i++)
         {
             banditStack.push(banditPath.get(i));
@@ -1124,9 +1302,9 @@ public class PathXDataModel extends MiniGameDataModel
         banditPath = new ArrayList<Integer>();
         while(!banditStack.isEmpty())
         {
-            banditPath.add(zombieStack.pop());
+            banditPath.add(banditStack.pop());
         }
-        //carsMovingAround();
+        carsMovingAround();
     }
     public void carsMovingAround()
     {
@@ -1144,31 +1322,41 @@ public class PathXDataModel extends MiniGameDataModel
         
         moveAllTilesToStack();
         
-        for (int i = 0; i < stackCars.size(); i++)
+        for (int i = 0; i < zombieStackCars.size(); i++)
         {
             // GET EACH TILE
-            PathXCar tile = stackCars.get(i);
+            PathXCar tile = zombieStackCars.get(i);
             if(tile.getCarType()==ZOMBIE)
                 // MAKE SURE IT'S MOVED EACH FRAME
             {
                 tile.setTarget(zombieTargetX, zombieTargetY);
-                movingCars.add(tile);
+                movingZombieCars.add(tile);
                 tile.initRoadPath(zombiePath);
             }
+            
+        }
+        for (int i = 0; i < policeStackCars.size(); i++)
+        {
+            PathXCar tile = policeStackCars.get(i);
             if(tile.getCarType()==POLICE)
                 // MAKE SURE IT'S MOVED EACH FRAME
             {
                 tile.setTarget(policeTargetX, policeTargetY);
-                movingCars.add(tile);
+                movingPoliceCars.add(tile);
                 tile.initRoadPath(policePath);
             }
+        }
+         for (int i = 0; i < banditStackCars.size(); i++)
+        {
+            PathXCar tile = banditStackCars.get(i);
             if(tile.getCarType()==BANDIT)
                 // MAKE SURE IT'S MOVED EACH FRAME
             {
                 tile.setTarget(banditTargetX, banditTargetY);
-                movingCars.add(tile);
+                movingBanditCars.add(tile);
                 tile.initRoadPath(banditPath);
             }
+           
         }
         
     }
@@ -1261,6 +1449,12 @@ public class PathXDataModel extends MiniGameDataModel
     public void endGameAsWin()
     {
         
+         super.endGameAsWin();
+       
+        miniGame.getAudio().stop(PathXPropertyType.SONG_CUE_MENU_SCREEN.toString());
+        miniGame.getAudio().stop(PathXPropertyType.SONG_CUE_GAME_SCREEN.toString());
+        miniGame.getAudio().play(PathXPropertyType.AUDIO_CUE_WIN.toString(), false);
+        
     }
     
     /**
@@ -1269,6 +1463,17 @@ public class PathXDataModel extends MiniGameDataModel
     public void endGameAsLoss()
     {
         
+        super.endGameAsLoss();
+        
+    }
+    public void setStartGame(boolean value)
+    {
+        startGame = value;
+    }
+    public boolean getStartGame()
+    {
+        
+        return startGame;
     }
     
     /**
@@ -1304,11 +1509,25 @@ public class PathXDataModel extends MiniGameDataModel
     
     public void resetPathXCar()
     {
+        stackCars = new  ArrayList<PathXCar> ();
         zombiePath = new ArrayList<Integer>();
         policePath = new ArrayList<Integer>();
         banditPath = new ArrayList<Integer>();
+        movingPlayerCars = new ArrayList<>();
+        
+        movingPoliceCars = new ArrayList<>();
+        movingBanditCars = new ArrayList<>();
+        movingZombieCars= new ArrayList<>();
+        movingPlayerCars= new ArrayList<>();
+        
+         playerStackCars = new ArrayList<PathXCar> ();
+       banditStackCars = new ArrayList<PathXCar> ();
+       zombieStackCars = new ArrayList<PathXCar> ();;
+      policeStackCars = new ArrayList<PathXCar> ();;
         
     }
+    
+    
     /**
      * Called each frame, this method updates all the game objects.
      *
@@ -1324,27 +1543,73 @@ public class PathXDataModel extends MiniGameDataModel
             game.beginUsingData();
             
             // WE ONLY NEED TO UPDATE AND MOVE THE MOVING TILES
-            for (int i = 0; i < movingCars.size(); i++)
+            for (int i = 0; i < movingPlayerCars.size(); i++)
             {
                 // GET THE NEXT TILE
-                PathXCar tile = movingCars.get(i);
+                PathXCar tile = movingPlayerCars.get(i);
                 
                 // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
                 tile.update(game);
                 
                 // IF IT'S REACHED ITS DESTINATION, REMOVE IT
                 // FROM THE LIST OF MOVING TILES
-                if (!tile.isMovingToTarget() && tile.getCarType() !=ZOMBIE && tile.getCarType() != BANDIT)
+                if (!tile.isMovingToTarget() )
                 {
-                    movingCars.remove(tile);
+                    movingPlayerCars.remove(tile);
+                }
+             
+                
+            }
+            for (int i = 0; i < movingPoliceCars.size(); i++)
+            {
+                // GET THE NEXT TILE
+                PathXCar tile = movingPoliceCars.get(i);
+                
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+                
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget() )
+                {
+                    movingPoliceCars.remove(tile);
                 }
                 
-                // if (!tile.isMovingToTarget() && tile.getCarType() ==ZOMBIE || tile.getCarType() == BANDIT)
-                if(tile.getLoop())
+                //  movingPoliceCars.remove(tile);
+                //    switchCarOrder();
+             
+            }
+            for (int i = 0; i < movingZombieCars.size(); i++)
+            {
+                // GET THE NEXT TILE
+                PathXCar tile = movingZombieCars.get(i);
+                
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+                
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget() )
                 {
-                    movingCars.remove(tile);
-                    switchCarOrder();
+                    movingZombieCars.remove(tile);
                 }
+                
+            }
+            for (int i = 0; i < movingBanditCars.size(); i++)
+            {
+                // GET THE NEXT TILE
+                PathXCar tile = movingBanditCars.get(i);
+                
+                // THIS WILL UPDATE IT'S POSITION USING ITS VELOCITY
+                tile.update(game);
+                
+                // IF IT'S REACHED ITS DESTINATION, REMOVE IT
+                // FROM THE LIST OF MOVING TILES
+                if (!tile.isMovingToTarget() )
+                {
+                    movingBanditCars.remove(tile);
+                }
+                
                 
             }
             

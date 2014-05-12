@@ -19,6 +19,8 @@
           <property name="GAME_SCREEN_IMAGE_BUTTON_X"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_X1"            value="./pathx/IMGAE_BUTTON_X_GAME_SCREEN1.png"></property>
          <property name="GAME_SCREEN_IMAGE_BUTTON_HOME1"            value="./pathx/IMGAE_BUTTON_HOME_GAME_SCREEN1.png"></property>
+          <property name="GAME_SCREEN_IMAGE_BUTTON_CHECK"            value="./pathx/IMGAE_BUTTON_CHECK.png"></property>
+          <property name="GAME_SCREEN_IMAGE_BUTTON_UNCHECK"            value="./pathx/IMGAE_BUTTON_UNCHECK.png"></property>
          
          
           <property name="GAME_SCREEN_IMAGE_BUTTON_POLICE"            value="./pathx/IMAGE_ZOMBIE_CAR.png"></property>
@@ -36,8 +38,14 @@
           
           <property name="IMAGE_HELP_SCREEN"            value="./pathx/IMAGE_HELP_SCREEN.png"></property>
 
- <property name="HELP_SCREEN_IMAGE_BUTTON_QUIT"            value="./pathx/IMAGE_QUIT.png"></property>
+         <property name="HELP_SCREEN_IMAGE_BUTTON_QUIT"            value="./pathx/IMAGE_QUIT.png"></property>
           <property name="HELP_SCREEN_IMAGE_BUTTON_QUIT_MOUSE_OVER"            value="./pathx/IMAGE_QUIT_MOUSE_OVER.png"></property>
+          
+           <property name="IMAGE_LEAVE_TOWN"            value="./pathx/IMAGE_LEAVE_TOWN.png"></property>
+          <property name="IMAGE_LEAVE_TOWN_MOUSE_OVER"            value="./pathx/IMAGE_LEAVE_TOWN_MOUSE_OVER.png"></property>
+          
+           <property name="IMAGE_TRY_AGAIN"            value="./pathx/IMAGE_TRY_AGAIN.png"></property>
+          <property name="IMAGE_TRY_AGAIN_MOUSE_OVER"            value="./pathx/IMAGE_TRY_AGAIN_MOUSE_OVER.png"></property>
           
 
 

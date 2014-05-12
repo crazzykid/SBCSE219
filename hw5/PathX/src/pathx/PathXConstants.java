@@ -60,8 +60,13 @@ public class PathXConstants
     public static final String GAME_SCROLL_PAUSE_BUTTON_TYPE = "GAME_SCROLL_PAUSE_BUTTON_TYPE";
     public static final String GAME_TOOLBAR_TYPE = "GAME_TOOLBAR_TYPE";
     
+    public static final String GAME_SETTINGS_CHECK_BUTTON_TYPE ="GAME_SETTINGS_CHECK_BUTTON_TYPE";
+     public static final String GAME_SETTINGS_MUSIC_BUTTON_TYPE ="GAME_SETTINGS_MUSIC_BUTTON_TYPE";
     public static final String HELP_QUIT_TYPE = "HELP_QUIT_TYPE";
     public static final String HELP_QUIT_TYPE2 = "HELP_QUIT_TYPE2";
+     public static final String LEAVE_TOWN_TYPE = "LEAVE_TOWN_TYPE";
+     public static final String TRY_AGAIN_TYPE = "TRY_AGAIN_TYPE";
+    
     public static final String GAME_PLAY_LEVEL_RED_TYPE1 = "GAME_PLAY_LEVEL_RED_TYPE1";
     public static final String GAME_PLAY_LEVEL_WHITE_TYPE1 = "GAME_PLAY_LEVEL_WHITE_TYPE1";
     public static final String GAME_PLAY_LEVEL_GREEN_TYPE1 = "GAME_PLAY_LEVEL_GREEN_TYPE1";
@@ -292,11 +297,11 @@ public class PathXConstants
     
     
     
-    public static final int VIEWPORT_OFFSET_X = 350;
-    public static final int VIEWPORT_OFFSET_Y = 350;
+   public static final int VIEWPORT_OFFSET_X = 350;
+   public static final int VIEWPORT_OFFSET_Y = 350;
     
     public static final int LEVEL1X  = VIEWPORT_OFFSET_X-160;
-    public static final int LEVEL1Y  = VIEWPORT_OFFSET_X-220;
+    public static final int LEVEL1Y  = VIEWPORT_OFFSET_X-260;
     
     public static final int LEVEL_BUTTON_WIDTH = 150;
     public static final int LEVEL_BUTTON_MARGIN = 5;
@@ -380,6 +385,12 @@ public class PathXConstants
     public static final int TOOLBAR_X = 0;
     public static final int TOOLBAR_Y = 0;
     
+     public static final int HOME_SETTINGS_CHECK_BUTTON_X = 212;
+    public static final int HOME_SETTINGS_CHECK_BUTTON_Y  =289;
+    
+     public static final int HOME_SETTINGS_MUSIC_BUTTON_X = 211;
+    public static final int HOME_SETTINGS_MUSIC_BUTTON_Y =362;
+    
     
     
     // public static final int BACK_BUTTON_X = 130;
@@ -443,10 +454,16 @@ public class PathXConstants
     public static final Font FONT_DEBUG_TEXT = new Font(Font.MONOSPACED, Font.BOLD, 14);
     public static final Font FONT_STATS = new Font(Font.MONOSPACED, Font.BOLD, 20);
     public static final Font FONT_NAME = new Font(Font.SANS_SERIF, Font.BOLD, 38);
+      public static final Font FONT_NAME_DIALOG = new Font(Font.SANS_SERIF, Font.BOLD, 20);
     public static final String BALANCE = "BALANCE  : $";
     public static final String BANK =    "BANK        : $";
 
-
+    public static final String INFO = "Rob the bank of ";
+   public static final String INFO2 = "and make your getaway to earn $";
+   
+   public static final int INFOX = 115;
+   public static final int INFOY = 200;
+    
     
     
     // LEVEL EDITOR PATHS
@@ -491,7 +508,7 @@ public class PathXConstants
     
     
     public static final String MAKE_LIGHT_GREEN = "IMGAE_BUTTON_GREEN_LIGHT.png";
-    public static final String MAKE_LIGHT_RED = "IMGAE_BUTTON_RED_LIGHT.png";
+    public static final String MAKE_LIGHT_RED   = "IMGAE_BUTTON_RED_LIGHT.png";
     public static final String DECREASE_SPEED_LIMIT = "IMGAE_BUTTON_DECREASE_SPEED.png";
     public static final String INCREASE_SPEED_LIMIT = "IMGAE_BUTTON_INCREASE_SPEED.png";
     public static final String INCREASE_PLAYER_SPEED = "IMGAE_BUTTON_INCREASE_PLAYER_SPEED.png";

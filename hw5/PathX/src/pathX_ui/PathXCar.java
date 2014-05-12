@@ -396,31 +396,31 @@ public class PathXCar extends Sprite
     }
      public int checkCollison()
     {
-        if(this.carType==PLAYER )
-        {
-           PathXCar cars; 
-           Iterator it = data.getAllTiles();
-           while(it.hasNext())
-           {
-               cars  = (PathXCar) it.next();
-               if(cars.getCarType() !=PLAYER)
-               {
-               int x = (int)cars.getX();
-               int y = (int)cars.getY();
-                if(calculateDistanceToSpecial(x,y) < MAX_TILE_VELOCITY-10)
-                  {
-                      if(cars.getCarType()== BANDIT)
-                      return 1;
-                      else
-                          if(cars.getCarType()== POLICE)
-                                return 2;
-                      else
-                          if(cars.getCarType()== ZOMBIE)
-                                return 3;
-                  } 
-                  }
-               }
-           }
+////        if(this.carType==PLAYER )
+////        {
+////           PathXCar cars; 
+////           Iterator it = data.getAllTiles();
+////           while(it.hasNext())
+////           {
+////               cars  = (PathXCar) it.next();
+////               if(cars.getCarType() !=PLAYER)
+////               {
+////               int x = (int)cars.getX();
+////               int y = (int)cars.getY();
+////                if(calculateDistanceToSpecial(x,y) <= 0)
+////                  {
+////                      if(cars.getCarType()== BANDIT)
+////                      return 1;
+////                      else
+////                          if(cars.getCarType()== POLICE)
+////                                return 2;
+////                      else
+////                          if(cars.getCarType()== ZOMBIE)
+////                                return 3;
+//                  } 
+//                  }
+//               }
+//           }
         return 0;
     }
     
@@ -464,20 +464,43 @@ public class PathXCar extends Sprite
         // IS THE TILE ALMOST AT THE PATH NODE IT'S TARGETING?
         if (calculateDistanceToTarget() < MAX_TILE_VELOCITY)
         {
-               
+            if(this.carType !=PLAYER)
+            {
+            // PUT IT RIGHT ON THE NODE
+            x = targetX ;
+            y = targetY ;
+            
+            }
+            else
+                {
             // PUT IT RIGHT ON THE NODE
             x = targetX;
             y = targetY;
             
+            }
+                
+            System.out.println(this.carType+"  Target X : " + targetX);
+            System.out.println(this.carType+"  Target Y : " + targetY);
             
             if(movePath.size() > 1) 
             { 
                 // AND TARGET THE NEXT NODE IN THE PATH
+                if(this.carType ==PLAYER)
+                {
                 targetX = movePath.get(0) + LEVEL1X;
                 targetY = movePath.get(1) + LEVEL1Y;
                 
+                }
+                else
+                {
+                    targetX =LEVEL1X +  movePath.get(movePathIndex);
+                    targetY = LEVEL1Y + movePath.get(movePathIndex +1);
+                }
+                if(this.carType==PLAYER)
+                {
                 movePath.remove(1); 
-                movePath.remove(0);
+                 movePath.remove(0);
+                }
             } 
             
              
@@ -485,9 +508,12 @@ public class PathXCar extends Sprite
            
             
             // AND ON TO THE NEXT PATH FOR THE NEXT TIME WE PICK A TARGET
-            movePathIndex += 2;
+             if(this.carType!=PLAYER)
+             {
+               movePathIndex += 2;
             
-            // winPathIndex %= (WIN_PATH_NODES * 2);
+             movePathIndex %= (movePath.size() );
+             }
         }
         // JUST A NORMAL PATHING UPDATE
         else
